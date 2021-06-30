@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Duffle One</title>
+
+	<meta name="description" content="Duffle One's personal website.">
+	<meta name="author" content="Duffle One">
+	<meta name="keywords" content="duffleone">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@100;200&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/d9eed9f9e7.js" crossorigin="anonymous"></script>
+	<style>
+		html,
+		body {
+			font-family: 'Overpass', sans-serif;
+			font-size: 14pt;
+			font-weight: 100;
+			color: rgb(26, 26, 26);
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.row {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+
+		.row a {
+			min-width: 8rem;
+		}
+
+		.text-center {
+			text-align: center;
+		}
+
+		a,
+		a:visited {
+			color: rgb(85, 61, 109);
+		}
+
+		h1 {
+			margin: 0;
+			margin-bottom: 0.8rem;
+			font-weight: 200;
+			font-size: 2.5rem;
+		}
+
+		h2 {
+			margin: 0;
+			font-weight: 200;
+			font-size: 2rem;
+		}
+
+		.root {
+			padding-bottom: 1rem;
+			margin-top: 1.2rem;
+		}
+
+		.icon-link {
+			color: inherit !important;
+			text-decoration: none;
+			padding-bottom: 0.5rem;
+		}
+
+		.icon {
+			padding: 1rem;
+			padding-bottom: 0.2rem;
+			font-size: 3rem;
+		}
+
+		.icon-text {
+			padding: 1rem;
+			padding-top: 0.2rem;
+		}
+
+		#fox {
+			width: 150px;
+			margin-bottom: 1rem;
+		}
+
+		section#credits {
+			width: 100%;
+			padding: 0.2rem;
+		}
+
+		@media only screen and (min-width: 1040px) and (min-height: 480px) {
+			section#credits {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+			}
+		}
+
+		@media (prefers-color-scheme: dark) {
+
+			html,
+			body {
+				background-color: rgb(26, 26, 26);
+				color: rgb(220, 220, 220);
+			}
+
+			a,
+			a:visited {
+				color: rgb(199, 140, 253);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<section class="root">
+		<div class="container">
+			<div class="text-center">
+				<img id="fox" src="img/arctic-fox.svg" />
+
+				<h1>Duffle One</h1>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="container">
+			<div class="row">
+				<a href="https://github.com/Duffleman" class="icon-link">
+					<div class="text-center">
+						<div class="icon"><i class="fab fa-github-alt"></i></div>
+						<div class="icon-text">GitHub</div>
+					</div>
+				</a>
+				<a href="https://steamcommunity.com/id/duffleman" class="icon-link">
+					<div class="text-center">
+						<div class="icon"><i class="fab fa-steam"></i></div>
+						<div class="icon-text">Steam</div>
+					</div>
+				</a>
+				<a href="https://keybase.io/Duffleman" class="icon-link">
+					<div class="text-center">
+						<div class="icon"><i class="fab fa-keybase"></i></div>
+						<div class="icon-text">Keybase</div>
+					</div>
+				</a>
+				<a href="https://medal.tv/users/21790251" class="icon-link">
+					<div class="text-center">
+						<div class="icon"><i class="fas fa-video"></i></div>
+						<div class="icon-text">Clips</div>
+					</div>
+				</a>
+				<a href="https://cuvva.com" class="icon-link">
+					<div class="text-center">
+						<div class="icon"><i class="fas fa-car-crash"></i></div>
+						<div class="icon-text">Cuvva</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+	<section id="credits">
+		<small>Fox icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
+	</section>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
+	</script>
+</body>
+
+</html>
