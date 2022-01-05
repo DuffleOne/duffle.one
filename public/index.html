@@ -15,12 +15,19 @@
 	<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@100;200&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/d9eed9f9e7.js" crossorigin="anonymous"></script>
 	<style>
+		html {
+			height: 100%;
+			width: 100%;
+			padding: 0;
+			margin: 0;
+		}
+
 		html,
 		body {
 			font-family: 'Overpass', sans-serif;
 			font-size: 14pt;
 			font-weight: 100;
-			color: rgb(26, 26, 26);
+			color: rgb(220, 220, 220);
 		}
 
 		.container {
@@ -44,7 +51,7 @@
 
 		a,
 		a:visited {
-			color: rgb(85, 61, 109);
+			color: rgb(199, 140, 253);
 		}
 
 		h1 {
@@ -97,20 +104,6 @@
 				position: fixed;
 				bottom: 0;
 				left: 0;
-			}
-		}
-
-		@media (prefers-color-scheme: dark) {
-
-			html,
-			body {
-				background-color: rgb(26, 26, 26);
-				color: rgb(220, 220, 220);
-			}
-
-			a,
-			a:visited {
-				color: rgb(199, 140, 253);
 			}
 		}
 	</style>
@@ -175,5 +168,22 @@
 		})
 	</script>
 </body>
-
+<script src="three.min.js"></script>
+<script src="vanta.net.min.js"></script>
+<script>
+VANTA.NET({
+	el: 'html',
+	mouseControls: true,
+	touchControls: true,
+	gyroControls: false,
+	minHeight: 200.00,
+	minWidth: 200.00,
+	scale: 1.00,
+	scaleMobile: 1.00,
+	color: 0xff00ae,
+	backgroundColor: 0x1a1a1a,
+	maxDistance: 15.00,
+	points: 14.00,
+})
+</script>
 </html>
