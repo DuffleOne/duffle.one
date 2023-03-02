@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>DuffleOne</title>
+
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Laura Miller">
+	<meta name="description" content="Laura's social media pagesMenu">
+
+	<!-- Dark mode -->
+	<script>
+		const storedTheme = localStorage.getItem('theme')
+
+		const getPreferredTheme = () => {
+			if (storedTheme) {
+				return storedTheme
+			}
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+		}
+
+		const setTheme = function (theme) {
+			if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				document.documentElement.setAttribute('data-bs-theme', 'dark')
+			} else {
+				document.documentElement.setAttribute('data-bs-theme', theme)
+			}
+		}
+
+		setTheme(getPreferredTheme())
+
+		window.addEventListener('DOMContentLoaded', () => {
+			var el = document.querySelector('.theme-icon-active');
+			if (el != 'undefined' && el != null) {
+				const showActiveTheme = theme => {
+					const activeThemeIcon = document.querySelector('.theme-icon-active use')
+					const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+					const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+					document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+						element.classList.remove('active')
+					})
+
+					btnToActive.classList.add('active')
+					activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+				}
+
+				window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+					if (storedTheme !== 'light' || storedTheme !== 'dark') {
+						setTheme(getPreferredTheme())
+					}
+				})
+
+				showActiveTheme(getPreferredTheme())
+
+				document.querySelectorAll('[data-bs-theme-value]')
+					.forEach(toggle => {
+						toggle.addEventListener('click', () => {
+							const theme = toggle.getAttribute('data-bs-theme-value')
+							localStorage.setItem('theme', theme)
+							setTheme(theme)
+							showActiveTheme(theme)
+						})
+					})
+
+			}
+		})
+
+	</script>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="assets/images/favicon.ico">
+
+	<!-- Google Font -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+	<!-- Plugins CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/dropzone/dist/dropzone.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/glightbox-master/dist/css/glightbox.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/choices.js/public/assets/styles/choices.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/vendor/flatpickr/dist/flatpickr.min.css">
+
+	<!-- Theme CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+
+<body>
+
+	<!-- =======================
+Header START -->
+	<header class="navbar-light fixed-top header-static bg-mode">
+
+		<!-- Logo Nav START -->
+		<nav class="navbar navbar-expand-lg">
+			<div class="container">
+				<!-- Logo START -->
+				<a class="navbar-brand" href="index.html">
+					<img class="light-mode-item navbar-brand-item" src="assets/images/arctic-fox.svg" alt="logo">
+					<img class="dark-mode-item navbar-brand-item" src="assets/images/arctic-fox.svg" alt="logo">
+				</a>
+				<!-- Logo END -->
+
+				<!-- Responsive navbar toggler -->
+				<button class="navbar-toggler ms-auto icon-md btn btn-light p-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-animation">
+						<span></span>
+						<span></span>
+						<span></span>
+					</span>
+				</button>
+
+				<!-- Main navbar START -->
+				<div class="collapse navbar-collapse" id="navbarCollapse">
+
+
+					<ul class="navbar-nav navbar-nav-scroll ms-auto">
+						<!-- Nav item 4 Mega menu -->
+						<li class="nav-item">
+							<a class="nav-link" href="https://duffle.one">Home</a>
+						</li>
+					</ul>
+				</div>
+				<!-- Main navbar END -->
+			</div>
+		</nav>
+		<!-- Logo Nav END -->
+	</header>
+	<!-- =======================
+Header END -->
+
+	<!-- **************** MAIN CONTENT START **************** -->
+	<main>
+
+		<!-- Container START -->
+		<div class="container">
+			<div class="row g-4">
+
+				<!-- Main content START -->
+				<div class="col-lg-8 vstack gap-4">
+					<!-- My profile START -->
+					<div class="card">
+						<!-- Cover image -->
+						<div class="h-200px rounded-top" style="background-image:url(assets/images/bg/05.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+						<!-- Card body START -->
+						<div class="card-body py-0">
+							<div class="d-sm-flex align-items-start text-center text-sm-start">
+								<div>
+									<!-- Avatar -->
+									<div class="avatar avatar-xxl mt-n5 mb-3">
+										<img class="avatar-img rounded-circle border border-white border-3" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+									</div>
+								</div>
+								<div class="ms-sm-4 mt-sm-3">
+									<!-- Info -->
+									<h1 class="mb-0 h5">Laura Miller <i class="bi bi-patch-check-fill text-success small"></i></h1>
+									<p>DuffleOne</p>
+								</div>
+							</div>
+							<!-- List profile -->
+							<ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
+								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Senior backend engineer</li>
+								<li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> London, UK 🇬🇧</li>
+								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on Mar 2, 2023</li>
+							</ul>
+						</div>
+						<!-- Card body END -->
+						<div class="card-footer mt-3 pt-2 pb-0">
+							<!-- Nav profile pages -->
+							<ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
+								<li class="nav-item"><a class="nav-link kink-link active" href="index.html">Laura</a></li>
+								<li class="nav-item"><a class="nav-link kink-link" href="about.html">About</a></li>
+								<li class="nav-item"><a class="nav-link kink-link" href="events.html">Events</a></li>
+								<li class="nav-item"><a href="index.html" class="btn btn-xs btn-warning ms-md-4 kink d-none">Hide Kink</a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- My profile END -->
+
+					<!-- Activity feed START -->
+					<div class="card">
+						<!-- Card header START -->
+						<div class="card-header border-0 pb-0">
+							<h5 class="card-title">Activity feed</h5>
+						</div>
+						<!-- Card header END -->
+
+						<!-- Card body START -->
+						<div class="card-body">
+							<div class="timeline">
+
+								<!-- Timeline item START -->
+								<div class="timeline-item kink d-none">
+									<!-- Timeline icon -->
+									<div class="timeline-icon">
+										<div class="avatar text-center">
+											<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+										</div>
+									</div>
+									<!-- Timeline content -->
+									<div class="timeline-content">
+										<div class="d-sm-flex justify-content-between">
+											<div>
+												<p class="small mb-0">Attended KV - TEARS FOR BEARS.</p>
+												<p class="small mb-0"><i class="bi bi-file-person pe-1"></i>As a guest</p>
+											</div>
+											<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Mar 1</p>
+										</div>
+									</div>
+								</div>
+								<!-- Timeline item END -->
+								<!-- Timeline item START -->
+								<div class="timeline-item kink d-none">
+									<!-- Timeline icon -->
+									<div class="timeline-icon">
+										<div class="avatar text-center">
+											<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+										</div>
+									</div>
+									<!-- Timeline content -->
+									<div class="timeline-content">
+										<div class="d-sm-flex justify-content-between">
+											<div>
+												<p class="small mb-0">Attended KV - E1.</p>
+												<p class="small mb-0"><i class="bi bi-file-person pe-1"></i>As a guest</p>
+											</div>
+											<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Feb 17</p>
+										</div>
+									</div>
+								</div>
+								<!-- Timeline item END -->
+
+								<!-- Timeline item START -->
+								<div class="timeline-item kink d-none">
+									<!-- Timeline icon -->
+									<div class="timeline-icon">
+										<div class="avatar text-center">
+											<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+										</div>
+									</div>
+									<!-- Timeline content -->
+									<div class="timeline-content">
+										<div class="d-sm-flex justify-content-between">
+											<div>
+												<p class="small mb-0">Attended LAM.</p>
+												<p class="small mb-0"><i class="bi bi-shop pe-1"></i>Market & after party</p>
+											</div>
+											<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Feb 5</p>
+										</div>
+									</div>
+								</div>
+								<!-- Timeline item END -->
+
+								<!-- Timeline item START -->
+								<div class="timeline-item kink d-none">
+									<!-- Timeline icon -->
+									<div class="timeline-icon">
+										<div class="avatar text-center">
+											<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+										</div>
+									</div>
+									<!-- Timeline content -->
+									<div class="timeline-content">
+										<div class="d-sm-flex justify-content-between">
+											<div>
+												<p class="small mb-0">Attended Club AntiChrist - Circus of the Damned.</p>
+												<p class="small mb-0"><i class="bi bi-calendar-date pe-1"></i>First 2023 event</p>
+											</div>
+											<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Jan 20</p>
+										</div>
+									</div>
+								</div>
+								<!-- Timeline item END -->
+
+								<!-- Timeline item START -->
+								<div class="timeline-item">
+									<!-- Timeline icon -->
+									<div class="timeline-icon">
+										<div class="avatar text-center">
+											<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+										</div>
+									</div>
+									<!-- Timeline content -->
+									<div class="timeline-content">
+										<div class="d-sm-flex justify-content-between">
+											<div>
+												<p class="small mb-0">Started a new hobby - Lindy Hop.</p>
+												<p class="small mb-0"><i class="bi bi-activity pe-1"></i>Weekly event</p>
+											</div>
+											<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Jan 11</p>
+										</div>
+									</div>
+								</div>
+								<!-- Timeline item END -->
+							</div>
+						</div>
+						<!-- Card body END -->
+					</div>
+					<!-- Activity feed END -->
+
+
+				</div>
+				<!-- Main content END -->
+
+				<!-- Right sidebar START -->
+				<div class="col-lg-4">
+
+					<div class="row g-4">
+
+						<!-- Card START -->
+						<div class="col-md-6 col-lg-12">
+							<div class="card">
+								<div class="card-header border-0 pb-0">
+									<h5 class="card-title">About</h5>
+									<!-- Button modal -->
+								</div>
+								<!-- Card body START -->
+								<div class="card-body position-relative pt-0">
+									<p>Hi! I avoid social media where I can, so I built this page instead.</p>
+									<!-- Date time -->
+									<ul class="list-unstyled mt-3 mb-0">
+										<li class="mb-2"><i class="bi bi-discord fa-fw pe-1"></i> Discord: <strong>DuffleOne#0001</strong></li>
+										<li class="mb-2"><i class="bi bi-envelope fa-fw pe-1"></i> Email: <strong>laura@duffle.one</strong></li>
+									</ul>
+								</div>
+								<!-- Card body END -->
+							</div>
+						</div>
+						<!-- Card END -->
+
+						<!-- Card START -->
+						<div class="col-md-6 col-lg-12 kink d-none">
+							<div class="card">
+								<div class="card-header border-0 pb-0">
+									<h5 class="card-title">Kink</h5>
+									<!-- Button modal -->
+								</div>
+								<!-- Card body START -->
+								<div class="card-body position-relative pt-0">
+									<p>I adore clubs, meeting new people, and getting involved in the London Kink community!</p>
+									<p>I dom, but can switch for women. I am bisexual, but homoromantic.</p>
+									<p>Happy to explore one night only fun, short term play partners, and long term romantic partners.</p>
+								</div>
+								<!-- Card body END -->
+							</div>
+						</div>
+						<!-- Card END -->
+
+						<!-- Card START -->
+						<div class="col-md-6 col-lg-12">
+							<div class="card">
+								<!-- Card header START -->
+								<div class="card-header d-flex justify-content-between border-0">
+									<h5 class="card-title">Employment</h5>
+								</div>
+								<!-- Card header END -->
+								<!-- Card body START -->
+								<div class="card-body position-relative pt-0">
+									<!-- Experience item START -->
+									<div class="d-flex mb-2">
+										<!-- Avatar -->
+										<div class="avatar me-3">
+											<img class="avatar-img rounded-circle" src="assets/images/employment/sexual-wellbeing.png" alt="Non-descript sexual wellbeing icon">
+										</div>
+										<!-- Info -->
+										<div>
+											<h6 class="card-title mb-0"><a href="#!">Sexual wellbeing company</a></h6>
+											<p class="small">April 2022 - Present employment</p>
+										</div>
+									</div>
+									<!-- Experience item END -->
+
+									<!-- Experience item START -->
+									<div class="d-flex mb-2">
+										<!-- Avatar -->
+										<div class="avatar me-3">
+											<img class="avatar-img rounded-circle" src="assets/images/employment/car-insurance.jpg" alt="Non-descript car insurance icon">
+										</div>
+										<!-- Info -->
+										<div>
+											<h6 class="card-title mb-0"><a href="#!">Car insurance broker</a></h6>
+											<p class="small">May 2016 - April 2022</p>
+										</div>
+									</div>
+									<!-- Experience item END -->
+
+									<!-- Experience item START -->
+									<div class="d-flex mb-2">
+										<!-- Avatar -->
+										<div class="avatar me-3">
+											<a href="https://en.wikipedia.org/wiki/Big_Tech"><img class="avatar-img rounded-circle" src="assets/images/employment/faang.png" alt="Non-descript FAANG company icon"></a>
+										</div>
+										<!-- Info -->
+										<div>
+											<h6 class="card-title mb-0"><a href="https://en.wikipedia.org/wiki/Big_Tech">FAANG company</a></h6>
+											<p class="small mb-0">2015 - 2016</p>
+										</div>
+									</div>
+									<!-- Experience item END -->
+
+									<!-- Experience item START -->
+									<div class="d-flex">
+										<!-- Avatar -->
+										<div class="avatar me-3">
+											<img class="avatar-img rounded-circle" src="assets/images/employment/charity.png" alt="Non-descript charity icon">
+										</div>
+										<!-- Info -->
+										<div>
+											<h6 class="card-title mb-0"><a href="#!">Local charity</a></h6>
+											<p class="small mb-0">2011 - 2015</p>
+										</div>
+									</div>
+									<!-- Experience item END -->
+								</div>
+								<!-- Card body END -->
+							</div>
+						</div>
+						<!-- Card END -->
+
+					</div>
+
+				</div>
+				<!-- Right sidebar END -->
+
+			</div> <!-- Row END -->
+		</div>
+		<!-- Container END -->
+
+	</main>
+	<!-- **************** MAIN CONTENT END **************** -->
+
+	<!-- =======================
+	JS libraries, plugins and custom scripts -->
+
+	<!-- Bootstrap JS -->
+	<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Vendors -->
+	<script src="assets/vendor/dropzone/dist/dropzone.js"></script>
+	<script src="assets/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+	<script src="assets/vendor/glightbox-master/dist/js/glightbox.min.js"></script>
+	<script src="assets/vendor/flatpickr/dist/flatpickr.min.js"></script>
+
+	<!-- Theme Functions -->
+	<script src="assets/js/functions.js"></script>
+
+	<!-- Laura specific bits-->
+	<script>
+		const url = new URLSearchParams(location.search);
+		if (url.has('kink')) {
+			for (const e of document.querySelectorAll('.kink')) {
+				e.classList.remove('d-none');
+			}
+
+			for (const l of document.querySelectorAll('.kink-link')) {
+				const existing = l.getAttribute('href');
+				l.setAttribute('href', `${existing}?kink`);
+			}
+		}
+	</script>
+
+</body>
+
+</html>
