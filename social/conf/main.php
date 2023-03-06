@@ -1,6 +1,6 @@
 <?php
 
-$lastUpdated = "Mar 3, 2023";
+$lastUpdated = "Mar 6, 2023";
 
 $pages = [
 	[

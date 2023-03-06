@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="Laura Miller">
-	<meta name="description" content="Laura's social media pagesMenu">
+	<meta name="description" content="Laura's social media">
 
 	<!-- Dark mode -->
 	<script>

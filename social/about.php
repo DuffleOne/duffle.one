@@ -35,7 +35,7 @@
 				<div class="d-flex align-items-center rounded border px-3 py-2">
 					<!-- Date -->
 					<p class="mb-0">
-						<i class="bi bi-arrow-through-heart fa-fw me-2"></i> Status: <strong>Single</strong>
+						<i class="bi bi-arrow-through-heart fa-fw me-2"></i> Status: <strong>WIP</strong>
 					</p>
 				</div>
 				<!-- Status END -->
@@ -59,16 +59,6 @@
 					</p>
 				</div>
 				<!-- Lives END -->
-			</div>
-			<div class="col-sm-6">
-				<!-- phone START -->
-				<div class="d-flex align-items-center rounded border px-3 py-2">
-					<!-- Date -->
-					<p class="mb-0">
-						<i class="bi bi-phone fa-fw me-2"></i> Phone: <strong><a href="tel:+447515564590">0751 556 4590</a></strong>
-					</p>
-				</div>
-				<!-- phone END -->
 			</div>
 			<div class="col-sm-6">
 				<!-- email START -->

@@ -28,6 +28,46 @@
 				<div class="timeline-content">
 					<div class="d-sm-flex justify-content-between">
 						<div>
+							<p class="small mb-0">Attended LAM.</p>
+							<p class="small mb-0"><i class="bi bi-shop pe-1"></i>Market & after party</p>
+						</div>
+						<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Mar 5</p>
+					</div>
+				</div>
+			</div>
+			<!-- Timeline item END -->
+			<!-- Timeline item START -->
+			<div class="timeline-item kink d-none">
+				<!-- Timeline icon -->
+				<div class="timeline-icon">
+					<div class="avatar text-center">
+						<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+					</div>
+				</div>
+				<!-- Timeline content -->
+				<div class="timeline-content">
+					<div class="d-sm-flex justify-content-between">
+						<div>
+							<p class="small mb-0">Attended Naughties.</p>
+							<p class="small mb-0"><i class="bi bi-1-square pe-1"></i>First time event</p>
+						</div>
+						<p class="small ms-sm-3 mt-2 mt-sm-0 text-nowrap">Mar 4</p>
+					</div>
+				</div>
+			</div>
+			<!-- Timeline item END -->
+			<!-- Timeline item START -->
+			<div class="timeline-item kink d-none">
+				<!-- Timeline icon -->
+				<div class="timeline-icon">
+					<div class="avatar text-center">
+						<img class="avatar-img rounded-circle" src="assets/images/avatar/me_200.png" alt="Laura Miller">
+					</div>
+				</div>
+				<!-- Timeline content -->
+				<div class="timeline-content">
+					<div class="d-sm-flex justify-content-between">
+						<div>
 							<p class="small mb-0">Attended KV - TEARS FOR BEERS.</p>
 							<p class="small mb-0"><i class="bi bi-file-person pe-1"></i>As a guest</p>
 						</div>

@@ -18,21 +18,44 @@
 			<div class="d-sm-flex align-items-center">
 				<!-- Avatar -->
 				<div class="avatar avatar-xl">
-					<img class="avatar-img rounded border border-white border-3" src="assets/images/events/ignition.webp" alt="Ignition">
+					<img class="avatar-img rounded border border-white border-3" src="assets/images/events/boardgames.jpeg" alt="Board games">
 				</div>
 				<div class="ms-sm-4 mt-2 mt-sm-0">
 					<!-- Info -->
-					<h5 class="mb-1"><a href="https://www.jamiellaurence.com/events">Ignition Dance</a></h5>
-					<p class="small mb-1"><span class="badge bg-info">Ballet</span></p>
+					<h5 class="mb-1"><a href="https://fetlife.com/events/1214026">Board games club</a></h5>
 					<ul class="nav nav-stack small">
 						<li class="nav-item">
-							<i class="bi bi-calendar-check pe-1"></i> Mar 4
+							<i class="bi bi-calendar-check pe-1"></i> Mar 6
 						</li>
 						<li class="nav-item">
 							<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧
 						</li>
 						<li class="nav-item">
-							<i class="bi bi-check-circle pe-1"></i> Confirmed
+							<i class="bi bi-ticket-perforated pe-1"></i> Free to attend
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- Events list START -->
+		<div class="row mb-4">
+			<div class="d-sm-flex align-items-center">
+				<!-- Avatar -->
+				<div class="avatar avatar-xl">
+					<img class="avatar-img rounded border border-white border-3" src="assets/images/events/cake.jpg" alt="Cake">
+				</div>
+				<div class="ms-sm-4 mt-2 mt-sm-0">
+					<!-- Info -->
+					<h5 class="mb-1">My birthday!</h5>
+					<ul class="nav nav-stack small">
+						<li class="nav-item">
+							<i class="bi bi-calendar-check pe-1"></i> Mar 8
+						</li>
+						<li class="nav-item">
+							<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧
+						</li>
+						<li class="nav-item">
+							<i class="bi bi-arrow-clockwise pe-1"></i> Plans forming
 						</li>
 					</ul>
 				</div>
@@ -42,39 +65,15 @@
 			<div class="d-sm-flex align-items-center">
 				<!-- Avatar -->
 				<div class="avatar avatar-xl">
-					<img class="avatar-img rounded border border-white border-3" src="https://image-placeholder.com/images/actual-size/200x200.png" alt="Naughties">
+					<img class="avatar-img rounded border border-white border-3" src="assets/images/events/charmskool.avif" alt="Charm Skool">
 				</div>
 				<div class="ms-sm-4 mt-2 mt-sm-0">
 					<!-- Info -->
-					<h5 class="mb-1">Naughties London</h5>
+					<h5 class="mb-1"><a href="https://www.eventbrite.co.uk/e/charmskool-erotic-pop-up-shop-social-tickets-560465115247">Charm Skool Pop up</a></h5>
 					<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
 					<ul class="nav nav-stack small">
 						<li class="nav-item">
-							<i class="bi bi-calendar-check pe-1"></i> Mar 4
-						</li>
-						<li class="nav-item">
-							<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧
-						</li>
-						<li class="nav-item">
-							<i class="bi bi-check-circle pe-1"></i> Confirmed
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="row mb-4 kink d-none">
-			<div class="d-sm-flex align-items-center">
-				<!-- Avatar -->
-				<div class="avatar avatar-xl">
-					<img class="avatar-img rounded border border-white border-3" src="assets/images/events/lam.webp" alt="LAM">
-				</div>
-				<div class="ms-sm-4 mt-2 mt-sm-0">
-					<!-- Info -->
-					<h5 class="mb-1"><a href="https://londonalternativemarket.com/">London Alternative Market (LAM)</a></h5>
-					<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-					<ul class="nav nav-stack small">
-						<li class="nav-item">
-							<i class="bi bi-calendar-check pe-1"></i> Mar 5
+							<i class="bi bi-calendar-check pe-1"></i> Mar 11
 						</li>
 						<li class="nav-item">
 							<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧

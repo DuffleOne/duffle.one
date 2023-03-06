@@ -148,6 +148,8 @@
 	<script>
 		const url = new URLSearchParams(location.search);
 		if (url.has('kink')) {
+			console.info('Kink mode enabled');
+
 			for (const e of document.querySelectorAll('.kink')) {
 				e.classList.remove('d-none');
 			}
