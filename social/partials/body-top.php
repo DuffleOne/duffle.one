@@ -1,5 +1,3 @@
-<?php require_once('./conf/main.php'); ?>
-
 <body>
 	<header class="navbar-light fixed-top header-static bg-mode">
 

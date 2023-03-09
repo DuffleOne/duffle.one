@@ -64,7 +64,7 @@
 										</div>
 										<!-- Info -->
 										<div>
-											<h6 class="card-title mb-0"><a href="#!">Sexual wellbeing company</a></h6>
+											<h6 class="card-title mb-0">Sexual wellbeing company</h6>
 											<p class="small">April 2022 - Present employment</p>
 										</div>
 									</div>
@@ -78,7 +78,7 @@
 										</div>
 										<!-- Info -->
 										<div>
-											<h6 class="card-title mb-0"><a href="#!">Car insurance broker</a></h6>
+											<h6 class="card-title mb-0">Car insurance broker</h6>
 											<p class="small">May 2016 - April 2022</p>
 										</div>
 									</div>
@@ -106,7 +106,7 @@
 										</div>
 										<!-- Info -->
 										<div>
-											<h6 class="card-title mb-0"><a href="#!">Local charity</a></h6>
+											<h6 class="card-title mb-0">Local charity</h6>
 											<p class="small mb-0">2011 - 2015</p>
 										</div>
 									</div>
