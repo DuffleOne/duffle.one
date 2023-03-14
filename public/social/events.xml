@@ -8,28 +8,6 @@
 	</channel>
 
 			<item>
-			<title>Club Labrys</title>
-			<link>https://www.bizarre-events.com/club-labrys</link>
-							<category>Kink</category>
-						<description>
-				Club Labrys,
-				Date: Mar 10,
-				Location: London 🇬🇧,
-				Status: Confirmed			</description>
-			<enclosure url="https://duffle.one/social/assets/images/events/clublabrys.webp" length="108044" type="image/webp" />
-		</item>
-			<item>
-			<title>Charm Skool Pop up</title>
-			<link>https://www.eventbrite.co.uk/e/charmskool-erotic-pop-up-shop-social-tickets-560465115247</link>
-							<category>Kink</category>
-						<description>
-				Charm Skool Pop up,
-				Date: Mar 11,
-				Location: London 🇬🇧,
-				Status: Confirmed			</description>
-			<enclosure url="https://duffle.one/social/assets/images/events/charmskool.avif" length="155022" type="image/avif" />
-		</item>
-			<item>
 			<title>KV - E1</title>
 			<link>https://klubverboten.com/dates</link>
 							<category>Kink</category>
@@ -94,6 +72,49 @@
 				Location: London 🇬🇧,
 				Status: Confirmed			</description>
 			<enclosure url="https://duffle.one/social/assets/images/events/ac.png" length="804019" type="image/png" />
+		</item>
+			<item>
+			<title>Naughties London</title>
+			<link>https://fetlife.com/events/1267189</link>
+							<category>Kink</category>
+						<description>
+				Naughties London,
+				Date: May 19,
+				Location: London 🇬🇧,
+				Status: Confirmed			</description>
+			<enclosure url="https://duffle.one/social/assets/images/events/blank.png" length="899657" type="image/png" />
+		</item>
+			<item>
+			<title>MCM Comic Con</title>
+			<link>https://www.mcmcomiccon.com/london/en-us/home.html</link>
+						<description>
+				MCM Comic Con,
+				Date: May 26 - 28,
+				Location: London 🇬🇧,
+				Status: Confirmed			</description>
+			<enclosure url="https://duffle.one/social/assets/images/events/comiccon.png" length="12071" type="image/png" />
+		</item>
+			<item>
+			<title>Club Labrys</title>
+			<link>https://www.bizarre-events.com/club-labrys</link>
+							<category>Kink</category>
+						<description>
+				Club Labrys,
+				Date: June 2,
+				Location: London 🇬🇧,
+				Status: Pending			</description>
+			<enclosure url="https://duffle.one/social/assets/images/events/clublabrys.webp" length="108044" type="image/webp" />
+		</item>
+			<item>
+			<title>The Big One - Club o&I/LAM</title>
+			<link>https://fetlife.com/events/1241601</link>
+							<category>Kink</category>
+						<description>
+				The Big One - Club o&I/LAM,
+				Date: Aug 13,
+				Location: Kent 🇬🇧,
+				Status: Pending			</description>
+			<enclosure url="https://duffle.one/social/assets/images/events/lam.webp" length="52848" type="image/webp" />
 		</item>
 	</rss>
 

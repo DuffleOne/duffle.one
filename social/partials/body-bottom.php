@@ -19,7 +19,6 @@
 									<p>Hi! I avoid social media where I can, so I built this page instead.</p>
 									<!-- Date time -->
 									<ul class="list-unstyled mt-3 mb-0">
-										<li class="mb-2"><i class="bi bi-discord fa-fw pe-1"></i> Discord: <strong>DuffleOne#0001</strong></li>
 										<li class="mb-2"><i class="bi bi-envelope fa-fw pe-1"></i> Email: <strong>laura@duffle.one</strong></li>
 									</ul>
 								</div>
@@ -39,7 +38,7 @@
 								<div class="card-body position-relative pt-0">
 									<p>I adore clubs, meeting new people, and getting involved in the London Kink community!</p>
 									<p>I dom, but can switch for women. I am bisexual, but homoromantic.</p>
-									<p>Happy to explore one night only fun, short term play partners, and long term romantic partners.</p>
+									<p>Happy to explore one night only fun, short term play partners, and longer term romantic partners.</p>
 								</div>
 								<!-- Card body END -->
 							</div>

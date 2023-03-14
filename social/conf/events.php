@@ -2,27 +2,10 @@
 
 $emoji = [
 	"confirmed" => "bi-check-circle",
+	"pending" => "bi-hourglass-split",
 ];
 
 $events = [
-	[
-		"name" => "Club Labrys",
-		"link" => "https://www.bizarre-events.com/club-labrys",
-		"image" => "assets/images/events/clublabrys.webp",
-		"kink" => true,
-		"date" => "Mar 10",
-		"location" => "London 🇬🇧",
-		"status" => "confirmed",
-	],
-	[
-		"name" => "Charm Skool Pop up",
-		"link" => "https://www.eventbrite.co.uk/e/charmskool-erotic-pop-up-shop-social-tickets-560465115247",
-		"image" => "assets/images/events/charmskool.avif",
-		"kink" => true,
-		"date" => "Mar 11",
-		"location" => "London 🇬🇧",
-		"status" => "confirmed",
-	],
 	[
 		"name" => "KV - E1",
 		"link" => "https://klubverboten.com/dates",
@@ -82,5 +65,41 @@ $events = [
 		"date" => "May 12",
 		"location" => "London 🇬🇧",
 		"status" => "confirmed",
+	],
+	[
+		"name" => "Naughties London",
+		"link" => "https://fetlife.com/events/1267189",
+		"image" => "assets/images/events/blank.png",
+		"kink" => true,
+		"date" => "May 19",
+		"location" => "London 🇬🇧",
+		"status" => "confirmed",
+	],
+	[
+		"name" => "MCM Comic Con",
+		"link" => "https://www.mcmcomiccon.com/london/en-us/home.html",
+		"image" => "assets/images/events/comiccon.png",
+		"kink" => false,
+		"date" => "May 26 - 28",
+		"location" => "London 🇬🇧",
+		"status" => "confirmed",
+	],
+	[
+		"name" => "Club Labrys",
+		"link" => "https://www.bizarre-events.com/club-labrys",
+		"image" => "assets/images/events/clublabrys.webp",
+		"kink" => true,
+		"date" => "June 2",
+		"location" => "London 🇬🇧",
+		"status" => "pending",
+	],
+	[
+		"name" => "The Big One - Club o&I/LAM",
+		"link" => "https://fetlife.com/events/1241601",
+		"image" => "assets/images/events/lam.webp",
+		"kink" => true,
+		"date" => "Aug 13",
+		"location" => "Kent 🇬🇧",
+		"status" => "pending",
 	],
 ];

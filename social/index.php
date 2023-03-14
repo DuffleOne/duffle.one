@@ -31,16 +31,6 @@
 				<!-- Birthday END -->
 			</div>
 			<div class="col-sm-6">
-				<!-- Status START -->
-				<div class="d-flex align-items-center rounded border px-3 py-2">
-					<!-- Date -->
-					<p class="mb-0">
-						<i class="bi bi-arrow-through-heart fa-fw me-2"></i> Status: <strong>WIP</strong>
-					</p>
-				</div>
-				<!-- Status END -->
-			</div>
-			<div class="col-sm-6">
 				<!-- Designation START -->
 				<div class="d-flex align-items-center rounded border px-3 py-2">
 					<!-- Date -->
@@ -66,6 +56,16 @@
 					<!-- Date -->
 					<p class="mb-0">
 						<i class="bi bi-envelope fa-fw me-2"></i> Email: <strong>laura@duffle.one</strong>
+					</p>
+				</div>
+				<!-- email END -->
+			</div>
+			<div class="col-sm-6">
+				<!-- email START -->
+				<div class="d-flex align-items-center rounded border px-3 py-2">
+					<!-- Date -->
+					<p class="mb-0">
+						<i class="bi bi-discord fa-fw me-2"></i> Discord: <strong>DuffleOne#0001</strong>
 					</p>
 				</div>
 				<!-- email END -->
