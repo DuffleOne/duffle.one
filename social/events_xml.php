@@ -3,31 +3,32 @@
 <rss version="2.0">
 	<channel>
 		<title>Laura's events</title>
-		<link>https://duffle.one/social/events.html?kink</link>
+		<link>https://duffle.one/events.html?kink</link>
 		<description>List of events Laura is attending</description>
 		<language>en-gb</language>
 	</channel>
 
-	<?php foreach ($events as $event): ?>
+	<?php foreach ($events as $event) { ?>
 		<item>
-			<title><?= $event['name']; ?></title>
-			<link><?= $event['link']; ?></link>
-			<?php if ($event['kink']): ?>
+			<title><?php echo urlencode($event['name']); ?></title>
+			<link><?php echo $event['link']; ?></link>
+			<?php if ($event['kink']) { ?>
 				<category>Kink</category>
-			<?php endif; ?>
+			<?php } ?>
 			<description>
-				<?= $event['name']; ?>,
-				Date: <?= $event['date']; ?>,
-				Location: <?= $event['location']; ?>,
-				Status: <?= ucwords($event['status']); ?>
+				<?php echo $event['name']; ?>,
+				Date: <?php echo $event['date']; ?>,
+				Location: <?php echo $event['location']; ?>,
+				Status: <?php echo ucwords($event['status']); ?>
 			</description>
-			<enclosure url="https://duffle.one/social/<?= $event['image']; ?>" length="<?= filesize(relativeURL($event['image'])); ?>" type="<?= mime_content_type(relativeURL($event['image'])); ?>" />
+			<enclosure url="https://duffle.one/<?php echo $event['image']; ?>" length="<?php echo filesize(relativeURL($event['image'])); ?>" type="<?php echo mime_content_type(relativeURL($event['image'])); ?>" />
 		</item>
-	<?php endforeach; ?>
+	<?php } ?>
 </rss>
 
 <?php
 
-function relativeURL($url) {
-	return "../public/social/{$url}";
+function relativeURL($url)
+{
+    return "../public/{$url}";
 }

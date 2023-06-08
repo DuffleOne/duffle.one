@@ -1,10 +1,10 @@
-<?php require_once('./conf/main.php'); ?>
-<?php require_once('./conf/events.php'); ?>
+<?php require_once './conf/main.php'; ?>
+<?php require_once './conf/events.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>DuffleOne</title>
+	<title>Duffle</title>
 
 	<!-- Meta Tags -->
 	<meta charset="utf-8">

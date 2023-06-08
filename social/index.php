@@ -1,8 +1,8 @@
-<?php $pageName = "about"; ?>
+<?php $pageName = 'about'; ?>
 
-<?php include("partials/header.php"); ?>
+<?php include 'partials/header.php'; ?>
 
-<?php include("partials/body-top.php"); ?>
+<?php include 'partials/body-top.php'; ?>
 
 <!-- Card feed item START -->
 <div class="card">
@@ -65,7 +65,7 @@
 				<div class="d-flex align-items-center rounded border px-3 py-2">
 					<!-- Date -->
 					<p class="mb-0">
-						<i class="bi bi-discord fa-fw me-2"></i> Discord: <strong>DuffleOne#0001</strong>
+						<i class="bi bi-discord fa-fw me-2"></i> Discord: <strong>Duffle (duffle.one)</strong>
 					</p>
 				</div>
 				<!-- email END -->
@@ -227,4 +227,4 @@
 </div>
 <!-- Card feed item END -->
 
-<?php include("partials/body-bottom.php"); ?>
+<?php include 'partials/body-bottom.php'; ?>

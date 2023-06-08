@@ -36,8 +36,8 @@
 								</div>
 								<!-- Card body START -->
 								<div class="card-body position-relative pt-0">
-									<p>I adore clubs, meeting new people, and getting involved in the London Kink community!</p>
-									<p>I dom, but can switch for women. I am bisexual, but homoromantic.</p>
+									<p>I adore kink/fetish events, meeting new people, and getting involved in the London Kink community!</p>
+									<p>I am a domme, and while I love playing with everyone, I only date women.</p>
 									<p>Happy to explore one night only fun, short term play partners, and longer term romantic partners.</p>
 								</div>
 								<!-- Card body END -->
