@@ -23,7 +23,9 @@
 				<div class="d-sm-flex align-items-center">
 					<!-- Avatar -->
 					<div class="avatar avatar-xl">
-						<img class="avatar-img rounded border border-white border-3" src="<?php echo $event['image']; ?>" alt="<?php echo $event['name']; ?>">
+						<?php if (!is_null($event['image'])) { ?>
+							<img class="avatar-img rounded border border-white border-3" src="<?php echo $event['image']; ?>" alt="<?php echo $event['name']; ?>">
+						<?php } ?>
 					</div>
 					<div class="ms-sm-4 mt-2 mt-sm-0">
 						<!-- Info -->

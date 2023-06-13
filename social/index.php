@@ -13,12 +13,13 @@
 	<!-- Card header END -->
 	<!-- Card body START -->
 	<div class="card-body">
-		<div class="rounded border px-3 py-2 mb-3">
+		<!-- <div class="rounded border px-3 py-2 mb-3">
 			<div class="d-flex align-items-center justify-content-between">
 				<h6>Overview</h6>
 			</div>
-			<p>Hi! I avoid social media for my mental health, but I appreciate that makes it difficult to get to know me, so this is a snapshot of a social media profile I maintain for people I meet.</p>
-		</div>
+			<p>Hi! I'm a software engineer living in London, please browse around this page and don't be afraid to reach out.</p>
+			<p>I list some public events I visit here too, come and say hello if you see me!</p>
+		</div> -->
 		<div class="row g-4">
 			<div class="col-sm-6">
 				<!-- Birthday START -->

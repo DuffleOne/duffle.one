@@ -16,7 +16,7 @@
 								</div>
 								<!-- Card body START -->
 								<div class="card-body position-relative pt-0">
-									<p>Hi! I avoid social media where I can, so I built this page instead.</p>
+									<p>I avoid social media for my mental health, but I appreciate that makes it difficult to get to know me, so this is a snapshot of a social media profile I maintain for people I meet.</p>
 									<!-- Date time -->
 									<ul class="list-unstyled mt-3 mb-0">
 										<li class="mb-2"><i class="bi bi-envelope fa-fw pe-1"></i> Email: <strong>laura@duffle.one</strong></li>
