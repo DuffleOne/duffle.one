@@ -14,6 +14,8 @@
 
 	<!-- Dark mode -->
 	<script>
+		const url = new URLSearchParams(location.search);
+
 		const storedTheme = localStorage.getItem('theme')
 
 		const getPreferredTheme = () => {

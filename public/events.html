@@ -13,6 +13,8 @@
 
 	<!-- Dark mode -->
 	<script>
+		const url = new URLSearchParams(location.search);
+
 		const storedTheme = localStorage.getItem('theme')
 
 		const getPreferredTheme = () => {
@@ -161,7 +163,7 @@
 							<ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
 								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Senior backend engineer</li>
 								<li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> London, UK 🇬🇧</li>
-								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on Jun 20, 2023</li>
+								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on Jun 23, 2023</li>
 							</ul>
 						</div>
 						<!-- Card body END -->
@@ -175,6 +177,16 @@
 					</div>
 					<!-- My profile END -->
 
+<style>
+div.fc-cell-shaded {
+	background-color: grey;
+}
+.kink-event {
+	background-color: darkred;
+	border-color: maroon;
+}
+</style>
+
 <!-- Events START -->
 <div class="card">
 	<!-- Card header START -->
@@ -184,217 +196,7 @@
 	<!-- Card header END -->
 	<!-- Card body START -->
 	<div class="card-body">
-		<!-- Events list START -->
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/dby.jpeg" alt="DEBAUCHERY">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://fetlife.com/events/1260555">DEBAUCHERY</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jun 24							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/blank.png" alt="Play munch">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://fetlife.com/events/1305783">Play munch</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jun 27							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-hourglass-split pe-1"></i> Pending							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/lam.webp" alt="LAM">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://londonalternativemarket.com/">LAM</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jul 2							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/kv.png" alt="KV - TEARS FOR BEERS">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://klubverboten.com/dates">KV - TEARS FOR BEERS</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jul 5							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/blank.png" alt="Naughties">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://fetlife.com/events/1283417">Naughties</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jul 8							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/brighton.jpeg" alt="🏳️‍⚧️ Pride">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1">🏳️‍⚧️ Pride</h5>
-																		<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jul 14							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> Brighton 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/dby.jpeg" alt="DEBAUCHERY">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://fetlife.com/events/1283968">DEBAUCHERY</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jul 22							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/pedestal.gif" alt="Club Pedestal">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://www.clubpedestal.com/main.html">Club Pedestal</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Jul 27							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-check-circle pe-1"></i> Confirmed							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/clublabrys.webp" alt="Club Labrys">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://www.bizarre-events.com/club-labrys">Club Labrys</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Aug 11							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> London 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-hourglass-split pe-1"></i> Pending							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-									<div class="row mb-4 kink d-none">
-							<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-													<img class="avatar-img rounded border border-white border-3" src="assets/images/events/lam.webp" alt="The Big One - Club o&I/LAM">
-											</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-													<h5 class="mb-1"><a href="https://fetlife.com/events/1241601">The Big One - Club o&I/LAM</a></h5>
-																			<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-												<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> Aug 13							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> Kent 🇬🇧							</li>
-							<li class="nav-item">
-								<i class="bi bi-hourglass-split pe-1"></i> Pending							</li>
-													</ul>
-					</div>
-				</div>
-			</div>
-				<!-- Events list END -->
+		<div id='calendar'></div>
 	</div>
 </div>
 <div class="card">
@@ -417,7 +219,48 @@
 	<!-- Card body END -->
 </div>
 <!-- Events START -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	var calendarEl = document.getElementById('calendar');
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		firstDay: 1, // Monday
+		headerToolbar: { center: 'listYear,timeGridWeek,dayGridMonth' },
+		initialView: 'listYear',
+		nowIndicator: true,
+		googleCalendarApiKey: 'AIzaSyCrg7JZIhKZIgTgef_3MTOjer0lG72WXPY',
+		events: {
+			googleCalendarId: 'c_1460e43f6b02ba57b9ed14513b3c4b12123a355995514ead248d94f709515471@group.calendar.google.com',
+			className: 'kink-event',
+		},
+		eventClick: function(info) {
+			info.jsEvent.preventDefault();
 
+			if (info.event.extendedProps.description) {
+				const el = document.createElement('html');
+				el.innerHTML = info.event.extendedProps.description;
+				const a = el.getElementsByTagName('a')[0];
+
+				window.open(a.href, '_blank');
+			}
+		},
+	});
+
+	if (!url.has('kink')) {
+		const sources = calendar.getEventSources();
+
+		for (const source of sources) {
+			if (source.context.calendarOptions.events.className === 'kink-event') {
+				source.remove();
+			}
+		}
+	}
+
+	calendar.render();
+});
+
+</script>
 
 </div>
 				<!-- Main content END -->
@@ -565,7 +408,6 @@
 
 	<!-- Laura specific bits-->
 	<script>
-		const url = new URLSearchParams(location.search);
 		if (url.has('kink')) {
 			console.info('Kink mode enabled');
 

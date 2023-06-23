@@ -145,7 +145,6 @@
 
 	<!-- Laura specific bits-->
 	<script>
-		const url = new URLSearchParams(location.search);
 		if (url.has('kink')) {
 			console.info('Kink mode enabled');
 

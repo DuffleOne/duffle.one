@@ -10,7 +10,7 @@ $emoji = [
 $events = [
     [
         'name' => 'DEBAUCHERY',
-        'link' => 'https://fetlife.com/events/1260555',
+        'link' => 'https://fetlife.com/events/1283967',
         'image' => 'assets/images/events/dby.jpeg',
         'kink' => true,
         'date' => 'Jun 24',
@@ -51,15 +51,6 @@ $events = [
         'kink' => true,
         'date' => 'Jul 8',
         'location' => 'London 🇬🇧',
-        'status' => 'confirmed',
-    ],
-    [
-        'name' => '🏳️‍⚧️ Pride',
-        'link' => null,
-        'image' => 'assets/images/events/brighton.jpeg',
-        'kink' => false,
-        'date' => 'Jul 14',
-        'location' => 'Brighton 🇬🇧',
         'status' => 'confirmed',
     ],
     [

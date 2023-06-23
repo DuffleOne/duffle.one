@@ -4,6 +4,16 @@
 
 <?php include 'partials/body-top.php'; ?>
 
+<style>
+div.fc-cell-shaded {
+	background-color: grey;
+}
+.kink-event {
+	background-color: darkred;
+	border-color: maroon;
+}
+</style>
+
 <!-- Events START -->
 <div class="card">
 	<!-- Card header START -->
@@ -13,53 +23,7 @@
 	<!-- Card header END -->
 	<!-- Card body START -->
 	<div class="card-body">
-		<!-- Events list START -->
-		<?php foreach ($events as $event) { ?>
-			<?php if ($event['kink']) { ?>
-				<div class="row mb-4 kink d-none">
-			<?php } else { ?>
-				<div class="row mb-4">
-			<?php } ?>
-				<div class="d-sm-flex align-items-center">
-					<!-- Avatar -->
-					<div class="avatar avatar-xl">
-						<?php if (!is_null($event['image'])) { ?>
-							<img class="avatar-img rounded border border-white border-3" src="<?php echo $event['image']; ?>" alt="<?php echo $event['name']; ?>">
-						<?php } ?>
-					</div>
-					<div class="ms-sm-4 mt-2 mt-sm-0">
-						<!-- Info -->
-						<?php if (!is_null($event['link'])) { ?>
-							<h5 class="mb-1"><a href="<?php echo $event['link']; ?>"><?php echo $event['name']; ?></a></h5>
-						<?php } else { ?>
-							<h5 class="mb-1"><?php echo $event['name']; ?></h5>
-						<?php } ?>
-						<?php if ($event['kink']) { ?>
-							<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>
-						<?php } ?>
-						<ul class="nav nav-stack small">
-							<li class="nav-item">
-								<i class="bi bi-calendar-check pe-1"></i> <?php echo $event['date']; ?>
-							</li>
-							<li class="nav-item">
-								<i class="bi bi-geo-alt pe-1"></i> <?php echo $event['location']; ?>
-							</li>
-							<li class="nav-item">
-								<i class="bi <?php echo $emoji[$event['status']]; ?> pe-1"></i> <?php echo ucwords($event['status']); ?>
-							</li>
-							<?php if (isset($event['items'])) { ?>
-								<?php foreach ($event['items'] as $item) { ?>
-									<li class="nav-item">
-										<i class="bi <?php echo $item['emoji']; ?> pe-1"></i> <?php echo $item['text']; ?>
-									</li>
-								<?php } ?>
-							<?php } ?>
-						</ul>
-					</div>
-				</div>
-			</div>
-		<?php } ?>
-		<!-- Events list END -->
+		<div id='calendar'></div>
 	</div>
 </div>
 <div class="card">
@@ -82,5 +46,46 @@
 	<!-- Card body END -->
 </div>
 <!-- Events START -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	var calendarEl = document.getElementById('calendar');
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		firstDay: 1, // Monday
+		headerToolbar: { center: 'listYear,timeGridWeek,dayGridMonth' },
+		initialView: 'listYear',
+		nowIndicator: true,
+		googleCalendarApiKey: 'AIzaSyCrg7JZIhKZIgTgef_3MTOjer0lG72WXPY',
+		events: {
+			googleCalendarId: 'c_1460e43f6b02ba57b9ed14513b3c4b12123a355995514ead248d94f709515471@group.calendar.google.com',
+			className: 'kink-event',
+		},
+		eventClick: function(info) {
+			info.jsEvent.preventDefault();
 
+			if (info.event.extendedProps.description) {
+				const el = document.createElement('html');
+				el.innerHTML = info.event.extendedProps.description;
+				const a = el.getElementsByTagName('a')[0];
+
+				window.open(a.href, '_blank');
+			}
+		},
+	});
+
+	if (!url.has('kink')) {
+		const sources = calendar.getEventSources();
+
+		for (const source of sources) {
+			if (source.context.calendarOptions.events.className === 'kink-event') {
+				source.remove();
+			}
+		}
+	}
+
+	calendar.render();
+});
+
+</script>
 <?php include 'partials/body-bottom.php'; ?>

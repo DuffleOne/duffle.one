@@ -13,6 +13,8 @@
 
 	<!-- Dark mode -->
 	<script>
+		const url = new URLSearchParams(location.search);
+
 		const storedTheme = localStorage.getItem('theme')
 
 		const getPreferredTheme = () => {
@@ -161,7 +163,7 @@
 							<ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
 								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Senior backend engineer</li>
 								<li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> London, UK 🇬🇧</li>
-								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on Jun 20, 2023</li>
+								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on Jun 23, 2023</li>
 							</ul>
 						</div>
 						<!-- Card body END -->
@@ -546,7 +548,6 @@
 
 	<!-- Laura specific bits-->
 	<script>
-		const url = new URLSearchParams(location.search);
 		if (url.has('kink')) {
 			console.info('Kink mode enabled');
 
