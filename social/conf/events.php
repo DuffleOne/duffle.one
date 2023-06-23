@@ -9,15 +9,6 @@ $emoji = [
 
 $events = [
     [
-        'name' => 'Decadence',
-        'link' => 'https://fetlife.com/events/1280594?sp=197',
-        'image' => 'assets/images/events/decadence.png',
-        'kink' => true,
-        'date' => 'Jun 17',
-        'location' => 'London 🇬🇧',
-        'status' => 'confirmed',
-    ],
-    [
         'name' => 'DEBAUCHERY',
         'link' => 'https://fetlife.com/events/1260555',
         'image' => 'assets/images/events/dby.jpeg',
@@ -72,13 +63,22 @@ $events = [
         'status' => 'confirmed',
     ],
     [
+        'name' => 'DEBAUCHERY',
+        'link' => 'https://fetlife.com/events/1283968',
+        'image' => 'assets/images/events/dby.jpeg',
+        'kink' => true,
+        'date' => 'Jul 22',
+        'location' => 'London 🇬🇧',
+        'status' => 'confirmed',
+    ],
+    [
         'name' => 'Club Pedestal',
         'link' => 'https://www.clubpedestal.com/main.html',
         'image' => 'assets/images/events/pedestal.gif',
         'kink' => true,
         'date' => 'Jul 27',
         'location' => 'London 🇬🇧',
-        'status' => 'pending',
+        'status' => 'confirmed',
     ],
     [
         'name' => 'Club Labrys',
@@ -157,7 +157,7 @@ $recurring = [
         'status' => 'confirmed',
     ],
     [
-        'name' => 'Pedestal',
+        'name' => 'Club Pedestal',
         'link' => 'https://www.clubpedestal.com/main.html',
         'image' => 'assets/images/events/pedestal.gif',
         'kink' => true,
