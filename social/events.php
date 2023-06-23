@@ -5,12 +5,12 @@
 <?php include 'partials/body-top.php'; ?>
 
 <style>
-div.fc-cell-shaded {
-	background-color: grey;
+:root {
+	--fc-list-event-hover-bg-color: '#1a252f';
+	--fc-neutral-bg-color: hsl(0deg 0% 10%);
 }
-.kink-event {
-	background-color: darkred;
-	border-color: maroon;
+div#calendar a {
+	color: inherit !important;
 }
 </style>
 
@@ -57,10 +57,17 @@ document.addEventListener('DOMContentLoaded', function() {
 		initialView: 'listYear',
 		nowIndicator: true,
 		googleCalendarApiKey: 'AIzaSyCrg7JZIhKZIgTgef_3MTOjer0lG72WXPY',
-		events: {
-			googleCalendarId: 'c_1460e43f6b02ba57b9ed14513b3c4b12123a355995514ead248d94f709515471@group.calendar.google.com',
-			className: 'kink-event',
-		},
+		eventSources: [
+			{
+				googleCalendarId: 'c_1460e43f6b02ba57b9ed14513b3c4b12123a355995514ead248d94f709515471@group.calendar.google.com',
+				className: 'kink-event',
+				color: '#8e24aa',
+			},
+			{
+				googleCalendarId: 'c_5445f4c4ec2673129d42d08b7befeb551fc9d4779c1e9f93ee2417c8dbe753c9@group.calendar.google.com',
+				color: '#33b679',
+			},
+		],
 		eventClick: function(info) {
 			info.jsEvent.preventDefault();
 
