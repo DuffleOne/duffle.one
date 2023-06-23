@@ -9,6 +9,9 @@
 	--fc-list-event-hover-bg-color: '#1a252f';
 	--fc-neutral-bg-color: hsl(0deg 0% 10%);
 }
+[data-bs-theme="light"] {
+	--fc-neutral-bg-color: hsl(0deg 0% 10% / 10%);
+}
 div#calendar a {
 	color: inherit !important;
 }
@@ -55,19 +58,25 @@ document.addEventListener('DOMContentLoaded', function() {
 		firstDay: 1, // Monday
 		headerToolbar: { center: 'listYear,timeGridWeek,dayGridMonth' },
 		initialView: 'listYear',
+		nextDayThreshold: '06:00:00',
 		nowIndicator: true,
 		googleCalendarApiKey: 'AIzaSyCrg7JZIhKZIgTgef_3MTOjer0lG72WXPY',
 		eventSources: [
 			{
+				id: 'sourceKink',
 				googleCalendarId: 'c_1460e43f6b02ba57b9ed14513b3c4b12123a355995514ead248d94f709515471@group.calendar.google.com',
-				className: 'kink-event',
 				color: '#8e24aa',
 			},
 			{
+				id: 'sourcePublic',
 				googleCalendarId: 'c_5445f4c4ec2673129d42d08b7befeb551fc9d4779c1e9f93ee2417c8dbe753c9@group.calendar.google.com',
 				color: '#33b679',
 			},
 		],
+		eventDidMount: function(info) {
+			if (info.isPast)
+				info.event.remove();
+		},
 		eventClick: function(info) {
 			info.jsEvent.preventDefault();
 
@@ -82,13 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 	if (!url.has('kink')) {
-		const sources = calendar.getEventSources();
-
-		for (const source of sources) {
-			if (source.context.calendarOptions.events.className === 'kink-event') {
-				source.remove();
-			}
-		}
+		const sourceKink = calendar.getEventSourceById('sourceKink');
+		sourceKink.remove();
 	}
 
 	calendar.render();

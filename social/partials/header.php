@@ -1,5 +1,4 @@
 <?php require_once './conf/main.php'; ?>
-<?php require_once './conf/events.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
