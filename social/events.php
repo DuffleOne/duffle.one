@@ -15,6 +15,11 @@
 div#calendar a {
 	color: inherit !important;
 }
+@media (max-width: 768px) {
+	button.fc-button {
+		font-size: 0.7em !important;
+	}
+}
 </style>
 
 <!-- Events START -->
