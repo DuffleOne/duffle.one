@@ -213,7 +213,18 @@ div#calendar a {
 <!-- Events START -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
 <script>
+const regex = /img:(?<uri>[a-z.]+);/;
+
+const apiKey = () => {
+	if (url.has('dev'))
+		return 'AIzaSyAvgLK89qnXxQax8IMLPVG4W6B37NZV0LA';
+
+	return 'AIzaSyCrg7JZIhKZIgTgef_3MTOjer0lG72WXPY';
+};
+
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendar');
 	var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -222,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		initialView: 'listYear',
 		nextDayThreshold: '06:00:00',
 		nowIndicator: true,
-		googleCalendarApiKey: 'AIzaSyCrg7JZIhKZIgTgef_3MTOjer0lG72WXPY',
+		googleCalendarApiKey: apiKey(),
 		eventSources: [
 			{
 				id: 'sourceKink',
@@ -238,17 +249,48 @@ document.addEventListener('DOMContentLoaded', function() {
 		eventDidMount: function(info) {
 			if (info.isPast)
 				info.event.remove();
-		},
-		eventClick: function(info) {
-			info.jsEvent.preventDefault();
+
+			let img = 'blank.png';
+			let link = null;
 
 			if (info.event.extendedProps.description) {
 				const el = document.createElement('html');
 				el.innerHTML = info.event.extendedProps.description;
-				const a = el.getElementsByTagName('a')[0];
 
-				window.open(a.href, '_blank');
+				const firstHref = el.getElementsByTagName('a')[0] ?? null;
+				if (firstHref)
+					link = firstHref.href;
+
+				const m = regex.exec(el.innerText);
+				if (m !== null)
+					img = m.groups.uri;
 			}
+
+			tippy(info.el, {
+				trigger: 'click',
+				interactive: true,
+				ignoreAttributes: true,
+				allowHTML: true,
+				followCursor: 'horizontal',
+				content: `
+					<div class="d-sm-flex align-items-center">
+						<div class="avatar avatar-xl">
+							<img class="avatar-img rounded border border-white border-3" src="assets/images/events/${img}" alt="${info.event.title}">
+						</div>
+						<div class="ms-sm-4 mt-2 mt-sm-0">
+							<a href="${link}">
+								<small>Click here for</small><br>
+								<h5 class="mb-1">Info & tickets</h5>
+							</a>
+							${info.event.source.id === 'sourceKink' ? '<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>' : ''}
+						</div>
+					</div>
+				`,
+			});
+		},
+		eventClick: function(info) {
+			info.jsEvent.preventDefault();
+			return;
 		},
 	});
 
