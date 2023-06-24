@@ -37,8 +37,8 @@
 								<!-- Card body START -->
 								<div class="card-body position-relative pt-0">
 									<p>I adore kink/fetish events, meeting new people, and getting involved in the London Kink community!</p>
-									<p>I am a domme, and while I love playing with everyone, I only date women.</p>
-									<p>Happy to explore one night only fun, short term play partners, and longer term romantic partners.</p>
+									<p>I am a bisexual domme, so I love playing with everyone. I am also polyamorous.</p>
+									<p>If you see me at an event, please come and say hi to introduce yourself in person.</p>
 								</div>
 								<!-- Card body END -->
 							</div>

@@ -16,6 +16,9 @@ div#calendar a {
 	color: inherit !important;
 }
 @media (max-width: 768px) {
+	div#calendar {
+		min-height: 600px;
+	}
 	button.fc-button {
 		font-size: 0.7em !important;
 	}
@@ -33,25 +36,6 @@ div#calendar a {
 	<div class="card-body">
 		<div id='calendar'></div>
 	</div>
-</div>
-<div class="card">
-	<div class="card-header d-sm-flex align-items-center justify-content-between border-0 pb-0">
-		<h5 class="card-title mb-sm-0">Recurring & past events</h5>
-	</div>
-	<div class="card-body">
-		<div class="row mb-4">
-			<div class="list-group">
-				<a href="https://www.clubantichrist.co.uk/" class="kink d-none list-group-item list-group-item-action">Club Antichrist</a>
-				<a href="https://www.bizarre-events.com/club-labrys" class="kink d-none list-group-item list-group-item-action">Club Labrys</a>
-				<a href="https://londonalternativemarket.com/" class="kink d-none list-group-item list-group-item-action">LAM</a>
-				<a href="https://klubverboten.com/dates" class="kink d-none list-group-item list-group-item-action">Klub Verboten</a>
-				<a href="#" class="kink d-none list-group-item list-group-item-action">Le Boutique Bazaar</a>
-				<a href="#" class="kink d-none list-group-item list-group-item-action">Naughties</a>
-				<a href="#" class="kink d-none list-group-item list-group-item-action">DEBAUCHERY</a>
-			</div>
-		</div>
-	</div>
-	<!-- Card body END -->
 </div>
 <!-- Events START -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>

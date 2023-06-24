@@ -13,13 +13,6 @@
 	<!-- Card header END -->
 	<!-- Card body START -->
 	<div class="card-body">
-		<!-- <div class="rounded border px-3 py-2 mb-3">
-			<div class="d-flex align-items-center justify-content-between">
-				<h6>Overview</h6>
-			</div>
-			<p>Hi! I'm a software engineer living in London, please browse around this page and don't be afraid to reach out.</p>
-			<p>I list some public events I visit here too, come and say hello if you see me!</p>
-		</div> -->
 		<div class="row g-4">
 			<div class="col-sm-6">
 				<!-- Birthday START -->
@@ -108,9 +101,7 @@
 					<p class="mb-0"><i class="bi bi-apple fa-fw me-2"></i></p>
 					<p class="mb-0"><i class="bi bi-discord fa-fw me-2"></i></p>
 					<p class="mb-0"><i class="bi bi-nintendo-switch fa-fw me-2"></i></p>
-					<p class="mb-0"><i class="bi bi-reddit fa-fw me-2"></i></p>
 					<p class="mb-0"><i class="bi bi-signal fa-fw me-2"></i></p>
-					<p class="mb-0"><i class="bi bi-snapchat fa-fw me-2"></i></p>
 					<p class="mb-0"><i class="bi bi-telegram fa-fw me-2"></i></p>
 					<p class="mb-0"><i class="bi bi-whatsapp fa-fw me-2"></i></p>
 					<p class="mb-0"><i class="bi bi-xbox fa-fw me-2"></i></p>
