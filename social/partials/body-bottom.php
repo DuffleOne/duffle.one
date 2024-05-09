@@ -59,12 +59,26 @@
 									<div class="d-flex mb-2">
 										<!-- Avatar -->
 										<div class="avatar me-3">
+											<img class="avatar-img rounded-circle" src="assets/images/employment/fire.png" alt="Fire emoji icon">
+										</div>
+										<!-- Info -->
+										<div>
+											<h6 class="card-title mb-0">Incident management</h6>
+											<p class="small">May 2024 (current)</p>
+										</div>
+									</div>
+									<!-- Experience item END -->
+
+									<!-- Experience item START -->
+									<div class="d-flex mb-2">
+										<!-- Avatar -->
+										<div class="avatar me-3">
 											<img class="avatar-img rounded-circle" src="assets/images/employment/sexual-wellbeing.png" alt="Non-descript sexual wellbeing icon">
 										</div>
 										<!-- Info -->
 										<div>
 											<h6 class="card-title mb-0">Sexual wellbeing company</h6>
-											<p class="small">April 2022 - Present employment</p>
+											<p class="small">April 2022 - May 2024</p>
 										</div>
 									</div>
 									<!-- Experience item END -->

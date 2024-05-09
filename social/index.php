@@ -29,7 +29,7 @@
 				<div class="d-flex align-items-center rounded border px-3 py-2">
 					<!-- Date -->
 					<p class="mb-0">
-						<i class="bi bi-briefcase fa-fw me-2"></i> <strong>Senior backend engineer</strong>
+						<i class="bi bi-briefcase fa-fw me-2"></i> <strong>Product engineer</strong>
 					</p>
 				</div>
 				<!-- Designation END -->
@@ -141,11 +141,11 @@
 				<!-- Interests item START -->
 				<div class="d-flex align-items-center position-relative">
 					<div class="avatar">
-						<img class="avatar-img rounded-circle" src="assets/images/lindy-hop.jpg" alt="Lindy hop dancers">
+						<img class="avatar-img rounded-circle" src="assets/images/photography.jpg" alt="Leaves">
 					</div>
 					<div class="ms-2">
-						<h6 class="mb-0">Lindy Hop</h6>
-						<p class="small mb-0">Weekly classes & socials</p>
+						<h6 class="mb-0"><a class="stretched-link" href="https://photos.duffle.one/">Photography</a></h6>
+						<p class="small mb-0">Amateur hobbyist</p>
 					</div>
 				</div>
 				<!-- Interests item END -->
