@@ -15,6 +15,9 @@
 	<script>
 		const url = new URLSearchParams(location.search);
 
+		const mode = url.has('kink') ? 'kink' : 'public';
+		console.info(`${mode} mode enabled`);
+
 		const storedTheme = localStorage.getItem('theme')
 
 		const getPreferredTheme = () => {

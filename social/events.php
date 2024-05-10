@@ -37,7 +37,7 @@ div#calendar a {
 		<div id='calendar'></div>
 	</div>
 </div>
-<!-- Events START -->
+<!-- Events END -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
 <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		firstDay: 1, // Monday
 		headerToolbar: { center: 'listYear,timeGridWeek,dayGridMonth' },
 		initialView: 'listYear',
-		nextDayThreshold: '06:00:00',
+		nextDayThreshold: '06:01:00',
 		nowIndicator: true,
 		googleCalendarApiKey: apiKey(),
 		eventSources: [
@@ -73,6 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
 				color: '#33b679',
 			},
 		],
+		eventDataTransform: function(event) {
+			if (!event.title)
+				event.title = "Private event 🙅‍♀️";
+
+			return event;
+		},
 		eventDidMount: function(info) {
 			if (info.isPast)
 				info.event.remove();
@@ -93,26 +99,28 @@ document.addEventListener('DOMContentLoaded', function() {
 					img = m.groups.uri;
 			}
 
+			content = `
+				<div class="d-sm-flex align-items-center">
+					<div class="avatar avatar-xl">
+						<img class="avatar-img rounded border border-white border-3" src="assets/images/events/${img}" alt="${info.event.title}">
+					</div>
+					<div class="ms-sm-4 mt-2 mt-sm-0">
+						${ link ? `<a href="${link}">
+							<small>Click here for</small><br>
+							<h5 class="mb-1">Info & tickets</h5>
+						</a>` : '' }
+						${info.event.source.id === 'sourceKink' ? '<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>' : ''}
+					</div>
+				</div>
+			`;
+
 			tippy(info.el, {
 				trigger: 'click',
 				interactive: true,
 				ignoreAttributes: true,
 				allowHTML: true,
 				followCursor: 'horizontal',
-				content: `
-					<div class="d-sm-flex align-items-center">
-						<div class="avatar avatar-xl">
-							<img class="avatar-img rounded border border-white border-3" src="assets/images/events/${img}" alt="${info.event.title}">
-						</div>
-						<div class="ms-sm-4 mt-2 mt-sm-0">
-							<a href="${link}">
-								<small>Click here for</small><br>
-								<h5 class="mb-1">Info & tickets</h5>
-							</a>
-							${info.event.source.id === 'sourceKink' ? '<p class="small mb-1"><span class="badge bg-danger">Kink</span></p>' : ''}
-						</div>
-					</div>
-				`,
+				content: content,
 			});
 		},
 		eventClick: function(info) {
@@ -121,9 +129,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		},
 	});
 
-	if (!url.has('kink')) {
-		const sourceKink = calendar.getEventSourceById('sourceKink');
-		sourceKink.remove();
+	const sourceKink = calendar.getEventSourceById('sourceKink');
+	const sourcePublic = calendar.getEventSourceById('sourcePublic');
+
+	switch (mode) {
+		case 'kink':
+			sourcePublic.remove();
+			break;
+		case 'public':
+			sourceKink.remove();
+			break;
 	}
 
 	calendar.render();

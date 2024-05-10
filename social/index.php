@@ -29,20 +29,10 @@
 				<div class="d-flex align-items-center rounded border px-3 py-2">
 					<!-- Date -->
 					<p class="mb-0">
-						<i class="bi bi-briefcase fa-fw me-2"></i> <strong>Product engineer</strong>
+						<i class="bi bi-briefcase fa-fw me-2"></i> <strong><?php echo $jobTitle; ?></strong>
 					</p>
 				</div>
 				<!-- Designation END -->
-			</div>
-			<div class="col-sm-6">
-				<!-- Lives START -->
-				<div class="d-flex align-items-center rounded border px-3 py-2">
-					<!-- Date -->
-					<p class="mb-0">
-						<i class="bi bi-geo-alt fa-fw me-2"></i> Lives in: <strong>London 🇬🇧</strong>
-					</p>
-				</div>
-				<!-- Lives END -->
 			</div>
 			<div class="col-sm-6">
 				<!-- email START -->
@@ -80,6 +70,16 @@
 					<!-- Date -->
 					<p class="mb-0">
 						<i class="bi bi-github fa-fw me-2"></i> GitHub: <strong><a href="https://github.com/DuffleOne">DuffleOne</a></strong>
+					</p>
+				</div>
+				<!-- email END -->
+			</div>
+			<div class="col-sm-6">
+				<!-- email START -->
+				<div class="d-flex align-items-center rounded border px-3 py-2">
+					<!-- Date -->
+					<p class="mb-0">
+						<i class="bi bi-instagram fa-fw me-2"></i> Instagram: <strong><a href="https://instagram.com/duffle.one">duffle.one</a></strong>
 					</p>
 				</div>
 				<!-- email END -->

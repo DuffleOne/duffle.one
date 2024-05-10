@@ -67,7 +67,7 @@
 							</div>
 							<!-- List profile -->
 							<ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Senior backend engineer</li>
+								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> <?php echo $jobTitle; ?></li>
 								<li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> London, UK 🇬🇧</li>
 								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on <?php echo $lastUpdated; ?></li>
 							</ul>
@@ -77,7 +77,7 @@
 							<!-- Nav profile pages -->
 							<ul class="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
 								<?php foreach ($pages as $page) { ?>
-									<li class="nav-item"><a class="nav-link kink-link <?php echo $pageName === $page['name'] ? 'active' : ''; ?>" href="<?php echo $page['href']; ?>"><?php echo $page['display']; ?></a></li>
+									<li class="nav-item<?php echo isset($page['kink']) ? ' kink d-none' : false; ?>"><a class="nav-link kink-link <?php echo $pageName === $page['name'] ? 'active' : ''; ?>" href="<?php echo $page['href']; ?>"><?php echo $page['display']; ?></a></li>
 								<?php } ?>
 							</ul>
 						</div>

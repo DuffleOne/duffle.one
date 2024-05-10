@@ -15,6 +15,9 @@
 	<script>
 		const url = new URLSearchParams(location.search);
 
+		const mode = url.has('kink') ? 'kink' : 'public';
+		console.info(`${mode} mode enabled`);
+
 		const storedTheme = localStorage.getItem('theme')
 
 		const getPreferredTheme = () => {
@@ -161,9 +164,9 @@
 							</div>
 							<!-- List profile -->
 							<ul class="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0">
-								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Senior backend engineer</li>
+								<li class="list-inline-item"><i class="bi bi-briefcase me-1"></i> Product engineer</li>
 								<li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> London, UK 🇬🇧</li>
-								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on Jun 24, 2023</li>
+								<li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> Last updated on May 10, 2024</li>
 							</ul>
 						</div>
 						<!-- Card body END -->
@@ -202,20 +205,10 @@
 				<div class="d-flex align-items-center rounded border px-3 py-2">
 					<!-- Date -->
 					<p class="mb-0">
-						<i class="bi bi-briefcase fa-fw me-2"></i> <strong>Senior backend engineer</strong>
+						<i class="bi bi-briefcase fa-fw me-2"></i> <strong>Product engineer</strong>
 					</p>
 				</div>
 				<!-- Designation END -->
-			</div>
-			<div class="col-sm-6">
-				<!-- Lives START -->
-				<div class="d-flex align-items-center rounded border px-3 py-2">
-					<!-- Date -->
-					<p class="mb-0">
-						<i class="bi bi-geo-alt fa-fw me-2"></i> Lives in: <strong>London 🇬🇧</strong>
-					</p>
-				</div>
-				<!-- Lives END -->
 			</div>
 			<div class="col-sm-6">
 				<!-- email START -->
@@ -253,6 +246,16 @@
 					<!-- Date -->
 					<p class="mb-0">
 						<i class="bi bi-github fa-fw me-2"></i> GitHub: <strong><a href="https://github.com/DuffleOne">DuffleOne</a></strong>
+					</p>
+				</div>
+				<!-- email END -->
+			</div>
+			<div class="col-sm-6">
+				<!-- email START -->
+				<div class="d-flex align-items-center rounded border px-3 py-2">
+					<!-- Date -->
+					<p class="mb-0">
+						<i class="bi bi-instagram fa-fw me-2"></i> Instagram: <strong><a href="https://instagram.com/duffle.one">duffle.one</a></strong>
 					</p>
 				</div>
 				<!-- email END -->
@@ -539,17 +542,13 @@
 
 	<!-- Laura specific bits-->
 	<script>
-		if (url.has('kink')) {
-			console.info('Kink mode enabled');
+		for (const e of document.querySelectorAll(`.${mode}`)) {
+			e.classList.remove('d-none');
+		}
 
-			for (const e of document.querySelectorAll('.kink')) {
-				e.classList.remove('d-none');
-			}
-
-			for (const l of document.querySelectorAll('.kink-link')) {
-				const existing = l.getAttribute('href');
-				l.setAttribute('href', `${existing}?kink`);
-			}
+		for (const l of document.querySelectorAll(`.${mode}-link`)) {
+			const existing = l.getAttribute('href');
+			l.setAttribute('href', `${existing}?${mode}`);
 		}
 	</script>
 

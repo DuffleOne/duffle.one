@@ -159,17 +159,13 @@
 
 	<!-- Laura specific bits-->
 	<script>
-		if (url.has('kink')) {
-			console.info('Kink mode enabled');
+		for (const e of document.querySelectorAll(`.${mode}`)) {
+			e.classList.remove('d-none');
+		}
 
-			for (const e of document.querySelectorAll('.kink')) {
-				e.classList.remove('d-none');
-			}
-
-			for (const l of document.querySelectorAll('.kink-link')) {
-				const existing = l.getAttribute('href');
-				l.setAttribute('href', `${existing}?kink`);
-			}
+		for (const l of document.querySelectorAll(`.${mode}-link`)) {
+			const existing = l.getAttribute('href');
+			l.setAttribute('href', `${existing}?${mode}`);
 		}
 	</script>
 
