@@ -11,7 +11,7 @@ steps:
     path: /build
   commands:
   - (cd home && npm install)
-  - (cd home && npx tailwindcss -i ./src/input.css -o /build/output.css --minify)
+  - (cd home && npx @tailwindcss/cli -i ./src/input.css -o /build/output.css --minify)
   - cp -f ./home/src/index.html /build/index.html
   - cp -f ./home/src/*.svg /build/
 
@@ -73,6 +73,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 0ae5aa608ec0076cbdb5db2713be76d1dd6a65e99eb9cc7e748a8fa025a1933c
+hmac: a6b9a4ee66c8bca4215f33639fe435ba0c370d8807288ba2e6e97a657e10dfc7
 
 ...
