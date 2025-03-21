@@ -48,3 +48,5 @@ volumes:
 trigger:
   branch:
   - master
+  target:
+  - production
