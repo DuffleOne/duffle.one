@@ -1,3 +1,4 @@
+---
 kind: pipeline
 type: docker
 name: build and publish
@@ -49,3 +50,8 @@ volumes:
   - name: aws
     host:
       path: /root/.aws
+---
+kind: signature
+hmac: 16b37251d9f66a194d2e7d351a6067037ec7ddb3557d4d826a288efde7584f5d
+
+...
