@@ -55,7 +55,6 @@ steps:
     path: /root/.aws
   commands:
   - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
-  - aws s3 rm s3://duffle.one/dev --recursive
   depends_on:
   - build_home
   - build_display
