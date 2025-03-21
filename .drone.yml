@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: build and publish
+name: build
 
 steps:
 - name: build
@@ -14,6 +14,11 @@ steps:
   - cp -f ./home/src/index.html /build/index.html
   - cp -f ./home/src/*.svg /build/
 
+- name: publish
+  image: amazon/aws-cli
+  commands:
+  - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
+
 volumes:
   - name: build
-    path: /build
+    temp: {}
