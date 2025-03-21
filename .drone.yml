@@ -5,8 +5,15 @@ name: build and publish
 steps:
 - name: build
   image: node
+  volumes:
+  - name: build
+    path: /build
   commands:
   - (cd home && npm install)
-  - (cd home && npm run build)
-  - cp -f ./home/src/index.html ./build/index.html
-  - cp -f ./home/src/*.svg ./build/
+  - (cd home && npx tailwindcss -i ./src/input.css -o /build/output.css --minify)
+  - cp -f ./home/src/index.html /build/index.html
+  - cp -f ./home/src/*.svg /build/
+
+volumes:
+  - name: build
+    path: /build
