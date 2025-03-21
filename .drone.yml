@@ -19,9 +19,14 @@ steps:
   volumes:
   - name: build
     path: /build
+  - name: aws
+    path: /root/.aws
   commands:
   - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
 
 volumes:
   - name: build
     temp: {}
+  - name: aws
+    host:
+      path: /root/.aws
