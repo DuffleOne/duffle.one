@@ -1,10 +1,50 @@
 kind: pipeline
 type: docker
-name: publish
+name: build and publish
 
 steps:
-- name: greeting
-  image: alpine
+- name: build_home
+  image: node
+  volumes:
+  - name: build
+    path: /build
   commands:
-  - echo hello
-  - echo world
+  - (cd home && npm install)
+  - (cd home && npx tailwindcss -i ./src/input.css -o /build/output.css --minify)
+  - cp -f ./home/src/index.html /build/index.html
+  - cp -f ./home/src/*.svg /build/
+
+- name: build_display
+  image: alpine
+  volumes:
+  - name: build
+    path: /build
+  commands:
+  - mkdir -p /build/display
+  - cp -f ./display/index.html /build/display/index.html
+  - cp -f ./display/*.svg /build/display/
+
+- name: publish
+  image: amazon/aws-cli
+  privileged: true
+  volumes:
+  - name: build
+    path: /build
+  - name: aws
+    path: /root/.aws
+  commands:
+  - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
+  depends_on:
+  - build_home
+  - build_display
+
+volumes:
+  - name: build
+    temp: {}
+  - name: aws
+    host:
+      path: /root/.aws
+
+trigger:
+  branch:
+  - master
