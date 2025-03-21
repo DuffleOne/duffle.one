@@ -1,10 +1,12 @@
 kind: pipeline
 type: docker
-name: publish
+name: build and publish
 
 steps:
 - name: build
   image: node
   commands:
-  - npm install
-  - npm run build
+  - (cd home && npm install)
+  - (cd home && npm run build)
+  - cp -f ./home/src/index.html ./build/index.html
+  - cp -f ./home/src/*.svg ./build/
