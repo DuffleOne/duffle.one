@@ -16,6 +16,9 @@ steps:
 
 - name: publish
   image: amazon/aws-cli
+  volumes:
+  - name: build
+    path: /build
   commands:
   - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
 
