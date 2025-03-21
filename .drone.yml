@@ -3,8 +3,8 @@ type: docker
 name: publish
 
 steps:
-- name: greeting
-  image: alpine
+- name: build
+  image: node
   commands:
-  - echo hello
-  - echo world
+  - npm install
+  - npm run build
