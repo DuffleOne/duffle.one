@@ -39,9 +39,6 @@ steps:
   - build_home
   - build_display
   when:
-    ref:
-      exclude:
-      - refs/heads/master
     event:
     - push
 
