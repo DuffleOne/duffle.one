@@ -27,6 +27,7 @@ steps:
 
 - name: publish development
   image: amazon/aws-cli
+  privileged: true
   volumes:
   - name: build
     path: /build
@@ -46,6 +47,7 @@ steps:
 
 - name: publish production
   image: amazon/aws-cli
+  privileged: true
   volumes:
   - name: build
     path: /build
@@ -71,6 +73,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: f5f02609c0a993c1c90dcd92ec635d11a9f427316f75f7b6b1c6abb871d742a2
+hmac: 6a80923643af8cca5c724f83681a3cb703ecd7424df005bb30469ee301126029
 
 ...
