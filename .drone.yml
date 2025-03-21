@@ -37,6 +37,9 @@ steps:
   depends_on:
   - build_home
   - build_display
+  when:
+    branch:
+    - master
 
 volumes:
   - name: build
