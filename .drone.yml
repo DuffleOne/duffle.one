@@ -25,17 +25,6 @@ steps:
   - cp -f ./display/index.html /build/display/index.html
   - cp -f ./display/*.svg /build/display/
 
-- name: list_build
-  image: alpine
-  volumes:
-  - name: build
-    path: /build
-  commands:
-  - ls -la /build
-  depends_on:
-  - build_home
-  - build_display
-
 - name: publish_development
   image: amazon/aws-cli
   volumes:
@@ -79,6 +68,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 84863ce592e9c85049607e2aefddf972468ca6a800daedb578ec1f0ddb8c4562
+hmac: 79fc38b4883f827ac8bde457820a4c1e03a7a884fd14916916b38afa0ef50ae3
 
 ...
