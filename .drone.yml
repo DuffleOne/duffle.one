@@ -44,3 +44,7 @@ volumes:
   - name: aws
     host:
       path: /root/.aws
+
+trigger:
+  branch:
+  - master
