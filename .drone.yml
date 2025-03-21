@@ -25,7 +25,27 @@ steps:
   - cp -f ./display/index.html /build/display/index.html
   - cp -f ./display/*.svg /build/display/
 
-- name: publish
+- name: publish development
+  image: amazon/aws-cli
+  privileged: true
+  volumes:
+  - name: build
+    path: /build
+  - name: aws
+    path: /root/.aws
+  commands:
+  - aws s3 sync /build s3://duffle.one/dev --acl public-read --follow-symlinks
+  depends_on:
+  - build_home
+  - build_display
+  when:
+    ref:
+      exclude:
+      - refs/heads/master
+    event:
+    - push
+
+- name: publish production
   image: amazon/aws-cli
   privileged: true
   volumes:
@@ -35,6 +55,7 @@ steps:
     path: /root/.aws
   commands:
   - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
+  - aws s3 rm s3://duffle.one/dev --recursive
   depends_on:
   - build_home
   - build_display
