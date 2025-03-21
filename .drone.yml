@@ -27,7 +27,6 @@ steps:
 
 - name: publish
   image: amazon/aws-cli
-  privileged: true
   volumes:
   - name: build
     path: /build
