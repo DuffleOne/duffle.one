@@ -38,8 +38,10 @@ steps:
   - build_home
   - build_display
   when:
-    branch:
-    - master
+    ref:
+    - refs/heads/master
+    event:
+    - push
 
 volumes:
   - name: build
@@ -47,7 +49,3 @@ volumes:
   - name: aws
     host:
       path: /root/.aws
-
-trigger:
-  branch:
-  - master
