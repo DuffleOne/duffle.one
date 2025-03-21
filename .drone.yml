@@ -25,6 +25,14 @@ steps:
   - cp -f ./display/index.html /build/display/index.html
   - cp -f ./display/*.svg /build/display/
 
+- name: list_build
+  image: alpine
+  volumes:
+  - name: build
+    path: /build
+  commands:
+  - ls -la /build
+
 - name: publish_development
   image: amazon/aws-cli
   volumes:
@@ -55,8 +63,8 @@ steps:
   - build_display
   - publish_development
   when:
-    ref:
-    - refs/heads/master
+    branch:
+    - master
     event:
     - push
 
@@ -68,6 +76,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: ef4acc11ef77e18cbf97b43b55c716908a99b587d49cc2825e7c75b8c6a42c89
+hmac: 45cebb5051d864e0bdb0c489dc6625d57849d1e3fcfb5f80d3d914ce9e063b68
 
 ...
