@@ -25,9 +25,8 @@ steps:
   - cp -f ./display/index.html /build/display/index.html
   - cp -f ./display/*.svg /build/display/
 
-- name: publish development
+- name: publish_development
   image: amazon/aws-cli
-  privileged: true
   volumes:
   - name: build
     path: /build
@@ -44,7 +43,6 @@ steps:
 
 - name: publish production
   image: amazon/aws-cli
-  privileged: true
   volumes:
   - name: build
     path: /build
@@ -55,6 +53,7 @@ steps:
   depends_on:
   - build_home
   - build_display
+  - publish_development
   when:
     ref:
     - refs/heads/master
@@ -69,6 +68,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 388c192bd0bc006d5c70cfc281a7201be8a6a2cf1bf1e883850ccf852d847da0
+hmac: ef4acc11ef77e18cbf97b43b55c716908a99b587d49cc2825e7c75b8c6a42c89
 
 ...
