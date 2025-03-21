@@ -66,13 +66,12 @@ steps:
 
 volumes:
   - name: build
-    temp:
-      medium: memory
+    temp: {}
   - name: aws
     host:
       path: /root/.aws
 ---
 kind: signature
-hmac: 6a80923643af8cca5c724f83681a3cb703ecd7424df005bb30469ee301126029
+hmac: 388c192bd0bc006d5c70cfc281a7201be8a6a2cf1bf1e883850ccf852d847da0
 
 ...
