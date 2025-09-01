@@ -4,45 +4,83 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="./output.css" rel="stylesheet">
+	<meta name="description" content="Laura Miller — links, photos, and more.">
+	<link rel="canonical" href="https://duffle.one/">
+	<meta property="og:title" content="Laura Miller — duffle.one">
+	<meta property="og:description" content="Links to my work and socials.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://duffle.one/">
+	<meta property="og:image" content="https://duffle.one/img/banner.jpg">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Laura Miller — duffle.one">
+	<meta name="twitter:description" content="Links to my work and socials.">
+	<meta name="twitter:image" content="https://duffle.one/img/banner.jpg">
+	<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#0b0f19" media="(prefers-color-scheme: dark)">
+	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+	<link href="./output.css?v=__BUILD_TS__" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+	<title>duffle.one</title>
 </head>
 
-<body class="h-screen">
-	<section class="bg-white dark:bg-gray-900 h-full">
-		<div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12 h-full flex flex-col justify-center">
-			<p class="mb-4 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">duffle.one</p>
-			<h1 class="mb-12 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Laura Miller</h1>
-
-			<div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-38">
-				<div class="flex flex-wrap justify-center items-center mt-8 text-gray-500 sm:justify-between">
-					<a href="https://instagram.com/duffle.one" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
-						<img src="instagram.svg" class="h-8" style="height:100px; width: 100px;" />
-						Instagram
-					</a>
-
-					<a href="https://github.com/DuffleOne" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
-						<img src="github.svg" class="h-8" style="height:100px; width: 100px;" />
-						Github
-					</a>
-
-					<a href="https://steamcommunity.com/id/DuffleOne" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
-						<img src="steam.svg" class="h-8" style="height:100px; width: 100px;" />
-						Steam
-					</a>
-
-					<a href="https://glass.photo/duffle" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
-						<img src="camera.svg" class="h-8" style="height:100px; width: 100px;" />
-						Photos
-					</a>
-
-					<a href="https://shop.duffle.one" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
-						<img src="shop.svg" class="h-8" style="height:100px; width: 100px;" />
-						Shop
-					</a>
-				</div>
-			</div>
+<body class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased">
+	<header class="w-full">
+		<div class="relative h-48 sm:h-64 w-full bg-gray-100 dark:bg-gray-800 bg-cover banner-image">
+			<div class="pointer-events-none absolute inset-x-0 bottom-0 h-32 sm:h-40 bg-gradient-to-b from-transparent via-white/10 to-white dark:via-gray-950/10 dark:to-gray-950 backdrop-blur-[2px] z-0 banner-mask"></div>
 		</div>
-	</section>
+	</header>
+
+	<main class="max-w-lg mx-auto px-4 -mt-16 sm:-mt-20">
+		<div class="flex flex-col items-center text-center">
+			<img src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-white dark:ring-gray-950 object-cover portrait-pos relative z-10" width="224" height="224" decoding="async" />
+			<h1 class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">Laura Miller</h1>
+			<p class="mt-1 text-sm text-gray-600 dark:text-gray-400">duffle.one</p>
+			<p class="mt-4 text-base leading-relaxed text-gray-700 dark:text-gray-300">Founding engineer, photographer, 3D designer.</p>
+		</div>
+
+		<nav class="mt-8" aria-label="Social links">
+			<ul class="space-y-3">
+				<li>
+					<a href="https://instagram.com/duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+						<img src="img/icons/instagram.svg" class="h-5 w-5" alt="Instagram" width="20" height="20" />
+						<span class="font-medium">Instagram</span>
+						<span class="ml-auto text-gray-400">↗</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://github.com/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+						<img src="img/icons/github.svg" class="h-5 w-5" alt="GitHub" width="20" height="20" />
+						<span class="font-medium">GitHub</span>
+						<span class="ml-auto text-gray-400">↗</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://steamcommunity.com/id/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+						<img src="img/icons/steam.svg" class="h-5 w-5" alt="Steam" width="20" height="20" />
+						<span class="font-medium">Steam</span>
+						<span class="ml-auto text-gray-400">↗</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://glass.photo/duffle" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+						<img src="img/icons/glass.ico" class="h-5 w-5" alt="Photos" width="20" height="20" />
+						<span class="font-medium">Photos</span>
+						<span class="ml-auto text-gray-400">↗</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://shop.duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+						<img src="img/icons/shop.svg" class="h-5 w-5" alt="Shop" width="20" height="20" />
+						<span class="font-medium">Shop</span>
+						<span class="ml-auto text-gray-400">↗</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</main>
+
 </body>
 
 </html>

@@ -4,61 +4,68 @@ type: docker
 name: build and publish
 
 steps:
-- name: build_home
-  image: node
-  volumes:
-  - name: build
-    path: /build
-  commands:
-  - (cd home && npm install)
-  - (cd home && npx @tailwindcss/cli -i ./src/input.css -o /build/output.css --minify)
-  - cp -f ./home/src/index.html /build/index.html
-  - cp -f ./home/src/*.svg /build/
+  - name: build_home
+    image: node
+    volumes:
+      - name: build
+        path: /build
+    commands:
+      - (cd home && npm ci)
+      - (cd home && npx @tailwindcss/cli -i ./src/input.css -o /build/output.css --minify)
+      - BUILD_TS=$(date +%s)
+      - sed "s/__BUILD_TS__/${BUILD_TS}/g" ./home/src/index.html > /build/index.html
+      - mkdir -p /build/img
+      - cp -R ./home/src/img/* /build/img/
+      - cp -f ./home/src/favicon.svg /build/favicon.svg
+      - cp -f ./home/src/404.html /build/404.html
 
-- name: build_display
-  image: alpine
-  volumes:
-  - name: build
-    path: /build
-  commands:
-  - mkdir -p /build/display
-  - cp -f ./display/index.html /build/display/index.html
-  - cp -f ./display/*.svg /build/display/
+  - name: build_display
+    image: alpine
+    volumes:
+      - name: build
+        path: /build
+    commands:
+      - mkdir -p /build/display
+      - cp -f ./display/index.html /build/display/index.html
+      - cp -f ./display/*.svg /build/display/
 
-- name: publish_development
-  image: amazon/aws-cli
-  volumes:
-  - name: build
-    path: /build
-  - name: aws
-    path: /root/.aws
-  commands:
-  - aws s3 sync /build s3://duffle.one/dev --acl public-read --follow-symlinks
-  depends_on:
-  - build_home
-  - build_display
-  when:
-    event:
-    - push
+  - name: publish_development
+    image: amazon/aws-cli
+    volumes:
+      - name: build
+        path: /build
+      - name: aws
+        path: /root/.aws
+    commands:
+      - aws s3 sync /build s3://duffle.one/dev --acl public-read --follow-symlinks
+    depends_on:
+      - build_home
+      - build_display
+    when:
+      event:
+        - push
 
-- name: publish production
-  image: amazon/aws-cli
-  volumes:
-  - name: build
-    path: /build
-  - name: aws
-    path: /root/.aws
-  commands:
-  - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
-  depends_on:
-  - build_home
-  - build_display
-  - publish_development
-  when:
-    branch:
-    - master
-    event:
-    - push
+  - name: publish production
+    image: amazon/aws-cli
+    volumes:
+      - name: build
+        path: /build
+      - name: aws
+        path: /root/.aws
+    commands:
+      - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
+      - aws s3 cp /build/output.css s3://duffle.one/output.css --acl public-read --content-type text/css --cache-control "public, max-age=300" --metadata-directive REPLACE
+      - aws s3 cp /build/index.html s3://duffle.one/index.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
+      - aws s3 cp /build/404.html s3://duffle.one/404.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
+    depends_on:
+      - build_home
+      - build_display
+      - publish_development
+    when:
+      branch:
+        - master
+      event:
+        - push
 
 volumes:
   - name: build
@@ -69,5 +76,3 @@ volumes:
 ---
 kind: signature
 hmac: 79fc38b4883f827ac8bde457820a4c1e03a7a884fd14916916b38afa0ef50ae3
-
-...
