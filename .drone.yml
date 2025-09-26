@@ -56,4 +56,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: ba752d85fede159ce58aaafc0582e4ad85a199036bedfa07e49c7726936de8c6
+hmac: 77090434431a6ca68d71f3d510e8bbe1993a62c338b923565ab391649c2fbd74
+
+...
