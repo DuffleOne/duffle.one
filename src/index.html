@@ -38,7 +38,9 @@
 			<h1 class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">Laura Miller</h1>
 			<p class="mt-1 text-sm text-gray-600 dark:text-gray-400">duffle.one</p>
 			<p class="mt-4 text-base leading-relaxed text-gray-700 dark:text-gray-300">Founding engineer, photographer, 3D designer.</p>
-			<blockquote id="daily-quote" class="mt-4 text-base italic text-gray-800 dark:text-gray-200 quote-block w-full text-center" aria-label="daily quote"><span id="daily-quote-text" class="opacity-0 inline-block"></span></blockquote>
+			<blockquote id="quote" class="mt-4 text-base italic text-gray-800 dark:text-gray-200 quote-block w-full text-center border border-gray-200 dark:border-gray-800" aria-label="daily quote">
+				<span id="quote-text" class="opacity-0 inline-block"></span>
+			</blockquote>
 		</div>
 
 		<nav class="mt-8" aria-label="Social links">
@@ -122,8 +124,8 @@
 		};
 
 		onReady(() => {
-			const el = document.getElementById("daily-quote");
-			const textEl = document.getElementById("daily-quote-text");
+			const el = document.getElementById("quote");
+			const textEl = document.getElementById("quote-text");
 			if (!el || !textEl) return;
 
 			const setQuote = () => {
