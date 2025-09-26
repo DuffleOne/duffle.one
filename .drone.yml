@@ -4,30 +4,14 @@ type: docker
 name: build and publish
 
 steps:
-  - name: build_home
-    image: node
+  - name: build_site
+    image: node:20
     volumes:
       - name: build
         path: /build
     commands:
-      - (cd home && npm ci)
-      - (cd home && npx @tailwindcss/cli -i ./src/input.css -o /build/output.css --minify)
-      - BUILD_TS=$(date +%s)
-      - sed "s/__BUILD_TS__/${BUILD_TS}/g" ./home/src/index.html > /build/index.html
-      - mkdir -p /build/img
-      - cp -R ./home/src/img/* /build/img/
-      - cp -f ./home/src/favicon.svg /build/favicon.svg
-      - cp -f ./home/src/404.html /build/404.html
-
-  - name: build_display
-    image: alpine
-    volumes:
-      - name: build
-        path: /build
-    commands:
-      - mkdir -p /build/display
-      - cp -f ./display/index.html /build/display/index.html
-      - cp -f ./display/*.svg /build/display/
+      - npm ci
+      - npm run build
 
   - name: publish_development
     image: amazon/aws-cli
@@ -39,8 +23,7 @@ steps:
     commands:
       - aws s3 sync /build s3://duffle.one/dev --acl public-read --follow-symlinks
     depends_on:
-      - build_home
-      - build_display
+      - build_site
     when:
       event:
         - push
@@ -54,12 +37,10 @@ steps:
         path: /root/.aws
     commands:
       - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
-      - aws s3 cp /build/output.css s3://duffle.one/output.css --acl public-read --content-type text/css --cache-control "public, max-age=300" --metadata-directive REPLACE
       - aws s3 cp /build/index.html s3://duffle.one/index.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
       - aws s3 cp /build/404.html s3://duffle.one/404.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
     depends_on:
-      - build_home
-      - build_display
+      - build_site
       - publish_development
     when:
       branch:
@@ -76,5 +57,3 @@ volumes:
 ---
 kind: signature
 hmac: ba752d85fede159ce58aaafc0582e4ad85a199036bedfa07e49c7726936de8c6
-
-...
