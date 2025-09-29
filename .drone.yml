@@ -24,9 +24,6 @@ steps:
       - aws s3 sync /build s3://duffle.one/dev --acl public-read --follow-symlinks
     depends_on:
       - build_site
-    when:
-      event:
-        - push
 
   - name: publish production
     image: amazon/aws-cli
@@ -56,6 +53,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 77090434431a6ca68d71f3d510e8bbe1993a62c338b923565ab391649c2fbd74
+hmac: 2a8591ca43206af9a26757eb37e9b111ea765a0fbb48c113f26bb3788fef27a8
 
 ...
