@@ -13,18 +13,6 @@ steps:
       - npm ci
       - npm run build
 
-  - name: publish_development
-    image: amazon/aws-cli
-    volumes:
-      - name: build
-        path: /build
-      - name: aws
-        path: /root/.aws
-    commands:
-      - aws s3 sync /build s3://duffle.one/dev --acl public-read --follow-symlinks
-    depends_on:
-      - build_site
-
   - name: publish production
     image: amazon/aws-cli
     volumes:
@@ -38,7 +26,6 @@ steps:
       - aws s3 cp /build/404.html s3://duffle.one/404.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
     depends_on:
       - build_site
-      - publish_development
     when:
       branch:
         - master
@@ -53,6 +40,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 2a8591ca43206af9a26757eb37e9b111ea765a0fbb48c113f26bb3788fef27a8
+hmac: 9147848b6b74a104cdba1c85744aac4a366d94a1c899b56a93380ec96644467b
 
 ...
