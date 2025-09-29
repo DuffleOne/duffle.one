@@ -8,7 +8,7 @@ export default defineConfig({
 	},
 	build: {
 		target: 'es2022',
-		outDir: '../build',
+		outDir: './build',
 		emptyOutDir: true,
 		rollupOptions: {
 			input: {
