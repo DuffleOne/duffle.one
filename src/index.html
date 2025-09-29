@@ -113,7 +113,26 @@
 			"When in Rome, they do as she does.",
 		];
 
-		const chooseRandom = (array) => array[Math.floor(Math.random() * array.length)];
+		const sequencer = () => {
+			let currentIdx = 0;
+			const shuffled = quotes.slice();
+			for (let i = shuffled.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+			}
+
+			console.log(shuffled);
+
+			return () => {
+				if (currentIdx >= shuffled.length) {
+					currentIdx = 0;
+				}
+
+				const quote = shuffled[currentIdx];
+				currentIdx++;
+				return quote;
+			}
+		}
 
 		const onReady = (fn) => {
 			if (document.readyState === "loading") {
@@ -127,9 +146,10 @@
 			const el = document.getElementById("quote");
 			const textEl = document.getElementById("quote-text");
 			if (!el || !textEl) return;
+			const seq = sequencer();
 
 			const setQuote = () => {
-				const quote = chooseRandom(quotes);
+				const quote = seq();
 				textEl.textContent = quote;
 				textEl.classList.remove("quote-fade-in");
 				// Force reflow to restart the animation
