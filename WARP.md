@@ -4,49 +4,33 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-This is a personal website project for Laura Miller (duffle.one) consisting of two static HTML sites:
-
-- **Home page** (`/home`): Personal landing page with social media links, built with Tailwind CSS
-- **Display page** (`/display`): Guest information page for Laura's flat, using Bootstrap
-
-The project deploys to AWS S3 with automated CI/CD through Drone CI.
+This is a single static website for Laura Miller (duffle.one), built with Tailwind CSS v4 and deployed to AWS S3. The previous `display/` site has been removed; everything now lives under `src/` at the repository root.
 
 ## Development Commands
 
-### Building the Project
+### Install
 
 ```bash
-# Build the entire project locally
-./compile.sh
+npm install
 ```
+
+### Build
 
 ```bash
-# Build just the home page (Tailwind CSS compilation)
-cd home && npm run build
+# Build the entire site locally using Vite (outputs to build/)
+npm run build
 ```
+
+### Develop (local)
 
 ```bash
-# Watch for changes during development (home page only)
-cd home && npm run watch
+# Start the Vite dev server
+npm run dev
 ```
 
-### Installing Dependencies
+Then open `build/index.html` in your browser. As you edit `src/index.html` or change classes, the CSS will update automatically.
 
-```bash
-# Install Node.js dependencies for the home page
-cd home && npm install
-```
-
-### Local Development
-
-```bash
-# Start Tailwind CSS in watch mode for live development
-cd home && npm run watch
-```
-
-After running this command, you can open `build/index.html` in your browser and see changes reflected as you modify the CSS classes or HTML.
-
-### Deployment
+### Deploy
 
 ```bash
 # Deploy to production (requires AWS CLI configured)
@@ -59,53 +43,41 @@ After running this command, you can open `build/index.html` in your browser and 
 
 ```
 duffle.one/
-├── home/              # Main personal website
-│   ├── src/
-│   │   ├── index.html # Home page HTML
-│   │   ├── input.css  # Tailwind CSS input file
-│   │   └── *.svg      # Social media icons
-│   └── package.json   # Node.js dependencies (Tailwind CSS)
-├── display/           # Guest information page
-│   ├── index.html     # Static HTML with Bootstrap
-│   └── *.svg          # UniFi app icons
-├── build/             # Generated output directory
-├── compile.sh         # Local build script
-├── publish.sh         # Production deployment script
-└── .drone.yml         # CI/CD configuration
+├── src/               # Site source
+│   ├── index.html     # Main page HTML
+│   ├── 404.html       # Not found page
+│   ├── input.css      # Tailwind CSS input
+│   ├── favicon.svg
+│   └── img/           # Images and icons
+├── build/             # Generated output (do not edit)
+├── package.json       # Tailwind CLI scripts
+├── compile.sh         # Local build script (copies HTML/assets, injects cache-bust)
+├── publish.sh         # Production deployment script (S3)
+└── package-lock.json
 ```
 
 ### Build Process
 
-1. **Home page**: Tailwind CSS compiles `home/src/input.css` → `build/output.css`
-2. **Static files**: HTML and SVG files are copied to `build/` directory
-3. **Display page**: Files copied to `build/display/` subdirectory
-
-### Deployment Pipeline
-
-- **Development**: Pushes to any branch deploy to `s3://duffle.one/dev`
-- **Production**: Pushes to `master` branch deploy to `s3://duffle.one` with `--delete` flag
+1. Tailwind CLI compiles `src/input.css` → `build/output.css` (watch/build via `npm` scripts).
+2. `compile.sh` copies HTML and static assets from `src/` into `build/` and injects a cache-busting timestamp into the CSS link in `index.html`.
 
 ### Technology Stack
 
-- **Styling**: Tailwind CSS v4 (home page), Bootstrap 5 (display page)
-- **Build tool**: Tailwind CLI
-- **CI/CD**: Drone CI with Docker containers
-- **Hosting**: AWS S3 static website hosting
-- **Version control**: Git
+- Tailwind CSS v4 via PostCSS in Vite
+- Hosting on AWS S3 (static site)
+- Git for version control
 
 ## Key Files
 
-- `home/src/index.html`: Main personal landing page
-- `home/src/input.css`: Tailwind CSS configuration and imports
-- `display/index.html`: Guest information page
-- `.drone.yml`: CI/CD pipeline configuration
-- `compile.sh`: Local build script that mirrors CI build process
-- `publish.sh`: Production deployment script
+- `src/index.html`: Main page
+- `src/404.html`: Not found page
+- `src/input.css`: Tailwind input
+- `compile.sh`: Local build steps
+- `publish.sh`: Deployment to S3
+- `package.json`: Build/watch scripts
 
 ## Development Notes
 
-- The home page uses Tailwind CSS v4 with the new CLI approach
-- No custom Tailwind config file - uses defaults with source scanning from `../src`
-- Display page is completely separate and uses CDN-hosted Bootstrap
-- Both pages are designed to be static with no JavaScript dependencies
-- SVG icons are stored locally and copied during build process
+- No separate `display/` site; everything is in `src/`.
+- Keep edits to `src/`; `build/` is output-only and can be cleaned/recreated.
+- Tailwind v4 CLI is used without a custom config.

@@ -1,14 +1,7 @@
-(./compile.sh)
+(npm run build)
 
 # Sync all site files
 aws s3 sync ./build s3://duffle.one --acl public-read --follow-symlinks --delete
-
-# Ensure CSS has correct metadata (content-type + cache) in case autodetect fails or cache is stale
-aws s3 cp ./build/output.css s3://duffle.one/output.css \
-  --acl public-read \
-  --content-type text/css \
-  --cache-control "public, max-age=300" \
-  --metadata-directive REPLACE
 
 # Ensure HTML served as text/html and not cached aggressively
 for page in index.html 404.html; do
@@ -18,3 +11,6 @@ for page in index.html 404.html; do
     --cache-control "no-cache, no-store, must-revalidate" \
     --metadata-directive REPLACE
 done
+
+# Set 404.html as the error document for the S3 bucket
+aws s3 website s3://duffle.one/ --index-document index.html --error-document 404.html

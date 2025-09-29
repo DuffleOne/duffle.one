@@ -18,7 +18,7 @@
 	<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 	<meta name="theme-color" content="#0b0f19" media="(prefers-color-scheme: dark)">
 	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
-	<link href="./output.css?v=__BUILD_TS__" rel="stylesheet">
+	<link href="./input.css" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -38,6 +38,9 @@
 			<h1 class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">Laura Miller</h1>
 			<p class="mt-1 text-sm text-gray-600 dark:text-gray-400">duffle.one</p>
 			<p class="mt-4 text-base leading-relaxed text-gray-700 dark:text-gray-300">Founding engineer, photographer, 3D designer.</p>
+			<blockquote id="quote" class="mt-4 text-base italic text-gray-800 dark:text-gray-200 quote-block w-full text-center border border-gray-200 dark:border-gray-800" aria-label="daily quote">
+				<span id="quote-text" class="opacity-0 inline-block"></span>
+			</blockquote>
 		</div>
 
 		<nav class="mt-8" aria-label="Social links">
@@ -81,6 +84,83 @@
 		</nav>
 	</main>
 
+	<script type="module">
+		const quotes = [
+			"At museums, she's allowed to touch the art.",
+			"Both sides of her pillow are cool.",
+			"Even her enemies list her as their emergency contact.",
+			"Her eye contact alone counts as a first date.",
+			"Her only regret is not knowing what regret feels like.",
+			"Her personality is so magnetic, she is unable to carry credit cards.",
+			"Her two cents is worth £37.50.",
+			"If opportunity knocks and she is not home, opportunity waits.",
+			"If there is an elephant in the room, it's because she brought one.",
+			"In a past life, she was herself.",
+			"Mosquitoes refuse to bite her, purely out of respect.",
+			"She can slam a revolving door.",
+			"She could disarm you with her charm, or her hands... either way.",
+			"She has inside jokes with complete strangers.",
+			"She has never relied on mistletoe.",
+			"She is a morning, evening, and night person.",
+			"She is the life of parties she has never attended.",
+			"She lives vicariously through herself.",
+			"She once 3D printed a 3D printer.",
+			"She once gave a pep talk so compelling, both teams won.",
+			"She once had an awkward moment, just to see how it feels.",
+			"She's a lover, not a fighter. But she is also a fighter, so don't get any ideas.",
+			"The last time she flirted with danger, danger got clingy.",
+			"The police often question her, just because they find her interesting.",
+			"When in Rome, they do as she does.",
+		];
+
+		const sequencer = () => {
+			let currentIdx = 0;
+			const shuffled = quotes.slice();
+			for (let i = shuffled.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+			}
+
+			console.log(shuffled);
+
+			return () => {
+				if (currentIdx >= shuffled.length) {
+					currentIdx = 0;
+				}
+
+				const quote = shuffled[currentIdx];
+				currentIdx++;
+				return quote;
+			}
+		}
+
+		const onReady = (fn) => {
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", fn, { once: true });
+			} else {
+				fn();
+			}
+		};
+
+		onReady(() => {
+			const el = document.getElementById("quote");
+			const textEl = document.getElementById("quote-text");
+			if (!el || !textEl) return;
+			const seq = sequencer();
+
+			const setQuote = () => {
+				const quote = seq();
+				textEl.textContent = quote;
+				textEl.classList.remove("quote-fade-in");
+				// Force reflow to restart the animation
+				void textEl.offsetWidth;
+				textEl.classList.add("quote-fade-in");
+			};
+
+			setQuote();
+			setInterval(setQuote, 5000);
+		});
+	</script>
 </body>
 
 </html>

@@ -1,0 +1,71 @@
+@import "tailwindcss" source("./");
+
+@layer utilities {
+	.banner-image {
+		background-image: url('img/banner.jpg');
+		background-position: center 50%;
+	}
+
+	.banner-mask {
+		-webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 85%);
+		mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 85%);
+	}
+
+	.portrait-pos {
+		object-position: center 28%;
+	}
+
+	/* Quote fade-in utility */
+	.quote-fade-in {
+		animation: quoteFadeIn 600ms ease-out forwards;
+	}
+
+	/* Quote block styling */
+	.quote-block {
+		position: relative;
+		padding: 1.25rem 2rem;
+		border-radius: 0.75rem;
+	}
+
+	.quote-block::before {
+		content: "“";
+		position: absolute;
+		top: 0.5rem;
+		left: 0.75rem;
+		font-size: 2em;
+		line-height: 1;
+		color: rgb(209 213 219);
+		font-weight: 700;
+		pointer-events: none;
+	}
+
+	.quote-block::after {
+		content: "”";
+		position: absolute;
+		bottom: -0.5rem;
+		right: 0.75rem;
+		font-size: 2em;
+		line-height: 1;
+		font-weight: 700;
+		pointer-events: none;
+		color: rgb(209 213 219);
+	}
+}
+
+@layer base {
+	html {
+		font-family: "Nunito", sans-serif;
+	}
+}
+
+@keyframes quoteFadeIn {
+	0% {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
