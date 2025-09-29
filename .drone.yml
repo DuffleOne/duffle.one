@@ -27,6 +27,7 @@ steps:
       - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
       - aws s3 cp /build/index.html s3://duffle.one/index.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
       - aws s3 cp /build/404.html s3://duffle.one/404.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
+      - aws s3 website s3://duffle.one/ --index-document index.html --error-document 404.html
     depends_on:
       - build_site
     when:
@@ -43,6 +44,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 6034274d78e543dd2c9081d79cea77e98a9916996d6e5994c653223ad9ee66ba
+hmac: 2a4142c1ac91623ada905a99d83bfcaca9dfc760f78b81119e34966514ebbec2
 
 ...
