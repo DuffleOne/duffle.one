@@ -1,11 +1,13 @@
 (npm run build)
 
+BUILD_DIR=${BUILD_DIR:-./build}
+
 # Sync all site files
-aws s3 sync ./build s3://duffle.one --acl public-read --follow-symlinks --delete
+aws s3 sync "$BUILD_DIR" s3://duffle.one --acl public-read --follow-symlinks --delete
 
 # Ensure HTML served as text/html and not cached aggressively
 for page in index.html 404.html; do
-  aws s3 cp ./build/$page s3://duffle.one/$page \
+  aws s3 cp "$BUILD_DIR/$page" s3://duffle.one/$page \
     --acl public-read \
     --content-type text/html \
     --cache-control "no-cache, no-store, must-revalidate" \

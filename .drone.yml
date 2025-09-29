@@ -6,6 +6,9 @@ name: build and publish
 steps:
   - name: build_site
     image: node:20
+    environment:
+      BUILD_DIR: /build
+      CI: true
     volumes:
       - name: build
         path: /build
@@ -40,6 +43,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 9147848b6b74a104cdba1c85744aac4a366d94a1c899b56a93380ec96644467b
+hmac: 6034274d78e543dd2c9081d79cea77e98a9916996d6e5994c653223ad9ee66ba
 
 ...

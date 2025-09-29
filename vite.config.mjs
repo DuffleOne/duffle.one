@@ -8,7 +8,7 @@ export default defineConfig({
 	},
 	build: {
 		target: 'es2022',
-		outDir: './build',
+		outDir: process.env.BUILD_DIR || (process.env.CI ? '/build' : './build'),
 		emptyOutDir: true,
 		rollupOptions: {
 			input: {
