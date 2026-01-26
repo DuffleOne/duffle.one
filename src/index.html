@@ -119,18 +119,36 @@
 
 		const sequencer = () => {
 			let currentIdx = 0;
-			const shuffled = quotes.slice();
-			for (let i = shuffled.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-			}
+			let shuffled = quotes.slice();
+			let lastQuote = null;
+
+			const shuffle = (arr) => {
+				const copy = arr.slice();
+				for (let i = copy.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[copy[i], copy[j]] = [copy[j], copy[i]];
+				}
+				return copy;
+			};
+
+			// Initial shuffle
+			shuffled = shuffle(shuffled);
 
 			return () => {
 				if (currentIdx >= shuffled.length) {
+					// Reshuffle when we've shown all quotes
+					shuffled = shuffle(quotes);
+					// If the first quote of the new shuffle is the same as the last one,
+					// swap it with another random quote
+					if (lastQuote && shuffled[0] === lastQuote && shuffled.length > 1) {
+						const swapIdx = Math.floor(Math.random() * (shuffled.length - 1)) + 1;
+						[shuffled[0], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[0]];
+					}
 					currentIdx = 0;
 				}
 
 				const quote = shuffled[currentIdx];
+				lastQuote = quote;
 				currentIdx++;
 				return quote;
 			}
