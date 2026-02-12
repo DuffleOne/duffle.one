@@ -5,10 +5,8 @@
 		"preview": "vite preview --open"
 	},
 	"devDependencies": {
-		"tailwindcss": "^4.0.15",
-		"vite": "^5.4.9",
-		"postcss": "^8.4.47",
-		"autoprefixer": "^10.4.20",
-		"@tailwindcss/postcss": "^4.0.15"
+		"@tailwindcss/vite": "^4",
+		"tailwindcss": "^4",
+		"vite": "^6"
 	}
 }

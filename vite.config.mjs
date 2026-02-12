@@ -1,8 +1,15 @@
 import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
 	root: 'src',
 	appType: 'mpa',
+	plugins: [
+		tailwindcss(),
+	],
+	server: {
+		port: 3000,
+	},
 	esbuild: {
 		target: 'es2022',
 	},

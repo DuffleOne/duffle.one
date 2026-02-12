@@ -15,8 +15,8 @@
 	<meta name="twitter:title" content="Laura Miller — duffle.one">
 	<meta name="twitter:description" content="Links to my work and socials.">
 	<meta name="twitter:image" content="https://duffle.one/img/banner.jpg">
-	<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-	<meta name="theme-color" content="#0b0f19" media="(prefers-color-scheme: dark)">
+	<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
 	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
 	<link href="./input.css" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,63 +25,75 @@
 	<title>duffle.one</title>
 </head>
 
-<body class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased">
+<body class="bg-stone-50 text-stone-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
 	<header class="w-full">
-		<div class="relative h-48 sm:h-64 w-full bg-gray-100 dark:bg-gray-800 bg-cover banner-image">
-			<div class="pointer-events-none absolute inset-x-0 bottom-0 h-32 sm:h-40 bg-gradient-to-b from-transparent via-white/10 to-white dark:via-gray-950/10 dark:to-gray-950 backdrop-blur-[2px] z-0 banner-mask"></div>
+		<div class="relative h-48 sm:h-96 w-full bg-stone-100 dark:bg-slate-800 bg-cover banner-image">
+			<div class="pointer-events-none absolute inset-x-0 bottom-0 h-32 sm:h-40 bg-gradient-to-b from-transparent via-stone-50/10 to-stone-50 dark:via-slate-950/10 dark:to-slate-950 backdrop-blur-[2px] z-0 banner-mask"></div>
 		</div>
 	</header>
 
 	<main class="max-w-lg mx-auto px-4 -mt-16 sm:-mt-20 pb-8 sm:pb-0">
 		<div class="flex flex-col items-center text-center">
-			<img src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-white dark:ring-gray-950 object-cover portrait-pos relative z-10" width="224" height="224" decoding="async" />
+			<img src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-stone-50 dark:ring-slate-950 object-cover portrait-pos relative z-10" width="224" height="224" decoding="async" />
 			<h1 class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">Laura Miller</h1>
-			<p class="mt-1 text-sm text-gray-600 dark:text-gray-400">duffle.one</p>
-			<p class="mt-4 text-base leading-relaxed text-gray-700 dark:text-gray-300">Founding engineer, photographer, 3D designer.</p>
-			<blockquote id="quote" class="mt-4 text-base italic text-gray-800 dark:text-gray-200 quote-block w-full text-center border border-gray-200 dark:border-gray-800" aria-label="daily quote">
+			<p class="mt-1 text-sm text-stone-500 dark:text-slate-400">duffle.one</p>
+			<p class="mt-4 text-base leading-relaxed text-stone-600 dark:text-slate-300">Founding engineer, photographer, 3D designer.</p>
+			<blockquote id="quote" class="mt-4 text-base italic text-stone-700 dark:text-slate-200 quote-block w-full text-center border border-stone-200 dark:border-slate-800" aria-label="daily quote">
 				<span id="quote-text" class="opacity-0 inline-block"></span>
 			</blockquote>
 		</div>
 
 		<nav class="mt-8" aria-label="Social links">
-			<ul class="space-y-3">
+			<ul class="grid grid-cols-2 gap-3">
 				<li>
-					<a href="https://instagram.com/duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+					<a href="https://instagram.com/duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/instagram.svg" class="h-5 w-5" alt="Instagram" width="20" height="20" />
 						<span class="font-medium">Instagram</span>
 						<span class="ml-auto text-gray-400">↗</span>
 					</a>
 				</li>
 				<li>
-					<a href="https://glass.photo/duffle" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+					<a href="https://glass.photo/duffle" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/glass.ico" class="h-5 w-5" alt="Photos" width="20" height="20" />
 						<span class="font-medium">Photos</span>
 						<span class="ml-auto text-gray-400">↗</span>
 					</a>
 				</li>
 				<li>
-					<a href="https://steamcommunity.com/id/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+					<a href="https://steamcommunity.com/id/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/steam.svg" class="h-5 w-5" alt="Steam" width="20" height="20" />
 						<span class="font-medium">Steam</span>
 						<span class="ml-auto text-gray-400">↗</span>
 					</a>
 				</li>
 				<li>
-					<a href="https://github.com/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
+					<a href="https://github.com/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/github.svg" class="h-5 w-5" alt="GitHub" width="20" height="20" />
 						<span class="font-medium">GitHub</span>
 						<span class="ml-auto text-gray-400">↗</span>
 					</a>
 				</li>
-				<li>
-					<a href="https://latex.duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700">
-						<img src="img/icons/warehouse.svg" class="h-5 w-5" alt="Latex stock checking" width="20" height="20" />
-						<span class="font-medium">Latex stock checking</span>
-						<span class="ml-auto text-gray-400">↗</span>
-					</a>
-				</li>
 			</ul>
 		</nav>
+
+		<div class="mt-8">
+			<div class="flex items-center gap-3">
+				<hr class="flex-1 border-stone-200 dark:border-slate-800" />
+				<h2 class="text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400">Projects</h2>
+				<hr class="flex-1 border-stone-200 dark:border-slate-800" />
+			</div>
+			<nav class="mt-4" aria-label="Projects">
+				<ul>
+					<li>
+						<a href="https://latex.duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
+							<img src="img/icons/warehouse.svg" class="h-5 w-5" alt="Latex stock checking" width="20" height="20" />
+							<span class="font-medium">Latex stock checking</span>
+							<span class="ml-auto text-gray-400">↗</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
 	</main>
 
 	<script type="module">
