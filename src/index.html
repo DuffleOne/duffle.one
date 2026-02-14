@@ -10,11 +10,11 @@
 	<meta property="og:description" content="Links to my work and socials.">
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="https://duffle.one/">
-	<meta property="og:image" content="https://duffle.one/img/banner.jpg">
+	<meta property="og:image" content="https://duffle.one/img/banner-og.jpg">
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="Laura Miller — duffle.one">
 	<meta name="twitter:description" content="Links to my work and socials.">
-	<meta name="twitter:image" content="https://duffle.one/img/banner.jpg">
+	<meta name="twitter:image" content="https://duffle.one/img/banner-og.jpg">
 	<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)">
 	<meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
 	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
@@ -27,7 +27,16 @@
 
 <body class="bg-stone-50 text-stone-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
 	<header class="w-full">
-		<div class="relative h-48 sm:h-96 w-full bg-stone-100 dark:bg-slate-800 bg-cover banner-image">
+		<div class="relative h-48 sm:h-96 w-full bg-stone-100 dark:bg-slate-800 overflow-hidden">
+			<img
+				srcset="img/banner-640.webp 640w, img/banner-1280.webp 1280w, img/banner-1920.webp 1920w, img/banner-3840.webp 3840w"
+				sizes="100vw"
+				src="img/banner-og.jpg"
+				alt=""
+				class="absolute inset-0 w-full h-full object-cover object-center"
+				decoding="async"
+				fetchpriority="high"
+			/>
 			<div class="pointer-events-none absolute inset-x-0 bottom-0 h-32 sm:h-40 bg-gradient-to-b from-transparent via-stone-50/10 to-stone-50 dark:via-slate-950/10 dark:to-slate-950 backdrop-blur-[2px] z-0 banner-mask"></div>
 		</div>
 	</header>
