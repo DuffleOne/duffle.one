@@ -1,0 +1,5 @@
+# duffle.one — robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://duffle.one/sitemap.xml

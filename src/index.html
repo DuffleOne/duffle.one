@@ -4,25 +4,108 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Laura Miller — links, photos, and more.">
+
+	<!-- Primary SEO -->
+	<title>Laura Miller — Founding Engineer, Photographer & 3D Designer | duffle.one</title>
+	<meta name="description" content="Laura Miller is a founding engineer, photographer, and 3D designer.">
+	<meta name="author" content="Laura Miller">
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<link rel="canonical" href="https://duffle.one/">
-	<meta property="og:title" content="Laura Miller — duffle.one">
-	<meta property="og:description" content="Links to my work and socials.">
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:site_name" content="duffle.one">
+	<meta property="og:title" content="Laura Miller — Founding Engineer, Photographer & 3D Designer">
+	<meta property="og:description" content="Founding engineer, photographer, and 3D designer.">
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="https://duffle.one/">
+	<meta property="og:locale" content="en_GB">
 	<meta property="og:image" content="https://duffle.one/img/banner-og.jpg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="Laura Miller — duffle.one">
+	<meta property="og:image:type" content="image/jpeg">
+
+	<!-- Twitter / X -->
 	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:title" content="Laura Miller — duffle.one">
-	<meta name="twitter:description" content="Links to my work and socials.">
+	<meta name="twitter:title" content="Laura Miller — Founding Engineer, Photographer & 3D Designer">
+	<meta name="twitter:description" content="Founding engineer, photographer, and 3D designer.">
 	<meta name="twitter:image" content="https://duffle.one/img/banner-og.jpg">
+	<meta name="twitter:image:alt" content="Laura Miller — duffle.one">
+
+	<!-- Theme -->
 	<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)">
 	<meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
-	<link rel="icon" href="./favicon.svg" type="image/svg+xml">
-	<link href="./input.css" rel="stylesheet">
+	<meta name="color-scheme" content="light dark">
+
+	<!-- Favicon & Manifest -->
+	<link rel="icon" href="/favicon.png" type="image/png" sizes="512x512">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="manifest" href="/site.webmanifest">
+
+	<!-- Preconnect & DNS Prefetch -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+	<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+	<!-- Styles -->
+	<link href="./input.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-	<title>duffle.one</title>
+
+	<!-- Structured Data (JSON-LD) -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@graph": [
+			{
+				"@type": "WebSite",
+				"@id": "https://duffle.one/#website",
+				"url": "https://duffle.one/",
+				"name": "duffle.one",
+				"description": "Laura Miller — Founding Engineer, Photographer & 3D Designer",
+				"publisher": { "@id": "https://duffle.one/#person" }
+			},
+			{
+				"@type": "WebPage",
+				"@id": "https://duffle.one/#webpage",
+				"url": "https://duffle.one/",
+				"name": "Laura Miller — Founding Engineer, Photographer & 3D Designer",
+				"isPartOf": { "@id": "https://duffle.one/#website" },
+				"about": { "@id": "https://duffle.one/#person" },
+				"description": "Laura Miller is a founding engineer, photographer, and 3D designer. Explore her projects, photography portfolio, and social links at duffle.one."
+			},
+			{
+				"@type": "ProfilePage",
+				"@id": "https://duffle.one/#profilepage",
+				"url": "https://duffle.one/",
+				"name": "Laura Miller",
+				"mainEntity": { "@id": "https://duffle.one/#person" }
+			},
+			{
+				"@type": "Person",
+				"@id": "https://duffle.one/#person",
+				"name": "Laura Miller",
+				"url": "https://duffle.one/",
+				"image": {
+					"@type": "ImageObject",
+					"url": "https://duffle.one/img/laura.jpg",
+					"width": 224,
+					"height": 224
+				},
+				"jobTitle": "Founding Engineer",
+				"description": "Founding engineer, photographer, and 3D designer.",
+				"sameAs": [
+					"https://instagram.com/duffle.one",
+					"https://glass.photo/duffle",
+					"https://github.com/DuffleOne",
+					"https://steamcommunity.com/id/DuffleOne"
+				]
+			}
+		]
+	}
+	</script>
+
+	<!-- Theme init (prevent FOUC) -->
 	<script>
 		(function () {
 			var t = localStorage.getItem('theme') || 'system';
