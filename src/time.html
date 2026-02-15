@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Primary SEO -->
+	<title>Availability — Laura Miller | duffle.one</title>
+	<meta name="description" content="See when Laura Miller is free for social plans. Weekday evenings and weekends at a glance.">
+	<meta name="author" content="Laura Miller">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://duffle.one/time.html">
+
+	<!-- Open Graph -->
+	<meta property="og:site_name" content="duffle.one">
+	<meta property="og:title" content="Availability — Laura Miller">
+	<meta property="og:description" content="See when Laura is free for social plans.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://duffle.one/time.html">
+
+	<!-- Theme -->
+	<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+	<meta name="color-scheme" content="light dark">
+
+	<!-- Favicon -->
+	<link rel="icon" href="/favicon.png" type="image/png" sizes="512x512">
+	<link rel="apple-touch-icon" href="/favicon.png">
+
+	<!-- Preconnect -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="https://www.googleapis.com">
+
+	<!-- Styles -->
+	<link href="./input.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+	<!-- Theme init (prevent FOUC) -->
+	<script>
+		(function () {
+			var t = localStorage.getItem('theme') || 'system';
+			if (t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+				document.documentElement.classList.add('dark');
+			}
+		})();
+	</script>
+</head>
+
+<body class="bg-stone-50 text-stone-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
+	<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-stone-900 focus:shadow-md dark:focus:bg-slate-800 dark:focus:text-slate-100">Skip to content</a>
+
+	<nav class="w-full border-b border-stone-200 dark:border-slate-800">
+		<div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+			<a href="/" class="flex items-center gap-2 text-stone-500 dark:text-slate-400 hover:text-stone-700 dark:hover:text-slate-200 transition-colors">
+				<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M15 10H5M5 10l4-4M5 10l4 4" />
+				</svg>
+				<span class="text-sm font-medium">duffle.one</span>
+			</a>
+			<span class="text-sm font-semibold tracking-tight">Availability</span>
+		</div>
+	</nav>
+
+	<main id="main" class="max-w-2xl mx-auto px-4 py-8">
+		<div class="text-center mb-8">
+			<h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">When I'm free</h1>
+			<p class="mt-2 text-sm text-stone-500 dark:text-slate-400">Weekday evenings & weekends — updated live from my calendar.</p>
+		</div>
+
+		<!-- Loading state -->
+		<div id="loading" class="space-y-3">
+			<div class="h-8 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse"></div>
+			<div class="grid grid-cols-7 gap-1.5">
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:0ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:50ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:100ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:150ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:200ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:250ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:300ms"></div>
+			</div>
+			<div class="grid grid-cols-7 gap-1.5">
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:50ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:100ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:150ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:200ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:250ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:300ms"></div>
+				<div class="h-16 rounded-lg bg-stone-200 dark:bg-slate-800 animate-pulse" style="animation-delay:350ms"></div>
+			</div>
+		</div>
+
+		<!-- Error state -->
+		<div id="error" class="hidden rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30 px-5 py-4 text-center">
+			<p class="text-sm font-medium text-red-700 dark:text-red-400" id="error-message">Unable to load calendar data.</p>
+			<p class="mt-1 text-xs text-red-500 dark:text-red-500">Check that the API key is set and the calendar is public.</p>
+		</div>
+
+		<!-- Calendar container -->
+		<div id="calendar" class="hidden">
+			<!-- Month navigation -->
+			<div class="flex items-center justify-between mb-4">
+				<button id="prev-month" type="button" aria-label="Previous month" class="rounded-lg p-2 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
+					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12 15l-5-5 5-5" />
+					</svg>
+				</button>
+				<h2 id="month-label" class="text-lg font-semibold tracking-tight"></h2>
+				<button id="next-month" type="button" aria-label="Next month" class="rounded-lg p-2 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
+					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M8 5l5 5-5 5" />
+					</svg>
+				</button>
+			</div>
+
+			<!-- Day-of-week headers -->
+			<div class="grid grid-cols-7 gap-1.5 mb-1.5">
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Mon</div>
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Tue</div>
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Wed</div>
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Thu</div>
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Fri</div>
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Sat</div>
+				<div class="text-center text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-slate-500 py-1">Sun</div>
+			</div>
+
+			<!-- Month grid (filled by JS) -->
+			<div id="month-grid" class="grid grid-cols-7 gap-1.5"></div>
+
+			<!-- Weekly detail (filled by JS) -->
+			<div id="week-detail" class="mt-4 hidden"></div>
+		</div>
+
+		<!-- Legend -->
+		<div id="legend" class="hidden mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-stone-500 dark:text-slate-400">
+			<span class="flex items-center gap-1.5">
+				<span class="inline-block h-3 w-3 rounded-sm bg-emerald-200 dark:bg-emerald-700 border border-emerald-300 dark:border-emerald-600"></span>
+				Free
+			</span>
+			<span class="flex items-center gap-1.5">
+				<span class="inline-block h-3 w-3 rounded-sm bg-amber-200 dark:bg-amber-700 border border-amber-300 dark:border-amber-600"></span>
+				Partially free
+			</span>
+			<span class="flex items-center gap-1.5">
+				<span class="inline-block h-3 w-3 rounded-sm bg-stone-200 dark:bg-slate-700 border border-stone-300 dark:border-slate-600"></span>
+				Busy / not available
+			</span>
+		</div>
+
+	</main>
+
+	<!-- Theme toggle -->
+	<footer class="pb-8 pt-4">
+		<div class="flex justify-center">
+			<div class="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1" role="radiogroup" aria-label="Color theme">
+				<button type="button" role="radio" aria-checked="false" aria-label="Light mode" data-theme="light" class="theme-btn rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 text-stone-400 hover:text-stone-600 dark:text-slate-500 dark:hover:text-slate-300">
+					<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="10" cy="10" r="3.5" />
+						<path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.93 4.93l1.41 1.41M13.66 13.66l1.41 1.41M4.93 15.07l1.41-1.41M13.66 6.34l1.41-1.41" />
+					</svg>
+				</button>
+				<button type="button" role="radio" aria-checked="true" aria-label="System theme" data-theme="system" class="theme-btn rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-200">
+					<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="2" y="3" width="16" height="11" rx="1.5" />
+						<path d="M7 17h6M10 14v3" />
+					</svg>
+				</button>
+				<button type="button" role="radio" aria-checked="false" aria-label="Dark mode" data-theme="dark" class="theme-btn rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 text-stone-400 hover:text-stone-600 dark:text-slate-500 dark:hover:text-slate-300">
+					<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M17.09 12.45A7 7 0 117.55 2.91a5.5 5.5 0 009.54 9.54z" />
+					</svg>
+				</button>
+			</div>
+		</div>
+	</footer>
+
+	<script type="module">
+		// ─── Config ────────────────────────────────────────────────────
+		const CONFIG = {
+			CALENDARS: [
+				'laura@duffle.one',
+				'c_1460e43f6b02ba57b9ed14513b3c4b12123a355995514ead248d94f709515471@group.calendar.google.com',
+				'duffleman.co.uk_ffjeloln7be0937g6mk3bu0qus@group.calendar.google.com',
+			],
+			API_KEY: 'AIzaSyBK5GFARlAMMDygMiqIlavKd9fJm6_Suz0',
+			TIMEZONE: 'Europe/London',
+			// Social availability windows per day-of-week (0=Sun … 6=Sat).
+			// Each day is an array of {start:[h,m], end:[h,m]} windows.
+			// Days not listed (or empty array) = unavailable.
+			SOCIAL_WINDOWS: {
+				1: [{ start: [18, 30], end: [23, 0] }],                                       // Mon
+				2: [{ start: [18, 30], end: [23, 0] }],                                       // Tue
+				3: [{ start: [18, 30], end: [23, 0] }],                                       // Wed
+				4: [{ start: [18, 30], end: [23, 0] }],                                       // Thu
+				5: [{ start: [18, 30], end: [23, 0] }],                                       // Fri
+				6: [{ start: [12, 0], end: [16, 30] }, { start: [18, 30], end: [23, 0] }],    // Sat
+			},
+		};
+
+		// ─── Helpers ───────────────────────────────────────────────────
+		const $ = (sel) => document.querySelector(sel);
+		const $$ = (sel) => document.querySelectorAll(sel);
+
+		const toDateKey = (date) => {
+			const y = date.getFullYear();
+			const m = String(date.getMonth() + 1).padStart(2, '0');
+			const d = String(date.getDate()).padStart(2, '0');
+			return `${y}-${m}-${d}`;
+		};
+
+		const tzDate = (isoStr) => new Date(isoStr);
+		const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+
+		const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+		const getMondayOfWeek = (date) => {
+			const d = new Date(date);
+			const day = d.getDay();
+			const diff = (day === 0 ? -6 : 1) - day;
+			d.setDate(d.getDate() + diff);
+			d.setHours(0, 0, 0, 0);
+			return d;
+		};
+
+		const addDays = (date, n) => {
+			const d = new Date(date);
+			d.setDate(d.getDate() + n);
+			return d;
+		};
+
+		const formatTime = (date) => {
+			const h = date.getHours();
+			const m = date.getMinutes();
+			return `${h % 12 || 12}${m ? ':' + String(m).padStart(2, '0') : ''}${h < 12 ? 'a' : 'p'}`;
+		};
+
+		// ─── Get availability windows for a specific date ──────────────
+		const getWindows = (date) => {
+			const dow = date.getDay();
+			const defs = CONFIG.SOCIAL_WINDOWS[dow];
+			if (!defs || !defs.length) return [];
+			return defs.map(w => {
+				const s = new Date(date); s.setHours(w.start[0], w.start[1], 0, 0);
+				const e = new Date(date); e.setHours(w.end[0], w.end[1], 0, 0);
+				return { start: s, end: e };
+			});
+		};
+
+		// ─── Merge overlapping intervals ───────────────────────────────
+		const mergeIntervals = (intervals) => {
+			if (!intervals.length) return [];
+			const sorted = intervals.slice().sort((a, b) => a.start - b.start);
+			const merged = [{ start: new Date(sorted[0].start), end: new Date(sorted[0].end) }];
+			for (let i = 1; i < sorted.length; i++) {
+				const last = merged[merged.length - 1];
+				if (sorted[i].start <= last.end) {
+					last.end = new Date(Math.max(last.end.getTime(), sorted[i].end.getTime()));
+				} else {
+					merged.push({ start: new Date(sorted[i].start), end: new Date(sorted[i].end) });
+				}
+			}
+			return merged;
+		};
+
+		// ─── Check availability windows against busy periods ───────────
+		// If ANY busy event overlaps a window, the entire window is blocked.
+		const computeFreeSlots = (windows, busyPeriods) => {
+			if (!windows.length) return { freeMinutes: 0, totalMinutes: 0, slots: [] };
+
+			const totalMinutes = windows.reduce((s, w) => s + (w.end - w.start) / 60000, 0);
+			const mergedBusy = mergeIntervals(busyPeriods);
+			const slots = [];
+
+			for (const win of windows) {
+				const hasOverlap = mergedBusy.some(b => b.start < win.end && b.end > win.start);
+				slots.push({ start: new Date(win.start), end: new Date(win.end), free: !hasOverlap });
+			}
+
+			const freeMinutes = slots.filter(s => s.free).reduce((s, f) => s + (f.end - f.start) / 60000, 0);
+			return { freeMinutes, totalMinutes, slots };
+		};
+
+		// ─── Fetch events from a single calendar ───────────────────────
+		const fetchCalendarEvents = async (calendarId, timeMin, timeMax) => {
+			const calId = encodeURIComponent(calendarId);
+			const url = `https://www.googleapis.com/calendar/v3/calendars/${calId}/events`
+				+ `?key=${encodeURIComponent(CONFIG.API_KEY)}`
+				+ `&timeMin=${timeMin.toISOString()}`
+				+ `&timeMax=${timeMax.toISOString()}`
+				+ `&singleEvents=true`
+				+ `&orderBy=startTime`
+				+ `&maxResults=250`
+				+ `&timeZone=${encodeURIComponent(CONFIG.TIMEZONE)}`;
+
+			const res = await fetch(url);
+			if (!res.ok) {
+				let msg = `Calendar API error (${res.status})`;
+				try {
+					const body = await res.json();
+					if (body?.error?.message) msg = body.error.message;
+				} catch { }
+				throw new Error(msg);
+			}
+
+			const data = await res.json();
+			return (data.items || [])
+				.filter(e => e.status !== 'cancelled')
+				.filter(e => e.transparency !== 'transparent')
+				.map(e => ({
+					start: e.start.dateTime ? tzDate(e.start.dateTime) : new Date(e.start.date + 'T00:00:00'),
+					end: e.end.dateTime ? tzDate(e.end.dateTime) : new Date(e.end.date + 'T00:00:00'),
+					allDay: !e.start.dateTime,
+				}));
+		};
+
+		// ─── Fetch all calendars in parallel ───────────────────────────
+		const fetchAllEvents = async (timeMin, timeMax) => {
+			const results = await Promise.all(
+				CONFIG.CALENDARS.map(id => fetchCalendarEvents(id, timeMin, timeMax))
+			);
+			return results.flat();
+		};
+
+		// ─── Build busy map keyed by date ──────────────────────────────
+		const buildBusyMap = (events) => {
+			const map = {};
+			for (const e of events) {
+				if (e.allDay) {
+					let d = new Date(e.start);
+					while (d < e.end) {
+						const key = toDateKey(d);
+						if (!map[key]) map[key] = [];
+						map[key].push({
+							start: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0),
+							end: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59),
+						});
+						d = addDays(d, 1);
+					}
+				} else {
+					const key = toDateKey(e.start);
+					if (!map[key]) map[key] = [];
+					map[key].push(e);
+					const endKey = toDateKey(e.end);
+					if (endKey !== key) {
+						if (!map[endKey]) map[endKey] = [];
+						map[endKey].push(e);
+					}
+				}
+			}
+			return map;
+		};
+
+		// ─── State ─────────────────────────────────────────────────────
+		let currentMonth = new Date();
+		currentMonth.setDate(1);
+		currentMonth.setHours(0, 0, 0, 0);
+		let busyMap = {};
+		let selectedWeekStart = null;
+		const busyCache = {};
+
+		// ─── Load events for the visible month ─────────────────────────
+		const loadMonth = async () => {
+			const year = currentMonth.getFullYear();
+			const month = currentMonth.getMonth();
+			const cacheKey = `${year}-${month}`;
+
+			if (busyCache[cacheKey]) {
+				busyMap = busyCache[cacheKey];
+				return;
+			}
+
+			const rangeStart = new Date(year, month, 1);
+			const rangeEnd = new Date(year, month + 1, 1);
+
+			const events = await fetchAllEvents(rangeStart, rangeEnd);
+			busyMap = buildBusyMap(events);
+			busyCache[cacheKey] = busyMap;
+		};
+
+		// ─── Render month grid ─────────────────────────────────────────
+		const renderMonth = () => {
+			const grid = $('#month-grid');
+			const label = $('#month-label');
+			grid.innerHTML = '';
+			label.textContent = `${MONTH_NAMES[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
+
+			const year = currentMonth.getFullYear();
+			const month = currentMonth.getMonth();
+			const firstDay = new Date(year, month, 1);
+			const lastDay = new Date(year, month + 1, 0);
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+
+			let startOffset = firstDay.getDay() - 1;
+			if (startOffset < 0) startOffset = 6;
+
+			for (let i = 0; i < startOffset; i++) {
+				const filler = document.createElement('div');
+				filler.className = 'h-16 sm:h-20';
+				grid.appendChild(filler);
+			}
+
+			for (let d = 1; d <= lastDay.getDate(); d++) {
+				const date = new Date(year, month, d);
+				const key = toDateKey(date);
+				const isPast = date < today;
+				const isToday = date.getTime() === today.getTime();
+				const windows = getWindows(date);
+				const busy = busyMap[key] || [];
+				const result = computeFreeSlots(windows, busy);
+
+				const hasWindows = windows.length > 0;
+				const freeRatio = result.totalMinutes > 0 ? result.freeMinutes / result.totalMinutes : 0;
+
+				const cell = document.createElement('button');
+				cell.type = 'button';
+				cell.setAttribute('aria-label', `${DAY_NAMES[(date.getDay() + 6) % 7]} ${d} ${MONTH_NAMES[month]} — ${hasWindows ? Math.round(freeRatio * 100) + '% free' : 'not available'}`);
+
+				let bgClass, barColor;
+				if (!hasWindows || isPast) {
+					bgClass = 'bg-stone-100 dark:bg-slate-800/50';
+					barColor = '';
+				} else if (freeRatio >= 0.75) {
+					bgClass = 'bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/40';
+					barColor = 'bg-emerald-400 dark:bg-emerald-500';
+				} else if (freeRatio >= 0.25) {
+					bgClass = 'bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 dark:hover:bg-amber-900/30';
+					barColor = 'bg-amber-400 dark:bg-amber-500';
+				} else {
+					bgClass = 'bg-stone-100 dark:bg-slate-800 hover:bg-stone-150 dark:hover:bg-slate-700';
+					barColor = 'bg-stone-300 dark:bg-slate-600';
+				}
+
+				cell.className = `relative flex flex-col items-center justify-center gap-1 h-16 sm:h-20 rounded-lg border transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 ${bgClass} ${isToday ? 'border-stone-400 dark:border-slate-500 ring-1 ring-stone-300 dark:ring-slate-600' : 'border-stone-200 dark:border-slate-800'} ${isPast ? 'opacity-40 cursor-default' : ''}`;
+
+				const dayNum = document.createElement('span');
+				dayNum.className = `text-sm font-semibold ${isToday ? 'text-stone-900 dark:text-slate-50' : ''}`;
+				dayNum.textContent = d;
+				cell.appendChild(dayNum);
+
+				if (hasWindows && !isPast && barColor) {
+					const bar = document.createElement('div');
+					bar.className = `h-1 rounded-full ${barColor}`;
+					bar.style.width = `${clamp(freeRatio * 100, 10, 90)}%`;
+					cell.appendChild(bar);
+				}
+
+				if (!isPast) {
+					cell.addEventListener('click', () => {
+						const weekStart = getMondayOfWeek(date);
+						if (selectedWeekStart && selectedWeekStart.getTime() === weekStart.getTime()) {
+							selectedWeekStart = null;
+							$('#week-detail').classList.add('hidden');
+						} else {
+							selectedWeekStart = weekStart;
+							renderWeekDetail();
+						}
+						highlightSelectedWeek();
+					});
+				}
+
+				grid.appendChild(cell);
+			}
+		};
+
+		// ─── Highlight selected week in the month grid ─────────────────
+		const highlightSelectedWeek = () => {
+			const grid = $('#month-grid');
+			const cells = Array.from(grid.children);
+			const year = currentMonth.getFullYear();
+			const month = currentMonth.getMonth();
+
+			cells.forEach(cell => {
+				cell.classList.remove('ring-2', 'ring-emerald-400', 'dark:ring-emerald-500');
+			});
+
+			if (!selectedWeekStart) return;
+
+			const firstDay = new Date(year, month, 1);
+			let startOffset = firstDay.getDay() - 1;
+			if (startOffset < 0) startOffset = 6;
+
+			for (let d = 1; d <= new Date(year, month + 1, 0).getDate(); d++) {
+				const date = new Date(year, month, d);
+				const ws = getMondayOfWeek(date);
+				if (ws.getTime() === selectedWeekStart.getTime()) {
+					const idx = startOffset + d - 1;
+					if (cells[idx]) {
+						cells[idx].classList.add('ring-2', 'ring-emerald-400', 'dark:ring-emerald-500');
+					}
+				}
+			}
+		};
+
+		// ─── Render weekly detail view ─────────────────────────────────
+		const renderWeekDetail = () => {
+			const container = $('#week-detail');
+			if (!selectedWeekStart) {
+				container.classList.add('hidden');
+				return;
+			}
+			container.classList.remove('hidden');
+			container.innerHTML = '';
+
+			const weekLabel = document.createElement('h3');
+			const weekEnd = addDays(selectedWeekStart, 6);
+			weekLabel.className = 'text-sm font-semibold text-stone-500 dark:text-slate-400 mb-3';
+			weekLabel.textContent = `Week of ${selectedWeekStart.getDate()} ${MONTH_NAMES[selectedWeekStart.getMonth()]} — ${weekEnd.getDate()} ${MONTH_NAMES[weekEnd.getMonth()]}`;
+			container.appendChild(weekLabel);
+
+			const grid = document.createElement('div');
+			grid.className = 'grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2';
+
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+
+			for (let i = 0; i < 7; i++) {
+				const date = addDays(selectedWeekStart, i);
+				const key = toDateKey(date);
+				const isPast = date < today;
+				const windows = getWindows(date);
+				const busy = busyMap[key] || [];
+				const result = computeFreeSlots(windows, busy);
+				const hasWindows = windows.length > 0;
+
+				const col = document.createElement('div');
+				col.className = `rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden ${isPast ? 'opacity-40' : ''}`;
+
+				const header = document.createElement('div');
+				const hasAnyFree = result.slots.some(s => s.free);
+				header.className = `px-3 py-2 text-center border-b border-stone-100 dark:border-slate-800 ${hasWindows && hasAnyFree ? 'bg-emerald-50 dark:bg-emerald-950/20' : ''}`;
+				header.innerHTML = `<div class="text-xs font-semibold uppercase tracking-wider ${hasWindows && hasAnyFree ? 'text-emerald-600 dark:text-emerald-400' : 'text-stone-400 dark:text-slate-500'}">${DAY_NAMES[i].slice(0, 3)}</div><div class="text-lg font-semibold">${date.getDate()}</div>`;
+				col.appendChild(header);
+
+				const body = document.createElement('div');
+				body.className = 'p-2 space-y-1';
+
+				if (!hasWindows) {
+					const noSlots = document.createElement('div');
+					noSlots.className = 'text-xs text-stone-400 dark:text-slate-500 text-center py-3 italic';
+					noSlots.textContent = 'Not available';
+					body.appendChild(noSlots);
+				} else if (result.slots.length === 0) {
+					const allFree = document.createElement('div');
+					allFree.className = 'text-xs text-emerald-600 dark:text-emerald-400 text-center py-3 font-medium';
+					allFree.textContent = 'All free!';
+					body.appendChild(allFree);
+				} else {
+					for (const slot of result.slots) {
+						const slotEl = document.createElement('div');
+						const startStr = formatTime(slot.start);
+						const endStr = formatTime(slot.end);
+
+						if (slot.free) {
+							slotEl.className = 'rounded-md bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 px-2 py-1.5';
+							slotEl.innerHTML = `<div class="text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Free</div><div class="text-xs text-emerald-600 dark:text-emerald-400">${startStr}–${endStr}</div>`;
+						} else {
+							slotEl.className = 'rounded-md bg-stone-100 dark:bg-slate-800 border border-stone-200 dark:border-slate-700 px-2 py-1.5';
+							slotEl.innerHTML = `<div class="text-[10px] font-semibold text-stone-400 dark:text-slate-500 uppercase tracking-wider">Busy</div><div class="text-xs text-stone-500 dark:text-slate-400">${startStr}–${endStr}</div>`;
+						}
+						body.appendChild(slotEl);
+					}
+				}
+
+				col.appendChild(body);
+				grid.appendChild(col);
+			}
+
+			container.appendChild(grid);
+		};
+
+		// ─── Theme toggle ──────────────────────────────────────────────
+		const applyTheme = (theme) => {
+			const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+			document.documentElement.classList.toggle('dark', dark);
+		};
+
+		matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+			if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
+		});
+
+		const updateToggle = (theme) => {
+			$$('[data-theme]').forEach(btn => {
+				const active = btn.dataset.theme === theme;
+				btn.setAttribute('aria-checked', active);
+				btn.classList.toggle('bg-stone-100', active);
+				btn.classList.toggle('dark:bg-slate-800', active);
+				btn.classList.toggle('text-stone-700', active);
+				btn.classList.toggle('dark:text-slate-200', active);
+				btn.classList.toggle('text-stone-400', !active);
+				btn.classList.toggle('hover:text-stone-600', !active);
+				btn.classList.toggle('dark:text-slate-500', !active);
+				btn.classList.toggle('dark:hover:text-slate-300', !active);
+			});
+		};
+
+		// ─── Init ──────────────────────────────────────────────────────
+		const init = async () => {
+			const theme = localStorage.getItem('theme') || 'system';
+			updateToggle(theme);
+			$$('[data-theme]').forEach(btn => {
+				btn.addEventListener('click', () => {
+					const t = btn.dataset.theme;
+					localStorage.setItem('theme', t);
+					applyTheme(t);
+					updateToggle(t);
+				});
+			});
+
+			const navigateMonth = async (delta) => {
+				currentMonth.setMonth(currentMonth.getMonth() + delta);
+				selectedWeekStart = null;
+				$('#week-detail').classList.add('hidden');
+				try {
+					await loadMonth();
+					renderMonth();
+				} catch (err) {
+					console.error('Calendar fetch failed:', err);
+				}
+			};
+
+			$('#prev-month').addEventListener('click', () => navigateMonth(-1));
+			$('#next-month').addEventListener('click', () => navigateMonth(1));
+
+			try {
+				await loadMonth();
+
+				$('#loading').classList.add('hidden');
+				$('#calendar').classList.remove('hidden');
+				$('#legend').classList.remove('hidden');
+				renderMonth();
+			} catch (err) {
+				console.error('Calendar fetch failed:', err);
+				$('#loading').classList.add('hidden');
+				$('#error').classList.remove('hidden');
+				$('#error-message').textContent = err.message || 'Unable to load calendar data.';
+			}
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', init, { once: true });
+		} else {
+			init();
+		}
+	</script>
+</body>
+
+</html>

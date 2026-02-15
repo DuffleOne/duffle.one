@@ -21,10 +21,11 @@ export default defineConfig({
 			input: {
 				index: 'src/index.html',
 				"404": 'src/404.html',
+				time: 'src/time.html',
 			},
 		},
 	},
 	optimizeDeps: {
-		entries: ['src/index.html', 'src/404.html'],
+		entries: ['src/index.html', 'src/404.html', 'src/time.html'],
 	},
 })
