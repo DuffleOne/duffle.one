@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="UTF-8">
@@ -23,31 +23,32 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 	<title>duffle.one</title>
+	<script>
+		(function () {
+			var t = localStorage.getItem('theme') || 'system';
+			if (t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+				document.documentElement.classList.add('dark');
+			}
+		})();
+	</script>
 </head>
 
 <body class="bg-stone-50 text-stone-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
+	<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-stone-900 focus:shadow-md dark:focus:bg-slate-800 dark:focus:text-slate-100">Skip to content</a>
 	<header class="w-full">
 		<div class="relative h-48 sm:h-96 w-full bg-stone-100 dark:bg-slate-800 overflow-hidden">
-			<img
-				srcset="img/banner-640.webp 640w, img/banner-1280.webp 1280w, img/banner-1920.webp 1920w, img/banner-3840.webp 3840w"
-				sizes="100vw"
-				src="img/banner-og.jpg"
-				alt=""
-				class="absolute inset-0 w-full h-full object-cover object-center"
-				decoding="async"
-				fetchpriority="high"
-			/>
+			<img srcset="img/banner-640.webp 640w, img/banner-1280.webp 1280w, img/banner-1920.webp 1920w, img/banner-3840.webp 3840w" sizes="100vw" src="img/banner-og.jpg" alt="Close-up of yellow crocus buds with water droplets on their petals" class="absolute inset-0 w-full h-full object-cover object-center" decoding="async" fetchpriority="high" />
 			<div class="pointer-events-none absolute inset-x-0 bottom-0 h-32 sm:h-40 bg-gradient-to-b from-transparent via-stone-50/10 to-stone-50 dark:via-slate-950/10 dark:to-slate-950 backdrop-blur-[2px] z-0 banner-mask"></div>
 		</div>
 	</header>
 
-	<main class="max-w-lg mx-auto px-4 -mt-16 sm:-mt-20 pb-8 sm:pb-0">
+	<main id="main" class="max-w-lg mx-auto px-4 -mt-16 sm:-mt-20 pb-8 sm:pb-0">
 		<div class="flex flex-col items-center text-center">
-			<img src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-stone-50 dark:ring-slate-950 object-cover portrait-pos relative z-10" width="224" height="224" decoding="async" />
+			<img id="portrait" src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-stone-50 dark:ring-slate-950 object-cover portrait-pos relative z-10 cursor-pointer select-none active:scale-95 transition-transform touch-manipulation" width="224" height="224" decoding="async" role="button" tabindex="0" aria-label="Laura Miller — click for a surprise" />
 			<h1 class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">Laura Miller</h1>
-			<p class="mt-1 text-sm text-stone-500 dark:text-slate-400">duffle.one</p>
+			<p class="mt-1 text-base text-stone-500 dark:text-slate-400">duffle.one</p>
 			<p class="mt-4 text-base leading-relaxed text-stone-600 dark:text-slate-300">Founding engineer, photographer, 3D designer.</p>
-			<blockquote id="quote" class="mt-4 text-base italic text-stone-700 dark:text-slate-200 quote-block w-full text-center border border-stone-200 dark:border-slate-800" aria-label="daily quote">
+			<blockquote id="quote" class="mt-4 text-base italic text-stone-700 dark:text-slate-200 quote-block w-full text-center border border-stone-200 dark:border-slate-800" aria-label="daily quote" aria-live="polite" aria-atomic="true">
 				<span id="quote-text" class="opacity-0 inline-block"></span>
 			</blockquote>
 		</div>
@@ -58,28 +59,36 @@
 					<a href="https://instagram.com/duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/instagram.svg" class="h-5 w-5" alt="Instagram" width="20" height="20" />
 						<span class="font-medium">Instagram</span>
-						<span class="ml-auto text-gray-400">↗</span>
+						<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M5 15L15 5M15 5H8M15 5v7" />
+						</svg>
 					</a>
 				</li>
 				<li>
 					<a href="https://glass.photo/duffle" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/glass.ico" class="h-5 w-5" alt="Photos" width="20" height="20" />
 						<span class="font-medium">Photos</span>
-						<span class="ml-auto text-gray-400">↗</span>
+						<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M5 15L15 5M15 5H8M15 5v7" />
+						</svg>
 					</a>
 				</li>
 				<li>
 					<a href="https://steamcommunity.com/id/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/steam.svg" class="h-5 w-5" alt="Steam" width="20" height="20" />
 						<span class="font-medium">Steam</span>
-						<span class="ml-auto text-gray-400">↗</span>
+						<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M5 15L15 5M15 5H8M15 5v7" />
+						</svg>
 					</a>
 				</li>
 				<li>
 					<a href="https://github.com/DuffleOne" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 						<img src="img/icons/github.svg" class="h-5 w-5" alt="GitHub" width="20" height="20" />
 						<span class="font-medium">GitHub</span>
-						<span class="ml-auto text-gray-400">↗</span>
+						<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M5 15L15 5M15 5H8M15 5v7" />
+						</svg>
 					</a>
 				</li>
 			</ul>
@@ -97,7 +106,9 @@
 						<a href="https://latex.duffle.one" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 							<img src="img/icons/warehouse.svg" class="h-5 w-5" alt="Latex stock checking" width="20" height="20" />
 							<span class="font-medium">Latex stock checking</span>
-							<span class="ml-auto text-gray-400">↗</span>
+							<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M5 15L15 5M15 5H8M15 5v7" />
+							</svg>
 						</a>
 					</li>
 					<li>
@@ -107,15 +118,120 @@
 								<span class="absolute h-[6px] w-[calc(100%+4px)] bg-[#003688]"></span>
 							</span>
 							<span class="font-medium">TFLGame</span>
-							<span class="ml-auto text-gray-400">↗</span>
+							<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M5 15L15 5M15 5H8M15 5v7" />
+							</svg>
 						</a>
 					</li>
 				</ul>
 			</nav>
 		</div>
+		<div class="mt-8 flex justify-center pb-4">
+			<div class="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1" role="radiogroup" aria-label="Color theme">
+				<button type="button" role="radio" aria-checked="false" aria-label="Light mode" data-theme="light" class="theme-btn rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 text-stone-400 hover:text-stone-600 dark:text-slate-500 dark:hover:text-slate-300">
+					<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="10" cy="10" r="3.5" />
+						<path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.93 4.93l1.41 1.41M13.66 13.66l1.41 1.41M4.93 15.07l1.41-1.41M13.66 6.34l1.41-1.41" />
+					</svg>
+				</button>
+				<button type="button" role="radio" aria-checked="true" aria-label="System theme" data-theme="system" class="theme-btn rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-200">
+					<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="2" y="3" width="16" height="11" rx="1.5" />
+						<path d="M7 17h6M10 14v3" />
+					</svg>
+				</button>
+				<button type="button" role="radio" aria-checked="false" aria-label="Dark mode" data-theme="dark" class="theme-btn rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700 text-stone-400 hover:text-stone-600 dark:text-slate-500 dark:hover:text-slate-300">
+					<svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M17.09 12.45A7 7 0 117.55 2.91a5.5 5.5 0 009.54 9.54z" />
+					</svg>
+				</button>
+			</div>
+		</div>
 	</main>
 
 	<script type="module">
+		// === Confetti ===
+		const confetti = (x, y) => {
+			if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+			const canvas = document.createElement('canvas');
+			const dpr = devicePixelRatio || 1;
+			canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999';
+			canvas.width = innerWidth * dpr;
+			canvas.height = innerHeight * dpr;
+			document.body.appendChild(canvas);
+
+			const ctx = canvas.getContext('2d');
+			ctx.scale(dpr, dpr);
+
+			const colors = ['#f43f5e', '#8b5cf6', '#3b82f6', '#22c55e', '#eab308', '#f97316', '#ec4899'];
+			const particles = Array.from({ length: 100 }, () => {
+				const angle = Math.random() * Math.PI * 2;
+				const speed = 3 + Math.random() * 7;
+				return {
+					x, y,
+					vx: Math.cos(angle) * speed * (0.5 + Math.random()),
+					vy: Math.sin(angle) * speed - 6,
+					w: 3 + Math.random() * 5,
+					h: 2 + Math.random() * 3,
+					color: colors[Math.floor(Math.random() * colors.length)],
+					rot: Math.random() * Math.PI * 2,
+					rotV: (Math.random() - 0.5) * 0.2,
+				};
+			});
+
+			let frame = 0;
+			const animate = () => {
+				if (++frame > 180) { canvas.remove(); return; }
+				ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+				for (const p of particles) {
+					p.vy += 0.12;
+					p.vx *= 0.99;
+					p.x += p.vx;
+					p.y += p.vy;
+					p.rot += p.rotV;
+
+					ctx.save();
+					ctx.translate(p.x, p.y);
+					ctx.rotate(p.rot);
+					ctx.globalAlpha = Math.max(0, 1 - (frame / 180) ** 2);
+					ctx.fillStyle = p.color;
+					ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+					ctx.restore();
+				}
+
+				requestAnimationFrame(animate);
+			};
+			requestAnimationFrame(animate);
+		};
+
+		// === Theme ===
+		const applyTheme = (theme) => {
+			const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+			document.documentElement.classList.toggle('dark', dark);
+		};
+
+		matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+			if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
+		});
+
+		const updateToggle = (theme) => {
+			document.querySelectorAll('[data-theme]').forEach(btn => {
+				const active = btn.dataset.theme === theme;
+				btn.setAttribute('aria-checked', active);
+				btn.classList.toggle('bg-stone-100', active);
+				btn.classList.toggle('dark:bg-slate-800', active);
+				btn.classList.toggle('text-stone-700', active);
+				btn.classList.toggle('dark:text-slate-200', active);
+				btn.classList.toggle('text-stone-400', !active);
+				btn.classList.toggle('hover:text-stone-600', !active);
+				btn.classList.toggle('dark:text-slate-500', !active);
+				btn.classList.toggle('dark:hover:text-slate-300', !active);
+			});
+		};
+
+		// === Quotes ===
 		const quotes = [
 			"At museums, she's allowed to touch the art.",
 			"Both sides of her pillow are cool.",
@@ -185,6 +301,7 @@
 			}
 		}
 
+		// === Init ===
 		const onReady = (fn) => {
 			if (document.readyState === "loading") {
 				document.addEventListener("DOMContentLoaded", fn, { once: true });
@@ -194,22 +311,51 @@
 		};
 
 		onReady(() => {
+			// Quotes
 			const el = document.getElementById("quote");
 			const textEl = document.getElementById("quote-text");
-			if (!el || !textEl) return;
-			const seq = sequencer();
+			if (el && textEl) {
+				const seq = sequencer();
+				const setQuote = () => {
+					const quote = seq();
+					textEl.textContent = quote;
+					textEl.classList.remove("quote-fade-in");
+					// Force reflow to restart the animation
+					void textEl.offsetWidth;
+					textEl.classList.add("quote-fade-in");
+				};
+				setQuote();
+				setInterval(setQuote, 5000);
+			}
 
-			const setQuote = () => {
-				const quote = seq();
-				textEl.textContent = quote;
-				textEl.classList.remove("quote-fade-in");
-				// Force reflow to restart the animation
-				void textEl.offsetWidth;
-				textEl.classList.add("quote-fade-in");
-			};
+			// Theme toggle
+			const currentTheme = localStorage.getItem('theme') || 'system';
+			updateToggle(currentTheme);
 
-			setQuote();
-			setInterval(setQuote, 5000);
+			document.querySelectorAll('[data-theme]').forEach(btn => {
+				btn.addEventListener('click', () => {
+					const theme = btn.dataset.theme;
+					localStorage.setItem('theme', theme);
+					applyTheme(theme);
+					updateToggle(theme);
+				});
+			});
+
+			// Confetti easter egg
+			const portrait = document.getElementById('portrait');
+			if (portrait) {
+				const trigger = () => {
+					const rect = portrait.getBoundingClientRect();
+					confetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+				};
+				portrait.addEventListener('click', trigger);
+				portrait.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						trigger();
+					}
+				});
+			}
 		});
 	</script>
 </body>
