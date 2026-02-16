@@ -6,7 +6,7 @@ BUILD_DIR=${BUILD_DIR:-./build}
 aws s3 sync "$BUILD_DIR" s3://duffle.one --acl public-read --follow-symlinks --delete
 
 # Ensure HTML served as text/html and not cached aggressively
-for page in index.html 404.html time.html; do
+for page in index.html 404.html time.html cv.html; do
   aws s3 cp "$BUILD_DIR/$page" s3://duffle.one/$page \
     --acl public-read \
     --content-type text/html \

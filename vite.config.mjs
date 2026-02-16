@@ -22,10 +22,11 @@ export default defineConfig({
 				index: 'src/index.html',
 				"404": 'src/404.html',
 				time: 'src/time.html',
+				cv: 'src/cv.html',
 			},
 		},
 	},
 	optimizeDeps: {
-		entries: ['src/index.html', 'src/404.html', 'src/time.html'],
+		entries: ['src/index.html', 'src/404.html', 'src/time.html', 'src/cv.html'],
 	},
 })
