@@ -1,3 +1,7 @@
 **/node_modules/*
 **/build/*
 **/.vite/*
+.DS_Store
+
+# Full-size jellycat photos (2GB+) — uploaded to S3 separately via publish.sh
+src/public/img/jellycats/*.jpg
