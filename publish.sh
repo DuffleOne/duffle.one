@@ -2,8 +2,19 @@
 
 BUILD_DIR=${BUILD_DIR:-./build}
 
-# Sync all site files
-aws s3 sync "$BUILD_DIR" s3://duffle.one --acl public-read --follow-symlinks --delete
+# Sync all site files (exclude full-size jellycat photos — they're uploaded separately)
+aws s3 sync "$BUILD_DIR" s3://duffle.one \
+  --acl public-read --follow-symlinks --delete \
+  --exclude "img/jellycats/*.jpg"
+
+# Upload full-size jellycat photos from local source (not in git)
+JELLYCAT_DIR=src/public/img/jellycats
+if [ -d "$JELLYCAT_DIR" ]; then
+  aws s3 sync "$JELLYCAT_DIR" s3://duffle.one/img/jellycats/ \
+    --acl public-read \
+    --exclude "thumbs/*" \
+    --cache-control "public, max-age=31536000, immutable"
+fi
 
 # Ensure HTML served as text/html and not cached aggressively
 for page in index.html 404.html time.html cv.html jellycats.html; do
