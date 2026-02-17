@@ -15,7 +15,7 @@ export default defineConfig({
 	},
 	build: {
 		target: 'es2022',
-		outDir: process.env.BUILD_DIR || (process.env.CI ? '/build' : './build'),
+		outDir: process.env.BUILD_DIR || (process.env.CI ? '/build' : '../build'),
 		emptyOutDir: true,
 		rollupOptions: {
 			input: {
@@ -23,10 +23,11 @@ export default defineConfig({
 				"404": 'src/404.html',
 				time: 'src/time.html',
 				cv: 'src/cv.html',
+				jellycats: 'src/jellycats.html',
 			},
 		},
 	},
 	optimizeDeps: {
-		entries: ['src/index.html', 'src/404.html', 'src/time.html', 'src/cv.html'],
+		entries: ['src/index.html', 'src/404.html', 'src/time.html', 'src/cv.html', 'src/jellycats.html'],
 	},
 })

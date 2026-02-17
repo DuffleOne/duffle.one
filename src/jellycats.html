@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>The Jellycat Collection</title>
+
+	<link rel="icon" href="/favicon.png" type="image/png" sizes="512x512">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+	<link href="./input.css" rel="stylesheet">
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Quicksand', sans-serif;
+			background: #faf6f1;
+			color: #3d2c22;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		/* ---- Hero ---- */
+		.hero {
+			position: relative;
+			width: 100%;
+			height: 55vh;
+			min-height: 340px;
+			overflow: hidden;
+		}
+
+		.hero img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center 40%;
+		}
+
+		.hero-overlay {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, rgba(58, 42, 28, .72) 0%, rgba(58, 42, 28, .15) 55%, transparent 100%);
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			padding: 2.5rem;
+		}
+
+		.hero-title {
+			font-size: clamp(2rem, 5vw, 3.5rem);
+			font-weight: 700;
+			color: #fff;
+			letter-spacing: -0.02em;
+			line-height: 1.15;
+		}
+
+		.hero-subtitle {
+			font-size: clamp(0.95rem, 2vw, 1.15rem);
+			color: rgba(255, 255, 255, .78);
+			margin-top: 0.5rem;
+			font-weight: 400;
+		}
+
+		/* ---- Filter bar ---- */
+		.filter-bar {
+			position: sticky;
+			top: 0;
+			z-index: 40;
+			background: rgba(250, 246, 241, .88);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-bottom: 1px solid rgba(61, 44, 34, .08);
+			padding: 1rem 1.5rem;
+			display: flex;
+			gap: 0.5rem;
+			overflow-x: auto;
+			scrollbar-width: none;
+		}
+
+		.filter-bar::-webkit-scrollbar {
+			display: none;
+		}
+
+		.filter-btn {
+			flex-shrink: 0;
+			padding: 0.45rem 1.1rem;
+			border-radius: 999px;
+			border: 1.5px solid rgba(61, 44, 34, .15);
+			background: transparent;
+			color: #6b5744;
+			font-family: inherit;
+			font-size: 0.85rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			white-space: nowrap;
+		}
+
+		.filter-btn:hover {
+			border-color: #c4956a;
+			color: #3d2c22;
+		}
+
+		.filter-btn.active {
+			background: #3d2c22;
+			color: #faf6f1;
+			border-color: #3d2c22;
+		}
+
+		/* ---- Gallery grid ---- */
+		.gallery {
+			max-width: 1400px;
+			margin: 0 auto;
+			padding: 2rem 1.5rem 4rem;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-auto-flow: dense;
+			gap: 1.5rem;
+		}
+
+		/* ---- Card ---- */
+		.card {
+			background: #fff;
+			border-radius: 16px;
+			overflow: hidden;
+			box-shadow: 0 1px 3px rgba(61, 44, 34, .06), 0 6px 16px rgba(61, 44, 34, .04);
+			transition: transform 0.25s ease, box-shadow 0.25s ease;
+			cursor: pointer;
+			opacity: 0;
+			animation: cardIn 0.4s ease forwards;
+		}
+
+		.card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 4px 12px rgba(61, 44, 34, .1), 0 16px 32px rgba(61, 44, 34, .08);
+		}
+
+		.card.wide {
+			grid-column: span 2;
+		}
+
+		.card-img-wrap {
+			position: relative;
+			width: 100%;
+			overflow: hidden;
+			background: #efe8df;
+		}
+
+		.card:not(.wide) .card-img-wrap {
+			aspect-ratio: 3 / 4;
+		}
+
+		.card.wide .card-img-wrap {
+			aspect-ratio: 16 / 9;
+		}
+
+		.card-img-wrap img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 0.4s ease;
+		}
+
+		.card:hover .card-img-wrap img {
+			transform: scale(1.04);
+		}
+
+		.card-body {
+			padding: 1rem 1.15rem 1.15rem;
+		}
+
+		.card-category {
+			display: inline-block;
+			font-size: 0.7rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+			padding: 0.2rem 0.6rem;
+			border-radius: 999px;
+			margin-bottom: 0.45rem;
+		}
+
+		.card-name {
+			font-size: 1.15rem;
+			font-weight: 700;
+			line-height: 1.3;
+			color: #3d2c22;
+		}
+
+		.card-type {
+			font-size: 0.82rem;
+			color: #a8937a;
+			font-weight: 500;
+			font-style: italic;
+			margin-top: 0.1rem;
+		}
+
+		.card-desc {
+			font-size: 0.88rem;
+			color: #8b7355;
+			margin-top: 0.3rem;
+			line-height: 1.45;
+		}
+
+		.card-desc:empty {
+			display: none;
+		}
+
+		.card.leader {
+			border: 2.5px solid #d4a24e;
+			box-shadow:
+				0 0 0 3px rgba(212, 162, 78, .15),
+				0 1px 3px rgba(61, 44, 34, .06),
+				0 6px 16px rgba(61, 44, 34, .04);
+		}
+
+		.card.leader:hover {
+			box-shadow:
+				0 0 0 3px rgba(212, 162, 78, .25),
+				0 4px 12px rgba(61, 44, 34, .1),
+				0 16px 32px rgba(61, 44, 34, .08);
+		}
+
+		.card-crown {
+			position: absolute;
+			top: 0.6rem;
+			left: 0.6rem;
+			width: 34px;
+			height: 34px;
+			background: linear-gradient(135deg, #f6d365, #d4a24e);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1rem;
+			box-shadow: 0 2px 8px rgba(180, 130, 50, .35);
+			pointer-events: none;
+			z-index: 2;
+		}
+
+		.card-star {
+			position: absolute;
+			top: 0.6rem;
+			right: 0.6rem;
+			width: 32px;
+			height: 32px;
+			background: rgba(255, 255, 255, .88);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1rem;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+			pointer-events: none;
+		}
+
+		.card-img-count {
+			position: absolute;
+			bottom: 0.6rem;
+			right: 0.6rem;
+			background: rgba(0, 0, 0, .55);
+			color: #fff;
+			font-size: 0.72rem;
+			font-weight: 600;
+			padding: 0.2rem 0.55rem;
+			border-radius: 999px;
+			backdrop-filter: blur(4px);
+		}
+
+		/* ---- Category badge colours ---- */
+		.cat-bunnies {
+			background: #fce4ec;
+			color: #ad1457;
+		}
+
+		.cat-dragons {
+			background: #f3e5f5;
+			color: #7b1fa2;
+		}
+
+		.cat-birds {
+			background: #e3f2fd;
+			color: #1565c0;
+		}
+
+		.cat-dogs {
+			background: #fff3e0;
+			color: #e65100;
+		}
+
+		.cat-farm {
+			background: #e8f5e9;
+			color: #2e7d32;
+		}
+
+		.cat-sea-creatures {
+			background: #e0f2f1;
+			color: #00695c;
+		}
+
+		.cat-forest {
+			background: #f1f8e9;
+			color: #558b2f;
+		}
+
+		.cat-other {
+			background: #efebe9;
+			color: #5d4037;
+		}
+
+		/* ---- Lightbox ---- */
+		.lightbox {
+			position: fixed;
+			inset: 0;
+			z-index: 100;
+			background: rgba(20, 14, 10, .92);
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+		}
+
+		.lightbox.open {
+			opacity: 1;
+			pointer-events: all;
+		}
+
+		.lightbox-inner {
+			position: relative;
+			max-width: 92vw;
+			max-height: 88vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.lightbox-img {
+			max-width: 92vw;
+			max-height: 78vh;
+			object-fit: contain;
+			border-radius: 8px;
+			transition: opacity 0.25s ease;
+		}
+
+		.lightbox-caption {
+			text-align: center;
+			margin-top: 1rem;
+			color: rgba(255, 255, 255, .85);
+		}
+
+		.lightbox-name {
+			font-size: 1.2rem;
+			font-weight: 700;
+			color: #fff;
+		}
+
+		.lightbox-desc {
+			font-size: 0.9rem;
+			margin-top: 0.25rem;
+			color: rgba(255, 255, 255, .6);
+		}
+
+		.lightbox-desc:empty {
+			display: none;
+		}
+
+		.lightbox-counter {
+			font-size: 0.75rem;
+			margin-top: 0.4rem;
+			color: rgba(255, 255, 255, .4);
+			font-weight: 600;
+		}
+
+		.lightbox-download {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			margin-top: 0.75rem;
+			padding: 0.5rem 1.1rem;
+			border-radius: 999px;
+			border: 1.5px solid rgba(255, 255, 255, .25);
+			background: rgba(255, 255, 255, .1);
+			color: #fff;
+			font-family: inherit;
+			font-size: 0.82rem;
+			font-weight: 600;
+			cursor: pointer;
+			text-decoration: none;
+			transition: all 0.2s ease;
+		}
+
+		.lightbox-download:hover {
+			background: rgba(255, 255, 255, .22);
+			border-color: rgba(255, 255, 255, .4);
+		}
+
+		.lightbox-download svg {
+			width: 16px;
+			height: 16px;
+		}
+
+		.lightbox-close {
+			position: fixed;
+			top: 1.2rem;
+			right: 1.2rem;
+			width: 44px;
+			height: 44px;
+			border-radius: 50%;
+			border: none;
+			background: rgba(255, 255, 255, .12);
+			color: #fff;
+			font-size: 1.4rem;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.2s;
+			z-index: 110;
+		}
+
+		.lightbox-close:hover {
+			background: rgba(255, 255, 255, .25);
+		}
+
+		.lightbox-nav {
+			position: fixed;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			border: none;
+			background: rgba(255, 255, 255, .1);
+			color: #fff;
+			font-size: 1.3rem;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.2s;
+			z-index: 110;
+		}
+
+		.lightbox-nav:hover {
+			background: rgba(255, 255, 255, .22);
+		}
+
+		.lightbox-prev {
+			left: 1rem;
+		}
+
+		.lightbox-next {
+			right: 1rem;
+		}
+
+		/* ---- Animations ---- */
+		@keyframes cardIn {
+			from {
+				opacity: 0;
+				transform: translateY(16px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* ---- Responsive ---- */
+		@media (max-width: 700px) {
+			.gallery {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1rem;
+				padding: 1rem;
+			}
+
+			.hero {
+				height: 40vh;
+				min-height: 240px;
+			}
+
+			.hero-overlay {
+				padding: 1.5rem;
+			}
+
+			.card-body {
+				padding: 0.75rem 0.85rem 0.85rem;
+			}
+
+			.card-name {
+				font-size: 1rem;
+			}
+
+			.lightbox-nav {
+				width: 38px;
+				height: 38px;
+				font-size: 1.1rem;
+			}
+
+			.lightbox-prev {
+				left: 0.5rem;
+			}
+
+			.lightbox-next {
+				right: 0.5rem;
+			}
+		}
+
+		@media (max-width: 420px) {
+			.card.wide {
+				grid-column: span 1;
+			}
+
+			.card.wide .card-img-wrap {
+				aspect-ratio: 4 / 3;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Hero -->
+	<div class="hero">
+		<img src="img/jellycats/everyone.jpg" alt="The whole Jellycat family" loading="eager" decoding="async">
+		<div class="hero-overlay">
+			<h1 class="hero-title">The Jellycat Collection</h1>
+			<p class="hero-subtitle" id="hero-subtitle"></p>
+		</div>
+	</div>
+
+	<!-- Filter bar -->
+	<nav class="filter-bar" id="filter-bar"></nav>
+
+	<!-- Gallery -->
+	<main class="gallery" id="gallery"></main>
+
+	<!-- Lightbox -->
+	<div class="lightbox" id="lightbox">
+		<button class="lightbox-close" id="lb-close" aria-label="Close">&times;</button>
+		<button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Previous">&#8249;</button>
+		<button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Next">&#8250;</button>
+		<div class="lightbox-inner">
+			<img class="lightbox-img" id="lb-img" src="" alt="">
+			<div class="lightbox-caption">
+				<div class="lightbox-name" id="lb-name"></div>
+				<div class="lightbox-desc" id="lb-desc"></div>
+				<div class="lightbox-counter" id="lb-counter"></div>
+				<a class="lightbox-download" id="lb-download" href="" download>
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+					</svg>
+					Download full size
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		/*
+		 * ============================
+		 *  COLLECTION DATA
+		 * ============================
+		 *
+		 *  Edit the entries below to update names, descriptions, and categories.
+		 *  - thumb:  filename used for the card thumbnail
+		 *  - images: all filenames for this entry (shown in lightbox)
+		 *  - wide:   if true, card spans two columns (good for group/landscape shots)
+		 */
+		const THUMB_BASE = "img/jellycats/thumbs/";
+		const FULL_BASE = "img/jellycats/";
+		const toWebp = (jpg) => jpg.replace(/\.jpg$/, ".webp");
+
+		const collection = [
+			// ─── Bunnies ───────────────────────────────────────────
+			{
+				name: "Black Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_black_p.jpg",
+				images: ["bunny_black_p.jpg", "bunny_black_l.jpg"],
+			},
+			{
+				name: "Grey Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_grey_p.jpg",
+				images: ["bunny_grey_p.jpg", "bunny_grey_l.jpg"],
+			},
+			{
+				name: "Lavender Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_lavendar_p.jpg",
+				images: ["bunny_lavendar_p.jpg", "bunny_lavendar_l.jpg"],
+			},
+			{
+				name: "Pink Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_pink_p.jpg",
+				images: ["bunny_pink_p.jpg", "bunny_pink_l.jpg", "bunny_pink_jump.jpg"],
+			},
+			{
+				name: "White Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_white_p.jpg",
+				images: ["bunny_white_p.jpg", "bunny_white_l.jpg"],
+			},
+			{
+				name: "The Bunny Gang",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_five_l.jpg",
+				images: ["bunny_five_l.jpg", "bunny_five_xl.jpg", "bunny_five_bums_line.jpg", "bunny_five_bums_pyramid.jpg"],
+				wide: true,
+			},
+
+			// ─── Dragons ──────────────────────────────────────────
+			{
+				name: "Idir",
+				type: "Lavender Dragon",
+				description: "Leader of the group",
+				category: "Dragons",
+				thumb: "dragon_idir_p.jpg",
+				images: ["dragon_idir_p.jpg", "dragon_idir_l.jpg"],
+				leader: true,
+			},
+			{
+				name: "Sky",
+				type: "Sky Dragon",
+				description: "",
+				category: "Dragons",
+				thumb: "dragon_sky_l.jpg",
+				images: ["dragon_sky_l.jpg", "dragon_sky_back_l.jpg"],
+			},
+			{
+				name: "Sprinkles",
+				type: "Lazulia Dragon",
+				description: "",
+				category: "Dragons",
+				thumb: "dragon_sprinkles_p.jpg",
+				images: ["dragon_sprinkles_p.jpg", "dragon_sprinkles_l.jpg", "dragon_sprinkles_upright_p.jpg"],
+			},
+			{
+				name: "White Dragon",
+				description: "",
+				category: "Dragons",
+				thumb: "dragon_white_p.jpg",
+				images: ["dragon_white_p.jpg", "dragon_white_l.jpg", "dragon_white_upright_p.jpg", "dragon_white_upright_l.jpg"],
+			},
+			{
+				name: "The Dragon Squad",
+				description: "",
+				category: "Dragons",
+				thumb: "drgon_four_pano_l.jpg",
+				images: ["drgon_four_pano_l.jpg"],
+				wide: true,
+			},
+
+			// ─── Birds ────────────────────────────────────────────
+			{
+				name: "Traf",
+				type: "London Pigeon",
+				description: "",
+				category: "Birds",
+				thumb: "bird_pigeon_lon_p.jpg",
+				images: ["bird_pigeon_lon_p.jpg", "bird_pigeon_lon_l.jpg"],
+			},
+			{
+				name: "Bobby",
+				type: "NYC Pigeon",
+				description: "",
+				category: "Birds",
+				thumb: "bird_pigeon_ny_p.jpg",
+				images: ["bird_pigeon_ny_p.jpg", "bird_pigeon_ny_l.jpg"],
+			},
+			{
+				name: "Robin",
+				description: "",
+				category: "Birds",
+				thumb: "bird_robin_p.jpg",
+				images: ["bird_robin_p.jpg", "bird_robin_l.jpg"],
+			},
+			{
+				name: "Quackers",
+				type: "Duck",
+				description: "",
+				category: "Birds",
+				thumb: "duck_p.jpg",
+				images: ["duck_p.jpg", "duck_l.jpg"],
+			},
+			{
+				name: "Penguin",
+				description: "",
+				category: "Birds",
+				thumb: "penguin_p.jpg",
+				images: ["penguin_p.jpg", "penguin_l.jpg"],
+			},
+			{
+				name: "Three Birds",
+				description: "",
+				category: "Birds",
+				thumb: "bird_three_l.jpg",
+				images: ["bird_three_l.jpg"],
+				wide: true,
+			},
+
+			// ─── Dogs ─────────────────────────────────────────────
+			{
+				name: "Scotty",
+				description: "",
+				category: "Dogs",
+				thumb: "dog_scotty_p.jpg",
+				images: ["dog_scotty_p.jpg", "dog_scotty_l.jpg"],
+			},
+			{
+				name: "Small Dog",
+				description: "",
+				category: "Dogs",
+				thumb: "dog_small_p.jpg",
+				images: ["dog_small_p.jpg", "dog_small_l.jpg"],
+			},
+			{
+				name: "Two Dogs",
+				description: "",
+				category: "Dogs",
+				thumb: "dog_two_l.jpg",
+				images: ["dog_two_l.jpg", "dog_two_p.jpg"],
+				wide: true,
+			},
+
+			// ─── Farm ─────────────────────────────────────────────
+			{
+				name: "Smudge",
+				type: "Cow",
+				description: "",
+				category: "Farm",
+				thumb: "farm_cow_p.jpg",
+				images: ["farm_cow_p.jpg", "farm_cow_l.jpg"],
+			},
+			{
+				name: "Horse",
+				description: "",
+				category: "Farm",
+				thumb: "farm_horse_p.jpg",
+				images: ["farm_horse_p.jpg", "farm_horse_l.jpg", "farm_horse_horizontal_l.jpg"],
+			},
+			{
+				name: "Pig",
+				description: "",
+				category: "Farm",
+				thumb: "farm_pig_p.jpg",
+				images: ["farm_pig_p.jpg", "farm_pig_l.jpg"],
+			},
+			{
+				name: "Farm Friends",
+				description: "",
+				category: "Farm",
+				thumb: "farm_three_l.jpg",
+				images: ["farm_three_l.jpg"],
+				wide: true,
+			},
+
+			// ─── Sea Creatures ────────────────────────────────────
+			{
+				name: "Cherry Octopus",
+				description: "",
+				category: "Sea Creatures",
+				thumb: "octopus_cherry_p.jpg",
+				images: ["octopus_cherry_p.jpg", "octopus_cherry_l.jpg"],
+			},
+			{
+				name: "Odel",
+				description: "The little one",
+				category: "Sea Creatures",
+				thumb: "octopus_odel_p.jpg",
+				images: ["octopus_odel_p.jpg", "octopos_odel_l.jpg"],
+			},
+			{
+				name: "Odelle",
+				description: "The big one",
+				category: "Sea Creatures",
+				thumb: "octopus_odelle_p.jpg",
+				images: ["octopus_odelle_p.jpg", "octopus_odelle_l.jpg", "octopus_odelle_2_p.jpg", "octopus_odelle_2_l.jpg"],
+			},
+			{
+				name: "Fish",
+				description: "",
+				category: "Sea Creatures",
+				thumb: "fish_p.jpg",
+				images: ["fish_p.jpg", "fish_l.jpg"],
+			},
+			{
+				name: "Three Octopi",
+				description: "",
+				category: "Sea Creatures",
+				thumb: "octopus_three_l.jpg",
+				images: ["octopus_three_l.jpg", "octopus_three_p.jpg"],
+				wide: true,
+			},
+
+			// ─── Forest ───────────────────────────────────────────
+			{
+				name: "Margo",
+				type: "Mushroom",
+				description: "",
+				category: "Forest",
+				thumb: "forest_mushroom_p.jpg",
+				images: ["forest_mushroom_p.jpg", "forest_mushroom_l.jpg"],
+			},
+			{
+				name: "Warthog",
+				description: "",
+				category: "Forest",
+				thumb: "forest_warthog_p.jpg",
+				images: ["forest_warthog_p.jpg", "forest_warthog_l.jpg"],
+			},
+			{
+				name: "Forest Friends",
+				description: "",
+				category: "Forest",
+				thumb: "forest_two_p.jpg",
+				images: ["forest_two_p.jpg"],
+				wide: true,
+			},
+
+			// ─── Other ───────────────────────────────────────────
+			{
+				name: "Albee",
+				type: "Bee",
+				description: "",
+				category: "Other",
+				thumb: "bee_p.jpg",
+				images: ["bee_p.jpg", "bee_l.jpg"],
+			},
+			{
+				name: "Devil",
+				description: "",
+				category: "Other",
+				thumb: "devil_p.jpg",
+				images: ["devil_p.jpg", "devil_l.jpg"],
+			},
+			{
+				name: "Tiger",
+				description: "",
+				category: "Other",
+				thumb: "tiger_p.jpg",
+				images: ["tiger_p.jpg", "tiger_l.jpg"],
+			},
+			{
+				name: "Kate",
+				description: "Honorary member (real human)",
+				category: "Other",
+				thumb: "kate.jpg",
+				images: ["kate.jpg", "kate_face.jpg", "kate_kiss.jpg", "kate_tongue.jpg"],
+				star: true,
+			},
+		];
+
+		/* ---- Helpers ---- */
+		const catSlug = (c) => "cat-" + c.toLowerCase().replace(/\s+/g, "-");
+		const categories = [...new Set(collection.map((e) => e.category))];
+
+		/* Build a flat image list for lightbox navigation */
+		const flatImages = [];
+		collection.forEach((entry) => {
+			entry.images.forEach((src) => {
+				flatImages.push({
+					thumb: THUMB_BASE + toWebp(src),
+					full: FULL_BASE + src,
+					name: entry.name,
+					description: entry.description,
+					category: entry.category,
+				});
+			});
+		});
+
+		/* ---- Subtitle ---- */
+		document.getElementById("hero-subtitle").textContent =
+			`${collection.length} friends across ${categories.length} categories`;
+
+		/* ---- Build filter bar ---- */
+		const filterBar = document.getElementById("filter-bar");
+		const makeBtn = (label, value) => {
+			const btn = document.createElement("button");
+			btn.className = "filter-btn" + (value === "all" ? " active" : "");
+			btn.textContent = label;
+			btn.dataset.filter = value;
+			btn.addEventListener("click", () => filterGallery(value, btn));
+			return btn;
+		};
+		filterBar.appendChild(makeBtn("All", "all"));
+		categories.forEach((cat) => filterBar.appendChild(makeBtn(cat, cat)));
+
+		let activeFilter = "all";
+
+		function filterGallery(value, btn) {
+			activeFilter = value;
+			filterBar.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+			btn.classList.add("active");
+
+			const cards = document.querySelectorAll(".card");
+			let delay = 0;
+			cards.forEach((card) => {
+				const match = value === "all" || card.dataset.category === value;
+				if (match) {
+					card.style.display = "";
+					card.style.animationDelay = delay + "ms";
+					card.style.animation = "none";
+					card.offsetHeight; // trigger reflow
+					card.style.animation = "";
+					delay += 40;
+				} else {
+					card.style.display = "none";
+				}
+			});
+		}
+
+		/* ---- Build gallery ---- */
+		const gallery = document.getElementById("gallery");
+
+		collection.sort((a, b) => {
+			if (a.category !== b.category) return 0;
+			return (b.wide ? 1 : 0) - (a.wide ? 1 : 0);
+		});
+
+		collection.forEach((entry, idx) => {
+			const card = document.createElement("div");
+			card.className = "card" + (entry.wide ? " wide" : "") + (entry.leader ? " leader" : "");
+			card.dataset.category = entry.category;
+			card.dataset.index = idx;
+			card.style.animationDelay = (idx * 40) + "ms";
+
+			const imgWrap = document.createElement("div");
+			imgWrap.className = "card-img-wrap";
+
+			const img = document.createElement("img");
+			img.src = THUMB_BASE + toWebp(entry.thumb);
+			img.alt = entry.name;
+			img.loading = "lazy";
+			img.decoding = "async";
+			imgWrap.appendChild(img);
+
+			if (entry.leader) {
+				const crown = document.createElement("span");
+				crown.className = "card-crown";
+				crown.textContent = "\u{1F451}";
+				imgWrap.appendChild(crown);
+			}
+
+			if (entry.star) {
+				const star = document.createElement("span");
+				star.className = "card-star";
+				star.textContent = "\u2B50";
+				imgWrap.appendChild(star);
+			}
+
+			if (entry.images.length > 1) {
+				const count = document.createElement("span");
+				count.className = "card-img-count";
+				count.textContent = entry.images.length + " photos";
+				imgWrap.appendChild(count);
+			}
+
+			const body = document.createElement("div");
+			body.className = "card-body";
+
+			const badge = document.createElement("span");
+			badge.className = "card-category " + catSlug(entry.category);
+			badge.textContent = entry.category;
+
+			const name = document.createElement("div");
+			name.className = "card-name";
+			name.textContent = entry.name;
+
+			const desc = document.createElement("div");
+			desc.className = "card-desc";
+			desc.textContent = entry.description;
+
+			body.appendChild(badge);
+			body.appendChild(name);
+
+			if (entry.type) {
+				const type = document.createElement("div");
+				type.className = "card-type";
+				type.textContent = entry.type;
+				body.appendChild(type);
+			}
+
+			body.appendChild(desc);
+
+			card.appendChild(imgWrap);
+			card.appendChild(body);
+			gallery.appendChild(card);
+
+			card.addEventListener("click", () => openLightbox(idx, 0));
+		});
+
+		/* ---- Lightbox ---- */
+		const lightbox = document.getElementById("lightbox");
+		const lbImg = document.getElementById("lb-img");
+		const lbName = document.getElementById("lb-name");
+		const lbDesc = document.getElementById("lb-desc");
+		const lbCounter = document.getElementById("lb-counter");
+		const lbDownload = document.getElementById("lb-download");
+
+		let currentEntry = 0;
+		let currentImageIdx = 0;
+
+		function openLightbox(entryIdx, imgIdx) {
+			currentEntry = entryIdx;
+			currentImageIdx = imgIdx || 0;
+			showLightboxImage();
+			lightbox.classList.add("open");
+			document.body.style.overflow = "hidden";
+		}
+
+		function closeLightbox() {
+			lightbox.classList.remove("open");
+			document.body.style.overflow = "";
+		}
+
+		function showLightboxImage() {
+			const entry = collection[currentEntry];
+			const jpgFile = entry.images[currentImageIdx];
+			lbImg.src = THUMB_BASE + toWebp(jpgFile);
+			lbImg.alt = entry.name;
+			lbName.textContent = entry.type ? `${entry.name} — ${entry.type}` : entry.name;
+			lbDesc.textContent = entry.description;
+			lbDownload.href = FULL_BASE + jpgFile;
+			lbDownload.download = jpgFile;
+
+			if (entry.images.length > 1) {
+				lbCounter.textContent = `${currentImageIdx + 1} / ${entry.images.length}`;
+			} else {
+				lbCounter.textContent = "";
+			}
+		}
+
+		function lightboxPrev() {
+			const entry = collection[currentEntry];
+			if (currentImageIdx > 0) {
+				currentImageIdx--;
+			} else {
+				currentEntry = (currentEntry - 1 + collection.length) % collection.length;
+				currentImageIdx = collection[currentEntry].images.length - 1;
+			}
+			showLightboxImage();
+		}
+
+		function lightboxNext() {
+			const entry = collection[currentEntry];
+			if (currentImageIdx < entry.images.length - 1) {
+				currentImageIdx++;
+			} else {
+				currentEntry = (currentEntry + 1) % collection.length;
+				currentImageIdx = 0;
+			}
+			showLightboxImage();
+		}
+
+		document.getElementById("lb-close").addEventListener("click", closeLightbox);
+		document.getElementById("lb-prev").addEventListener("click", lightboxPrev);
+		document.getElementById("lb-next").addEventListener("click", lightboxNext);
+
+		lightbox.addEventListener("click", (e) => {
+			if (e.target === lightbox || e.target.classList.contains("lightbox-inner")) {
+				closeLightbox();
+			}
+		});
+
+		document.addEventListener("keydown", (e) => {
+			if (!lightbox.classList.contains("open")) return;
+			if (e.key === "Escape") closeLightbox();
+			if (e.key === "ArrowLeft") lightboxPrev();
+			if (e.key === "ArrowRight") lightboxNext();
+		});
+	</script>
+</body>
+
+</html>
