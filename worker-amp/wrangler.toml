@@ -1,0 +1,10 @@
+name = "gaming"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+AMP_URL = "https://amp.dfl.mx"
+AMP_USERNAME = "read-only"
+
+# Set via `wrangler secret put AMP_PASSWORD`
+# AMP_PASSWORD = ""

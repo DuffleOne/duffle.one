@@ -157,6 +157,45 @@
 			color: var(--dim);
 		}
 
+		.status {
+			display: inline-block;
+			width: 0.6em;
+			height: 0.6em;
+			border-radius: 50%;
+			margin-right: 0.4em;
+			vertical-align: middle;
+		}
+
+		.status-online {
+			background: var(--ok);
+			box-shadow: 0 0 6px var(--ok);
+		}
+
+		.status-offline {
+			background: var(--err);
+			box-shadow: 0 0 6px var(--err);
+		}
+
+		#servers-loading {
+			color: var(--dim);
+			padding: 1rem 1.25rem;
+			font-style: italic;
+		}
+
+		#servers-error {
+			color: var(--err);
+			padding: 1rem 1.25rem;
+			display: none;
+		}
+
+		#servers-empty {
+			border: 1px dashed var(--border);
+			padding: 1.5rem 1.25rem;
+			color: var(--dim);
+			text-align: center;
+			display: none;
+		}
+
 		footer {
 			margin-top: 2rem;
 			padding-top: 1rem;
@@ -178,41 +217,78 @@
 			</div>
 		</header>
 
-		<section id="factorio">
-			<h2>Factorio <span class="tag">// multiplayer</span></h2>
+		<section>
+			<h2>Connection <span class="tag">// all servers</span></h2>
 			<dl>
 				<dt>Host</dt>
-				<dd><code class="val" id="factorio-host">212.140.154.25</code></dd>
-				<dt>Port</dt>
-				<dd><code>34197</code> <span style="color:var(--dim)">UDP</span></dd>
-				<dt>Password</dt>
-				<dd><code class="val" id="factorio-pass">********</code></dd>
+				<dd><code class="val">gaming.duffle.one</code></dd>
+				<dt>IP</dt>
+				<dd><code class="val">212.140.154.25</code></dd>
 			</dl>
-			<p class="note">
-				In-game: Multiplayer → Connect to address → <kbd>host:34197</kbd> (Factorio appends port if omitted in some setups; explicit is safer).
-			</p>
 		</section>
 
-		<section id="enshrouded">
-			<h2>Enshrouded <span class="tag">// multiplayer</span></h2>
-			<dl>
-				<dt>Host</dt>
-				<dd><code class="val" id="enshrouded-host">212.140.154.25</code></dd>
-				<dt>Port</dt>
-				<dd><code>15638</code> <span style="color:var(--dim)">TCP/UDP</span></dd>
-				<dt>Password</dt>
-				<dd><code class="val" id="enshrouded-pass">********</code></dd>
-			</dl>
-			<p class="note">
-				Join → filter “Show dedicated server” → direct connect / favorites by IPv4.
-			</p>
-		</section>
+		<div id="servers-loading">$ fetching server status...</div>
+		<div id="servers-error">$ error: failed to reach server panel</div>
+		<div id="servers-empty">$ no servers currently provisioned</div>
+		<div id="servers"></div>
 
 		<footer>
 			<div class="prompt">duffle.one/gaming.html — noindex; friends &amp; co-op only.</div>
 			<div style="margin-top:0.35rem"><a href="/">← back to site</a></div>
 		</footer>
 	</div>
+
+	<script type="module">
+		const API = location.hostname === "localhost" ? "http://localhost:3001/api" : "https://gaming.dfl-be7.workers.dev";
+
+		async function loadServers() {
+			const loading = document.getElementById("servers-loading");
+			const error = document.getElementById("servers-error");
+			const container = document.getElementById("servers");
+
+			try {
+				const res = await fetch(API);
+				if (!res.ok) throw new Error(res.status);
+				const servers = await res.json();
+
+				loading.style.display = "none";
+				if (servers.length === 0) {
+					document.getElementById("servers-empty").style.display = "block";
+					return;
+				}
+				container.innerHTML = servers.map(serverHTML).join("");
+			} catch {
+				loading.style.display = "none";
+				error.style.display = "block";
+			}
+		}
+
+		function serverHTML(s) {
+			const statusClass = s.running ? "status-online" : "status-offline";
+			const statusText = s.running ? "online" : "offline";
+			const players = s.running && s.players !== null
+				? `${s.players}${s.maxPlayers ? "/" + s.maxPlayers : ""}`
+				: "—";
+
+			return `
+				<section>
+					<h2>
+						<span class="status ${statusClass}" title="${statusText}"></span>
+						${s.name} <span class="tag">// ${s.game}</span>
+					</h2>
+					<dl>
+						<dt>Port</dt>
+						<dd><code class="val">${s.port}</code></dd>
+						<dt>Status</dt>
+						<dd>${statusText}</dd>
+						<dt>Players</dt>
+						<dd>${players}</dd>
+					</dl>
+				</section>`;
+		}
+
+		loadServers();
+	</script>
 </body>
 
 </html>

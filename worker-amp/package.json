@@ -1,0 +1,11 @@
+{
+  "name": "amp-servers",
+  "private": true,
+  "scripts": {
+    "dev": "bun run dev.js",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

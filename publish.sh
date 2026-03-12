@@ -17,7 +17,7 @@ if [ -d "$JELLYCAT_DIR" ]; then
 fi
 
 # Ensure HTML served as text/html and not cached aggressively
-for page in index.html 404.html time.html cv.html jellycats.html; do
+for page in index.html 404.html time.html cv.html jellycats.html gaming.html; do
   aws s3 cp "$BUILD_DIR/$page" s3://duffle.one/$page \
     --acl public-read \
     --content-type text/html \
