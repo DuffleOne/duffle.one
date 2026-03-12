@@ -1,5 +1,8 @@
 # duffle.one — robots.txt
 User-agent: *
 Allow: /
+# Private gaming page — do not crawl (defense in depth with page meta)
+Disallow: /gaming.html
+Disallow: /gaming
 
 Sitemap: https://duffle.one/sitemap.xml

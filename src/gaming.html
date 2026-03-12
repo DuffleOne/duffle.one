@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>gaming // duffle.one</title>
+	<!-- Block indexing/caching/snippets for all major crawlers -->
+	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, max-snippet:0, max-image-preview:none, max-video-preview:0">
+	<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+	<meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+	<meta name="theme-color" content="#0a0e14">
+	<link rel="icon" href="/favicon.png" type="image/png">
+	<!-- Monospace + terminal vibe; standalone from main site -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #0a0e14;
+			--fg: #b3b1ad;
+			--dim: #5c6370;
+			--accent: #56b6c2;
+			--warn: #e5c07b;
+			--ok: #98c379;
+			--err: #e06c75;
+			--border: #2c323c;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			background: var(--bg);
+			color: var(--fg);
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			font-family: "IBM Plex Mono", "Consolas", "Menlo", monospace;
+			font-size: 14px;
+			line-height: 1.55;
+			padding: 1.5rem;
+			background:
+				radial-gradient(ellipse 80% 50% at 50% -20%, rgba(86, 182, 194, 0.08), transparent),
+				var(--bg);
+		}
+
+		a {
+			color: var(--accent);
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		.scanlines {
+			pointer-events: none;
+			position: fixed;
+			inset: 0;
+			background: repeating-linear-gradient(0deg,
+					transparent,
+					transparent 2px,
+					rgba(0, 0, 0, 0.03) 2px,
+					rgba(0, 0, 0, 0.03) 4px);
+			z-index: 9999;
+		}
+
+		.wrap {
+			max-width: 72ch;
+			margin: 0 auto;
+		}
+
+		header {
+			border: 1px solid var(--border);
+			padding: 1rem 1.25rem;
+			margin-bottom: 1.5rem;
+			background: rgba(0, 0, 0, 0.35);
+		}
+
+		header h1 {
+			margin: 0 0 0.5rem 0;
+			font-size: 1rem;
+			font-weight: 700;
+			color: var(--ok);
+			letter-spacing: 0.02em;
+		}
+
+		header .sub {
+			color: var(--dim);
+			font-size: 0.85rem;
+		}
+
+		.prompt::before {
+			content: "$ ";
+			color: var(--dim);
+		}
+
+		section {
+			border: 1px solid var(--border);
+			margin-bottom: 1.25rem;
+			background: rgba(0, 0, 0, 0.25);
+		}
+
+		section h2 {
+			margin: 0;
+			padding: 0.6rem 1rem;
+			font-size: 0.9rem;
+			font-weight: 600;
+			color: var(--warn);
+			border-bottom: 1px solid var(--border);
+			background: rgba(0, 0, 0, 0.2);
+		}
+
+		section h2 .tag {
+			color: var(--dim);
+			font-weight: 400;
+		}
+
+		dl {
+			margin: 0;
+			padding: 1rem 1.25rem;
+			display: grid;
+			grid-template-columns: auto 1fr;
+			gap: 0.35rem 1.5rem;
+		}
+
+		dt {
+			color: var(--dim);
+			font-weight: 600;
+		}
+
+		dd {
+			margin: 0;
+			word-break: break-all;
+		}
+
+		dd code,
+		.val {
+			background: rgba(86, 182, 194, 0.08);
+			padding: 0.15rem 0.4rem;
+			border: 1px solid var(--border);
+			color: var(--accent);
+		}
+
+		.note {
+			padding: 0 1.25rem 1rem;
+			color: var(--dim);
+			font-size: 0.8rem;
+		}
+
+		.note::before {
+			content: "# ";
+			color: var(--dim);
+		}
+
+		footer {
+			margin-top: 2rem;
+			padding-top: 1rem;
+			border-top: 1px dashed var(--border);
+			color: var(--dim);
+			font-size: 0.8rem;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="scanlines" aria-hidden="true"></div>
+	<div class="wrap">
+		<header>
+			<h1>// GAMING_SERVERS</h1>
+			<div class="sub prompt">cat /etc/duffle.one/gaming/README</div>
+			<div class="sub" style="margin-top:0.5rem">
+				Public endpoints for game servers I host.
+			</div>
+		</header>
+
+		<section id="factorio">
+			<h2>Factorio <span class="tag">// multiplayer</span></h2>
+			<dl>
+				<dt>Host</dt>
+				<dd><code class="val" id="factorio-host">212.140.154.25</code></dd>
+				<dt>Port</dt>
+				<dd><code>34197</code> <span style="color:var(--dim)">UDP</span></dd>
+				<dt>Password</dt>
+				<dd><code class="val" id="factorio-pass">********</code></dd>
+			</dl>
+			<p class="note">
+				In-game: Multiplayer → Connect to address → <kbd>host:34197</kbd> (Factorio appends port if omitted in some setups; explicit is safer).
+			</p>
+		</section>
+
+		<section id="enshrouded">
+			<h2>Enshrouded <span class="tag">// multiplayer</span></h2>
+			<dl>
+				<dt>Host</dt>
+				<dd><code class="val" id="enshrouded-host">212.140.154.25</code></dd>
+				<dt>Port</dt>
+				<dd><code>15638</code> <span style="color:var(--dim)">TCP/UDP</span></dd>
+				<dt>Password</dt>
+				<dd><code class="val" id="enshrouded-pass">********</code></dd>
+			</dl>
+			<p class="note">
+				Join → filter “Show dedicated server” → direct connect / favorites by IPv4.
+			</p>
+		</section>
+
+		<footer>
+			<div class="prompt">duffle.one/gaming.html — noindex; friends &amp; co-op only.</div>
+			<div style="margin-top:0.35rem"><a href="/">← back to site</a></div>
+		</footer>
+	</div>
+</body>
+
+</html>

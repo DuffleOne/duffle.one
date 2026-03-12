@@ -24,10 +24,11 @@ export default defineConfig({
 				time: 'src/time.html',
 				cv: 'src/cv.html',
 				jellycats: 'src/jellycats.html',
+				gaming: 'src/gaming.html',
 			},
 		},
 	},
 	optimizeDeps: {
-		entries: ['src/index.html', 'src/404.html', 'src/time.html', 'src/cv.html', 'src/jellycats.html'],
+		entries: ['src/index.html', 'src/404.html', 'src/time.html', 'src/cv.html', 'src/jellycats.html', 'src/gaming.html'],
 	},
 })
