@@ -2,6 +2,7 @@
 	"name": "Laura Miller — duffle.one",
 	"short_name": "duffle.one",
 	"description": "Laura Miller is a founding engineer, photographer, and 3D designer.",
+	"id": "/",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#fafaf9",
@@ -10,7 +11,8 @@
 		{
 			"src": "/favicon.png",
 			"sizes": "512x512",
-			"type": "image/png"
+			"type": "image/png",
+			"purpose": "any"
 		}
 	]
 }

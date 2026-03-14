@@ -55,11 +55,43 @@
 		pointer-events: none;
 		color: rgb(214 211 209);
 	}
+
+	:where(.dark, .dark *) .quote-block::before,
+	:where(.dark, .dark *) .quote-block::after {
+		color: rgb(51 65 85);
+	}
+
+	/* Staggered entrance animation */
+	.fade-up {
+		opacity: 0;
+		transform: translateY(12px);
+		animation: fadeUp 500ms ease-out forwards;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.fade-up {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
 }
 
 @layer base {
 	html {
 		font-family: "Nunito", sans-serif;
+	}
+}
+
+@keyframes fadeUp {
+	0% {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }
 
