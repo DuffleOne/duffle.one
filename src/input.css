@@ -61,6 +61,44 @@
 		color: rgb(51 65 85);
 	}
 
+	/* Portrait hover glow */
+	#portrait {
+		transition: transform 150ms ease, box-shadow 300ms ease;
+	}
+
+	#portrait:hover {
+		box-shadow:
+			0 0 0 4px rgb(250 250 249),
+			0 0 20px 4px rgb(168 162 158 / 0.4);
+	}
+
+	:where(.dark, .dark *) #portrait:hover {
+		box-shadow:
+			0 0 0 4px rgb(2 6 23),
+			0 0 20px 4px rgb(56 189 248 / 0.2);
+	}
+
+	/* Arrow nudge on card hover */
+	.arrow-nudge {
+		transition: transform 200ms ease;
+	}
+
+	a:hover .arrow-nudge {
+		transform: translateX(3px);
+	}
+
+	/* Dark mode: subtle glow shadows */
+	:where(.dark, .dark *) .hover\:shadow-md:hover {
+		box-shadow: 0 0 12px 0 rgb(56 189 248 / 0.06);
+	}
+
+	/* Tappable quote */
+	.quote-block {
+		cursor: pointer;
+		user-select: none;
+		-webkit-user-select: none;
+	}
+
 	/* Staggered entrance animation */
 	.fade-up {
 		opacity: 0;
@@ -80,6 +118,13 @@
 @layer base {
 	html {
 		font-family: "Nunito", sans-serif;
+		scroll-behavior: smooth;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
 	}
 }
 
