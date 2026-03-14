@@ -127,7 +127,7 @@
 
 	<main id="main" class="max-w-lg mx-auto px-4 -mt-16 sm:-mt-20 pb-8 sm:pb-0">
 		<div class="flex flex-col items-center text-center">
-			<img id="portrait" src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-stone-50 dark:ring-slate-950 object-cover portrait-pos relative z-10 cursor-pointer select-none active:scale-95 transition-transform touch-manipulation" width="224" height="224" decoding="async" role="button" tabindex="0" aria-label="Laura Miller — click for a surprise" />
+			<img id="portrait" src="img/laura.jpg" alt="Laura Miller" class="h-44 w-44 sm:h-56 sm:w-56 rounded-full ring-4 ring-stone-50 dark:ring-slate-950 object-cover portrait-pos relative z-10 cursor-pointer select-none active:scale-95 transition-transform touch-manipulation" width="224" height="224" decoding="async" role="button" tabindex="0" aria-label="Click for a surprise" />
 			<h1 class="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">Laura Miller</h1>
 			<p class="mt-1 text-base text-stone-500 dark:text-slate-400">duffle.one</p>
 			<p class="mt-4 text-base leading-relaxed text-stone-600 dark:text-slate-300">Founding engineer, photographer, 3D designer.</p>
@@ -256,6 +256,21 @@
 	</main>
 
 	<script type="module">
+		// === Console Art ===
+		console.log(
+			'%c' +
+			'    ____        __________   \n' +
+			'   / __ \\__  __/ __/ __/ /__ \n' +
+			'  / / / / / / / /_/ /_/ / _ \\\n' +
+			' / /_/ / /_/ / __/ __/ /  __/\n' +
+			'/_____/\\__,_/_/ /_/ /_/\\___/ \n',
+			'color: #8b5cf6; font-weight: bold; font-size: 12px;'
+		);
+		console.log(
+			'%cYou found the console!',
+			'color: #f43f5e; font-size: 14px; font-weight: bold;'
+		);
+
 		// === Confetti ===
 		const confetti = (x, y) => {
 			if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -462,12 +477,42 @@
 				});
 			});
 
-			// Confetti easter egg
+			// Confetti easter egg + click counter
 			const portrait = document.getElementById('portrait');
 			if (portrait) {
+				let clicks = 0;
+				const reactions = [
+					null, null, null,           // 1-3: just confetti
+					'🎉',                       // 4
+					null, null, null, null, null,
+					'👀 10 clicks? Really?',     // 10
+					null, null, null, null, null, null, null, null, null,
+					'🤯 20?! I am concerned.',   // 20
+					null, null, null, null,
+					'🏆 25 — You win. At what? Nobody knows.', // 25
+				];
+
+				const showReaction = (text) => {
+					const toast = document.createElement('div');
+					toast.textContent = text;
+					toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1e293b;color:#f8fafc;padding:8px 20px;border-radius:9999px;font-size:14px;z-index:10000;opacity:0;transition:opacity 300ms;pointer-events:none;white-space:nowrap;';
+					document.body.appendChild(toast);
+					requestAnimationFrame(() => toast.style.opacity = '1');
+					setTimeout(() => {
+						toast.style.opacity = '0';
+						setTimeout(() => toast.remove(), 300);
+					}, 2000);
+				};
+
 				const trigger = () => {
+					clicks++;
 					const rect = portrait.getBoundingClientRect();
 					confetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+					if (clicks < reactions.length && reactions[clicks - 1]) {
+						showReaction(reactions[clicks - 1]);
+					} else if (clicks >= 50 && clicks % 50 === 0) {
+						showReaction(`${clicks} clicks. This is your life now.`);
+					}
 				};
 				portrait.addEventListener('click', trigger);
 				portrait.addEventListener('keydown', (e) => {
@@ -477,6 +522,56 @@
 					}
 				});
 			}
+
+			// === Konami Code ===
+			const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+			let konamiIdx = 0;
+			let partyActive = false;
+			document.addEventListener('keydown', (e) => {
+				if (e.key === konamiSeq[konamiIdx]) {
+					konamiIdx++;
+					if (konamiIdx === konamiSeq.length) {
+						konamiIdx = 0;
+						partyActive = !partyActive;
+						document.body.classList.toggle('party-mode', partyActive);
+						const h1 = document.querySelector('h1');
+						if (h1) h1.classList.toggle('party-text', partyActive);
+						if (partyActive) {
+							// Burst confetti from multiple points
+							for (let i = 0; i < 5; i++) {
+								setTimeout(() => confetti(Math.random() * innerWidth, Math.random() * innerHeight * 0.6), i * 150);
+							}
+						}
+					}
+				} else {
+					konamiIdx = e.key === konamiSeq[0] ? 1 : 0;
+				}
+			});
+
+			// === Tab Title Trolling ===
+			const realTitle = document.title;
+			const awayMessages = [
+				'👋 Come baaack!',
+				'😢 Miss you already…',
+				'🥺 Was it something I said?',
+				'💔 Don\'t leave me hanging!',
+			];
+			let awayIdx = 0;
+			let awayTimer;
+			document.addEventListener('visibilitychange', () => {
+				if (document.hidden) {
+					awayIdx = 0;
+					document.title = awayMessages[0];
+					awayTimer = setInterval(() => {
+						awayIdx = (awayIdx + 1) % awayMessages.length;
+						document.title = awayMessages[awayIdx];
+					}, 2000);
+				} else {
+					clearInterval(awayTimer);
+					document.title = '🎉 Welcome back!';
+					setTimeout(() => { document.title = realTitle; }, 1500);
+				}
+			});
 		});
 	</script>
 </body>
