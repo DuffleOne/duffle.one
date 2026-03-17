@@ -525,7 +525,7 @@
 			}
 
 			// === Konami Code ===
-			const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+			const konamiSeq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 			let konamiIdx = 0;
 			let partyActive = false;
 			document.addEventListener('keydown', (e) => {
@@ -550,19 +550,19 @@
 			});
 
 			// === Players Online ===
-		fetch('https://gaming.dfl-be7.workers.dev')
-			.then(r => r.ok ? r.json() : [])
-			.then(servers => {
-				const total = servers.reduce((n, s) => n + (s.running && s.players ? s.players : 0), 0);
-				const el = document.getElementById('players-online');
-				if (el && total > 0) {
-					el.textContent = `${total} online`;
-					el.classList.remove('hidden');
-				}
-			})
-			.catch(() => {});
+			fetch('https://gaming.dfl-be7.workers.dev')
+				.then(r => r.ok ? r.json() : [])
+				.then(servers => {
+					const total = servers.reduce((n, s) => n + (s.running && s.players ? s.players : 0), 0);
+					const el = document.getElementById('players-online');
+					if (el && total > 0) {
+						el.textContent = `${total} online`;
+						el.classList.remove('hidden');
+					}
+				})
+				.catch(() => { });
 
-		// === Tab Title Trolling ===
+			// === Tab Title Trolling ===
 			const realTitle = document.title;
 			const awayMessages = [
 				'👋 Come baaack!',

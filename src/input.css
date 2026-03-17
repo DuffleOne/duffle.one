@@ -82,6 +82,14 @@
 		-webkit-user-select: none;
 	}
 
+	/* Accessible accordion summary: hide default marker */
+	.accordion-summary::-webkit-details-marker {
+		display: none;
+	}
+	.accordion-summary::marker {
+		content: "";
+	}
+
 	/* Party mode (Konami code) */
 	.party-mode {
 		animation: partyBg 2s linear infinite;
