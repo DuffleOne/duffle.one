@@ -22,24 +22,10 @@ export default {
 		}
 
 		try {
-			const { sessionId, instanceIds, permissions } = await login(env);
-			console.log("[amp] login ok, session:", sessionId);
-			console.log("[amp] permissions:", permissions);
-			console.log("[amp] extracted instance IDs:", instanceIds);
+			const { sessionId } = await login(env);
+			const allInstances = await getInstances(env, sessionId);
 
-			const instances = await Promise.all(
-				instanceIds.map((id) => getInstance(env, sessionId, id))
-			);
-			console.log("[amp] fetched instances:", instances.map((i) => ({
-				id: i.InstanceID,
-				name: i.FriendlyName,
-				module: i.Module,
-				moduleDisplay: i.ModuleDisplayName,
-				running: i.Running,
-				appState: i.AppState,
-			})));
-
-			const servers = instances
+			const servers = allInstances
 				.filter((inst) => inst.Module !== "ADS")
 				.map((inst) => ({
 					name: inst.FriendlyName,
@@ -49,7 +35,6 @@ export default {
 					maxPlayers: inst.Metrics?.["Active Users"]?.MaxValue ?? null,
 					port: getGamePort(inst),
 				}));
-			console.log("[amp] response:", servers);
 
 			return Response.json(servers, {
 				headers: {
@@ -58,7 +43,9 @@ export default {
 				},
 			});
 		} catch (err) {
-			return Response.json({ error: "Failed to fetch server status" }, { status: 502, headers: cors });
+			console.error("[amp] FATAL:", err.message);
+			console.error("[amp] stack:", err.stack);
+			return Response.json({ error: "Failed to fetch server status", debug: err.message }, { status: 502, headers: cors });
 		}
 	},
 };
@@ -78,24 +65,18 @@ async function login(env) {
 	const data = await res.json();
 	if (!data.success) throw new Error("AMP login failed");
 
-	const instanceIds = [...new Set(
-		(data.permissions || [])
-			.map((p) => p.match(/^Instances\.([0-9a-f-]{36})\./))
-			.filter(Boolean)
-			.map((m) => m[1])
-	)];
-
-	return { sessionId: data.sessionID, instanceIds, permissions: data.permissions };
+	return { sessionId: data.sessionID };
 }
 
-async function getInstance(env, sessionId, instanceId) {
-	const res = await fetch(`${env.AMP_URL}/API/ADSModule/GetInstance`, {
+async function getInstances(env, sessionId) {
+	const res = await fetch(`${env.AMP_URL}/API/ADSModule/GetInstances`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json", Accept: "application/json" },
-		body: JSON.stringify({ SESSIONID: sessionId, InstanceId: instanceId }),
+		body: JSON.stringify({ SESSIONID: sessionId }),
 	});
 
-	return res.json();
+	const targets = await res.json();
+	return targets.flatMap((t) => t.AvailableInstances || []);
 }
 
 function getGamePort(inst) {
