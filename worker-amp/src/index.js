@@ -34,6 +34,7 @@ export default {
 					players: inst.Metrics?.["Active Users"]?.RawValue ?? null,
 					maxPlayers: inst.Metrics?.["Active Users"]?.MaxValue ?? null,
 					port: getGamePort(inst),
+					imageSource: inst.DisplayImageSource ?? null,
 				}));
 
 			return Response.json(servers, {

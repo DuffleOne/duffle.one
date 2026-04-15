@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>gaming // duffle.one</title>
 	<!-- Block indexing/caching/snippets for all major crawlers -->
-	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, max-snippet:0, max-image-preview:none, max-video-preview:0">
+	<meta name="robots"
+		content="noindex, nofollow, noarchive, nosnippet, noimageindex, max-snippet:0, max-image-preview:none, max-video-preview:0">
 	<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 	<meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 	<meta name="theme-color" content="#0a0e14">
@@ -14,7 +15,8 @@
 	<!-- Monospace + terminal vibe; standalone from main site -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+		rel="stylesheet">
 	<style>
 		:root {
 			--bg: #0a0e14;
@@ -101,14 +103,14 @@
 
 		section {
 			border: 1px solid var(--border);
-			margin-bottom: 1.25rem;
+			margin-bottom: 0;
 			background: rgba(0, 0, 0, 0.25);
 		}
 
 		section h2 {
 			margin: 0;
-			padding: 0.6rem 1rem;
-			font-size: 0.9rem;
+			padding: 0.35rem 0.75rem;
+			font-size: 0.85rem;
 			font-weight: 600;
 			color: var(--warn);
 			border-bottom: 1px solid var(--border);
@@ -120,12 +122,16 @@
 			font-weight: 400;
 		}
 
+		section.connection-section {
+			margin-bottom: 0.4rem;
+		}
+
 		dl {
 			margin: 0;
-			padding: 1rem 1.25rem;
+			padding: 0.5rem 0.75rem;
 			display: grid;
 			grid-template-columns: auto 1fr;
-			gap: 0.35rem 1.5rem;
+			gap: 0.2rem 1rem;
 		}
 
 		dt {
@@ -196,28 +202,56 @@
 			display: none;
 		}
 
-		.server-grid {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 1.25rem;
-		}
-
-		.server-column h3 {
-			margin: 0 0 0.75rem 0;
-			font-size: 0.85rem;
+		.server-section h3 {
+			margin: 0 0 0.4rem 0;
+			font-size: 0.75rem;
 			font-weight: 600;
 			color: var(--dim);
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
 		}
 
-		.server-column h3 .col-count {
-			color: var(--dim);
+		.server-section h3 .col-count {
 			font-weight: 400;
 		}
 
+		.server-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			gap: 0.5rem;
+		}
+
+		.server-section-offline {
+			margin-top: 0.75rem;
+		}
+
+		.server-section-offline section {
+			font-size: 0.8em;
+			opacity: 0.6;
+		}
+
+		.server-section-offline section h2 {
+			padding: 0.25rem 0.6rem;
+			font-size: 0.75rem;
+		}
+
+		.server-section-offline dl {
+			padding: 0.35rem 0.6rem;
+			gap: 0.15rem 0.75rem;
+		}
+
+		.game-banner {
+			width: 100%;
+			height: 8rem;
+			object-fit: cover;
+			object-position: top;
+			display: block;
+			opacity: 0.4;
+			border-bottom: 1px solid var(--border);
+		}
+
 		@media (max-width: 768px) {
-			.server-grid {
+			.server-row {
 				grid-template-columns: 1fr;
 			}
 		}
@@ -243,7 +277,7 @@
 			</div>
 		</header>
 
-		<section>
+		<section class="connection-section">
 			<h2>Connection <span class="tag">// all servers</span></h2>
 			<dl>
 				<dt>Host</dt>
@@ -266,6 +300,19 @@
 
 	<script type="module">
 		const API = location.hostname === "localhost" ? "http://localhost:3001/api" : "https://gaming.dfl-be7.workers.dev";
+
+		function gameBanner(s) {
+			if (!s.imageSource) return '';
+			let src;
+			if (s.imageSource.startsWith('steam:')) {
+				src = `https://cdn.cloudflare.steamstatic.com/steam/apps/${s.imageSource.slice(6)}/header.jpg`;
+			} else if (s.imageSource.startsWith('url:')) {
+				src = s.imageSource.slice(4);
+			} else {
+				return '';
+			}
+			return `<img class="game-banner" src="${src}" alt="" loading="lazy">`;
+		}
 
 		async function loadServers() {
 			const loading = document.getElementById("servers-loading");
@@ -291,16 +338,19 @@
 					.sort((a, b) => a.name.localeCompare(b.name));
 
 				container.innerHTML = `
-					<div class="server-grid">
-						<div class="server-column">
-							<h3>Online <span class="col-count">(${online.length})</span></h3>
+					<div class="server-section">
+						<h3>Online <span class="col-count">(${online.length})</span></h3>
+						<div class="server-row">
 							${online.length ? online.map(serverHTML).join("") : '<div style="color:var(--dim);font-size:0.85rem">No servers online</div>'}
 						</div>
-						<div class="server-column">
-							<h3>Offline <span class="col-count">(${offline.length})</span></h3>
-							${offline.length ? offline.map(serverHTML).join("") : '<div style="color:var(--dim);font-size:0.85rem">No servers offline</div>'}
+					</div>
+					${offline.length ? `
+					<div class="server-section server-section-offline">
+						<h3>Offline <span class="col-count">(${offline.length})</span></h3>
+						<div class="server-row">
+							${offline.map(serverHTML).join("")}
 						</div>
-					</div>`;
+					</div>` : ''}`;
 			} catch {
 				loading.style.display = "none";
 				error.style.display = "block";
@@ -309,15 +359,18 @@
 
 		function serverHTML(s) {
 			const statusClass = s.running ? "status-online" : "status-offline";
-			const statusText = s.running ? "online" : "offline";
+			const statusText = s.running
+				? '<span style="color:var(--ok)">[ LIVE ]</span>'
+				: '<span style="color:var(--err)">[ DOWN ]</span>';
 			const players = s.running && s.players !== null
-				? `${s.players}${s.maxPlayers ? "/" + s.maxPlayers : ""}`
-				: "—";
+				? `<span style="color:var(--accent)">${s.players}</span><span style="color:var(--dim)">/${s.maxPlayers ?? '?'} slots</span>`
+				: '<span style="color:var(--dim)">---</span>';
 
 			return `
 				<section>
+					${s.running ? gameBanner(s) : ''}
 					<h2>
-						<span class="status ${statusClass}" title="${statusText}"></span>
+						<span class="status ${statusClass}" title="${s.running ? 'online' : 'offline'}"></span>
 						${s.name} <span class="tag">// ${s.game}</span>
 					</h2>
 					<dl>
@@ -325,7 +378,7 @@
 						<dd><code class="val">${s.port}</code></dd>
 						<dt>Status</dt>
 						<dd>${statusText}</dd>
-						<dt>Players</dt>
+						<dt>Crew</dt>
 						<dd>${players}</dd>
 					</dl>
 				</section>`;
