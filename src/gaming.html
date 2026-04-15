@@ -70,7 +70,7 @@
 		}
 
 		.wrap {
-			max-width: 72ch;
+			max-width: 120ch;
 			margin: 0 auto;
 		}
 
@@ -196,6 +196,32 @@
 			display: none;
 		}
 
+		.server-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1.25rem;
+		}
+
+		.server-column h3 {
+			margin: 0 0 0.75rem 0;
+			font-size: 0.85rem;
+			font-weight: 600;
+			color: var(--dim);
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		.server-column h3 .col-count {
+			color: var(--dim);
+			font-weight: 400;
+		}
+
+		@media (max-width: 768px) {
+			.server-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
 		footer {
 			margin-top: 2rem;
 			padding-top: 1rem;
@@ -256,7 +282,25 @@
 					document.getElementById("servers-empty").style.display = "block";
 					return;
 				}
-				container.innerHTML = servers.map(serverHTML).join("");
+
+				const online = servers
+					.filter(s => s.running)
+					.sort((a, b) => (a.players ?? 0) - (b.players ?? 0));
+				const offline = servers
+					.filter(s => !s.running)
+					.sort((a, b) => a.name.localeCompare(b.name));
+
+				container.innerHTML = `
+					<div class="server-grid">
+						<div class="server-column">
+							<h3>Online <span class="col-count">(${online.length})</span></h3>
+							${online.length ? online.map(serverHTML).join("") : '<div style="color:var(--dim);font-size:0.85rem">No servers online</div>'}
+						</div>
+						<div class="server-column">
+							<h3>Offline <span class="col-count">(${offline.length})</span></h3>
+							${offline.length ? offline.map(serverHTML).join("") : '<div style="color:var(--dim);font-size:0.85rem">No servers offline</div>'}
+						</div>
+					</div>`;
 			} catch {
 				loading.style.display = "none";
 				error.style.display = "block";
