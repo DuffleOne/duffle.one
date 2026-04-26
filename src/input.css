@@ -127,6 +127,79 @@
 			transform: none;
 		}
 	}
+
+	/* Time-of-day ambient tint (system theme only) */
+	#tod-tint {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: -1;
+		background: radial-gradient(ellipse 100% 60% at 50% 0%, var(--accent-tint, transparent), transparent 70%);
+		opacity: 0;
+		transition: opacity 800ms ease, background 6s ease;
+	}
+
+	#tod-tint.active { opacity: 1; }
+
+	/* Quote share button */
+	.quote-share {
+		position: absolute;
+		bottom: 0.4rem;
+		left: 0.5rem;
+		background: transparent;
+		border: 0;
+		padding: 0.25rem;
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 200ms, color 200ms;
+		color: rgb(168 162 158);
+		line-height: 0;
+	}
+
+	.quote-block:hover .quote-share,
+	.quote-block:focus-within .quote-share,
+	.quote-share:focus-visible {
+		opacity: 1;
+	}
+
+	.quote-share:hover { color: rgb(120 113 108); }
+	.quote-share.copied { color: rgb(34 197 94); opacity: 1; }
+
+	:where(.dark, .dark *) .quote-share { color: rgb(100 116 139); }
+	:where(.dark, .dark *) .quote-share:hover { color: rgb(148 163 184); }
+
+	/* Server-online toast */
+	.server-toast {
+		position: fixed;
+		bottom: 1.25rem;
+		right: 1.25rem;
+		background: rgb(15 23 42);
+		color: rgb(248 250 252);
+		padding: 0.65rem 1rem;
+		border-radius: 0.5rem;
+		font-size: 0.875rem;
+		z-index: 10000;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+		transform: translateX(140%);
+		transition: transform 450ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms;
+		text-decoration: none;
+		max-width: calc(100vw - 2.5rem);
+	}
+
+	.server-toast.show { transform: translateX(0); }
+	.server-toast.hide { opacity: 0; }
+
+	.server-toast .dot {
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 50%;
+		background: #22c55e;
+		box-shadow: 0 0 8px #22c55e;
+		flex-shrink: 0;
+	}
 }
 
 @layer base {

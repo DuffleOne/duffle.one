@@ -117,6 +117,7 @@
 </head>
 
 <body class="bg-stone-50 text-stone-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
+	<div id="tod-tint" aria-hidden="true"></div>
 	<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-stone-900 focus:shadow-md dark:focus:bg-slate-800 dark:focus:text-slate-100">Skip to content</a>
 	<header class="w-full">
 		<div class="relative h-48 sm:h-96 w-full bg-stone-100 dark:bg-slate-800 overflow-hidden">
@@ -133,6 +134,12 @@
 			<p class="mt-4 text-base leading-relaxed text-stone-600 dark:text-slate-300">Founding engineer, photographer, 3D designer.</p>
 			<blockquote id="quote" class="mt-4 text-base italic text-stone-700 dark:text-slate-200 quote-block w-full text-center border border-stone-200 dark:border-slate-800" aria-label="daily quote" aria-live="polite" aria-atomic="true">
 				<span id="quote-text" class="opacity-0 inline-block"></span>
+				<button id="quote-share" type="button" class="quote-share" aria-label="Copy link to this quote" title="Copy link to this quote">
+					<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M8 11.5a3 3 0 0 0 4.24 0l3-3a3 3 0 0 0-4.24-4.24l-1 1" />
+						<path d="M12 8.5a3 3 0 0 0-4.24 0l-3 3a3 3 0 0 0 4.24 4.24l1-1" />
+					</svg>
+				</button>
 			</blockquote>
 		</div>
 
@@ -280,6 +287,12 @@
 			'%cYou found the console!',
 			'color: #f43f5e; font-size: 14px; font-weight: bold;'
 		);
+		console.log(
+			'%cTry %cwindow.duffle.help()%c for toys.',
+			'color: #64748b;',
+			'color: #8b5cf6; font-weight: bold;',
+			'color: #64748b;'
+		);
 
 		// === Confetti ===
 		const confetti = (x, y) => {
@@ -344,8 +357,51 @@
 		};
 
 		matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-			if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
+			if ((localStorage.getItem('theme') || 'system') === 'system') {
+				applyTheme('system');
+				updateTodTint();
+			}
 		});
+
+		// === Party mode (also exposed via window.duffle.party) ===
+		let partyActive = false;
+		const togglePartyMode = () => {
+			partyActive = !partyActive;
+			document.body.classList.toggle('party-mode', partyActive);
+			const h1 = document.querySelector('h1');
+			if (h1) h1.classList.toggle('party-text', partyActive);
+			if (partyActive) {
+				for (let i = 0; i < 5; i++) {
+					setTimeout(() => confetti(Math.random() * innerWidth, Math.random() * innerHeight * 0.6), i * 150);
+				}
+			}
+			return partyActive;
+		};
+
+		// === Time-of-day ambient tint (system theme only) ===
+		const updateTodTint = () => {
+			const tintEl = document.getElementById('tod-tint');
+			if (!tintEl) return;
+			const theme = localStorage.getItem('theme') || 'system';
+			if (theme !== 'system') {
+				tintEl.classList.remove('active');
+				return;
+			}
+			const hour = new Date().getHours();
+			const isDark = document.documentElement.classList.contains('dark');
+			let tint;
+			if (hour >= 5 && hour < 9) {
+				tint = isDark ? 'rgba(254, 215, 170, 0.06)' : 'rgba(254, 215, 170, 0.45)';
+			} else if (hour >= 9 && hour < 16) {
+				tint = isDark ? 'rgba(186, 230, 253, 0.05)' : 'rgba(219, 234, 254, 0.5)';
+			} else if (hour >= 16 && hour < 19) {
+				tint = isDark ? 'rgba(216, 180, 254, 0.06)' : 'rgba(233, 213, 255, 0.5)';
+			} else {
+				tint = isDark ? 'rgba(165, 180, 252, 0.07)' : 'rgba(199, 210, 254, 0.45)';
+			}
+			document.documentElement.style.setProperty('--accent-tint', tint);
+			tintEl.classList.add('active');
+		};
 
 		const updateToggle = (theme) => {
 			document.querySelectorAll('[data-theme]').forEach(btn => {
@@ -405,10 +461,6 @@
 		];
 
 		const sequencer = () => {
-			let currentIdx = 0;
-			let shuffled = quotes.slice();
-			let lastQuote = null;
-
 			const shuffle = (arr) => {
 				const copy = arr.slice();
 				for (let i = copy.length - 1; i > 0; i--) {
@@ -418,26 +470,22 @@
 				return copy;
 			};
 
-			// Initial shuffle
-			shuffled = shuffle(shuffled);
+			let order = shuffle(quotes.map((_, i) => i));
+			let pointer = 0;
+			let lastIdx = -1;
 
 			return () => {
-				if (currentIdx >= shuffled.length) {
-					// Reshuffle when we've shown all quotes
-					shuffled = shuffle(quotes);
-					// If the first quote of the new shuffle is the same as the last one,
-					// swap it with another random quote
-					if (lastQuote && shuffled[0] === lastQuote && shuffled.length > 1) {
-						const swapIdx = Math.floor(Math.random() * (shuffled.length - 1)) + 1;
-						[shuffled[0], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[0]];
+				if (pointer >= order.length) {
+					order = shuffle(quotes.map((_, i) => i));
+					if (lastIdx !== -1 && order[0] === lastIdx && order.length > 1) {
+						const swap = Math.floor(Math.random() * (order.length - 1)) + 1;
+						[order[0], order[swap]] = [order[swap], order[0]];
 					}
-					currentIdx = 0;
+					pointer = 0;
 				}
-
-				const quote = shuffled[currentIdx];
-				lastQuote = quote;
-				currentIdx++;
-				return quote;
+				const idx = order[pointer++];
+				lastIdx = idx;
+				return { text: quotes[idx], idx };
 			}
 		}
 
@@ -450,33 +498,76 @@
 			}
 		};
 
+		// === Quotes init + share permalink ===
+		let setQuoteFn = null;
+		let currentQuoteIdx = -1;
+		const quoteEl = document.getElementById("quote");
+		const textEl = document.getElementById("quote-text");
+		const shareBtn = document.getElementById("quote-share");
+
 		onReady(() => {
-			// Quotes
-			const el = document.getElementById("quote");
-			const textEl = document.getElementById("quote-text");
-			if (el && textEl) {
+			if (quoteEl && textEl) {
 				const seq = sequencer();
 				let timer;
-				const setQuote = () => {
-					const quote = seq();
-					textEl.textContent = quote;
+				const renderQuote = (text) => {
+					textEl.textContent = text;
 					textEl.classList.remove("quote-fade-in");
 					void textEl.offsetWidth;
 					textEl.classList.add("quote-fade-in");
 				};
+				const advance = () => {
+					const next = seq();
+					currentQuoteIdx = next.idx;
+					renderQuote(next.text);
+				};
 				const resetTimer = () => {
 					clearInterval(timer);
-					timer = setInterval(setQuote, 5000);
+					timer = setInterval(advance, 5000);
 				};
-				setQuote();
-				resetTimer();
-				// Click to advance
-				el.addEventListener('click', () => { setQuote(); resetTimer(); });
+				setQuoteFn = () => { advance(); resetTimer(); };
+
+				// Honor ?q=N permalink: show that quote, pause auto-rotation
+				const params = new URLSearchParams(location.search);
+				const qParam = params.get('q');
+				const qIdx = qParam !== null ? parseInt(qParam, 10) : NaN;
+				if (Number.isInteger(qIdx) && qIdx >= 0 && qIdx < quotes.length) {
+					currentQuoteIdx = qIdx;
+					renderQuote(quotes[qIdx]);
+					// no resetTimer — let the recipient see the linked quote
+				} else {
+					advance();
+					resetTimer();
+				}
+
+				// Click block to advance (and resume rotation)
+				quoteEl.addEventListener('click', (e) => {
+					if (e.target.closest('#quote-share')) return;
+					advance();
+					resetTimer();
+				});
+
+				// Share button: copy permalink to current quote
+				if (shareBtn) {
+					shareBtn.addEventListener('click', async (e) => {
+						e.stopPropagation();
+						if (currentQuoteIdx < 0) return;
+						const url = `${location.origin}/?q=${currentQuoteIdx}`;
+						try {
+							await navigator.clipboard.writeText(url);
+							shareBtn.classList.add('copied');
+							setTimeout(() => shareBtn.classList.remove('copied'), 1500);
+						} catch {
+							// Fallback: select-and-prompt
+							prompt('Copy this link:', url);
+						}
+					});
+				}
 			}
 
 			// Theme toggle
 			const currentTheme = localStorage.getItem('theme') || 'system';
 			updateToggle(currentTheme);
+			updateTodTint();
 
 			document.querySelectorAll('[data-theme]').forEach(btn => {
 				btn.addEventListener('click', () => {
@@ -484,6 +575,7 @@
 					localStorage.setItem('theme', theme);
 					applyTheme(theme);
 					updateToggle(theme);
+					updateTodTint();
 				});
 			});
 
@@ -536,35 +628,108 @@
 			// === Konami Code ===
 			const konamiSeq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 			let konamiIdx = 0;
-			let partyActive = false;
 			document.addEventListener('keydown', (e) => {
 				if (e.key === konamiSeq[konamiIdx]) {
 					konamiIdx++;
 					if (konamiIdx === konamiSeq.length) {
 						konamiIdx = 0;
-						partyActive = !partyActive;
-						document.body.classList.toggle('party-mode', partyActive);
-						const h1 = document.querySelector('h1');
-						if (h1) h1.classList.toggle('party-text', partyActive);
-						if (partyActive) {
-							// Burst confetti from multiple points
-							for (let i = 0; i < 5; i++) {
-								setTimeout(() => confetti(Math.random() * innerWidth, Math.random() * innerHeight * 0.6), i * 150);
-							}
-						}
+						togglePartyMode();
 					}
 				} else {
 					konamiIdx = e.key === konamiSeq[0] ? 1 : 0;
 				}
 			});
 
-			// === Players Online ===
+			// Refresh time-of-day tint each minute (so hour rollovers update the tint)
+			setInterval(updateTodTint, 60000);
+
+			// === Players Online: button glow, animated favicon, transition toast ===
+			const KEY_LAST_SERVERS = 'duffle:lastServers';
+			const faviconLink = document.querySelector('link[rel="icon"]');
+			let faviconPulseTimer = null;
+
+			const buildFaviconVariants = () => new Promise((resolve) => {
+				const img = new Image();
+				img.crossOrigin = 'anonymous';
+				img.onload = () => {
+					const size = 64;
+					const draw = () => {
+						const c = document.createElement('canvas');
+						c.width = size; c.height = size;
+						const ctx = c.getContext('2d');
+						ctx.drawImage(img, 0, 0, size, size);
+						return { canvas: c, ctx };
+					};
+					try {
+						const base = draw().canvas.toDataURL('image/png');
+						const dot = draw();
+						dot.ctx.beginPath();
+						dot.ctx.arc(size - 14, size - 14, 13, 0, Math.PI * 2);
+						dot.ctx.fillStyle = '#22c55e';
+						dot.ctx.fill();
+						dot.ctx.lineWidth = 3;
+						dot.ctx.strokeStyle = '#ffffff';
+						dot.ctx.stroke();
+						resolve({ base, dot: dot.canvas.toDataURL('image/png') });
+					} catch {
+						resolve(null);
+					}
+				};
+				img.onerror = () => resolve(null);
+				img.src = faviconLink ? faviconLink.href : '/favicon.png';
+			});
+
+			const startFaviconPulse = async () => {
+				if (faviconPulseTimer || !faviconLink) return;
+				const variants = await buildFaviconVariants();
+				if (!variants) return;
+				let on = false;
+				faviconLink.href = variants.dot;
+				faviconPulseTimer = setInterval(() => {
+					on = !on;
+					faviconLink.href = on ? variants.base : variants.dot;
+				}, 1100);
+			};
+
+			const showServerToast = (server, delay = 0) => {
+				setTimeout(() => {
+					const toast = document.createElement('a');
+					toast.className = 'server-toast';
+					toast.href = '/gaming';
+					toast.innerHTML = `<span class="dot" aria-hidden="true"></span><span>🎮 ${server.players} on <strong>${server.name}</strong></span>`;
+					document.body.appendChild(toast);
+					// Double rAF so the initial transform paints before .show triggers the transition
+					requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('show')));
+					setTimeout(() => {
+						toast.classList.add('hide');
+						setTimeout(() => toast.remove(), 500);
+					}, 6000);
+				}, delay);
+			};
+
 			fetch('https://gaming.dfl-be7.workers.dev')
 				.then(r => r.ok ? r.json() : [])
 				.then(servers => {
 					const total = servers.reduce((n, s) => n + (s.running && s.players ? s.players : 0), 0);
 					const link = document.getElementById('gaming-link');
 					if (link && total > 0) link.classList.add('players-online-glow');
+					if (total > 0) startFaviconPulse();
+
+					// Toast for servers that newly came online (vs last visit)
+					const prevRaw = localStorage.getItem(KEY_LAST_SERVERS);
+					const isFirstVisit = prevRaw === null;
+					const prev = isFirstVisit ? {} : (() => { try { return JSON.parse(prevRaw); } catch { return {}; } })();
+					const now = {};
+					const transitions = [];
+					for (const s of servers) {
+						const players = s.running && s.players ? s.players : 0;
+						now[s.name] = players;
+						if (!isFirstVisit && players > 0 && (prev[s.name] || 0) === 0) {
+							transitions.push({ name: s.name, players });
+						}
+					}
+					localStorage.setItem(KEY_LAST_SERVERS, JSON.stringify(now));
+					transitions.forEach((s, i) => showServerToast(s, 800 + i * 4500));
 				})
 				.catch(() => { });
 
@@ -592,6 +757,31 @@
 					setTimeout(() => { document.title = realTitle; }, 1500);
 				}
 			});
+
+			// === window.duffle API (toys for the console) ===
+			window.duffle = {
+				confetti: (x, y) => {
+					confetti(x ?? innerWidth / 2, y ?? innerHeight / 2);
+					return '🎉';
+				},
+				party: () => togglePartyMode() ? 'party on' : 'party off',
+				quote: () => {
+					if (setQuoteFn) setQuoteFn();
+					return textEl ? textEl.textContent : null;
+				},
+				help: () => {
+					console.log(
+						'%cwindow.duffle\n' +
+						'%c  .confetti(x?, y?)  fire confetti at (x, y) or center\n' +
+						'  .party()           toggle party mode\n' +
+						'  .quote()           show next quote (returns text)\n' +
+						'  .help()            this message',
+						'color:#8b5cf6;font-weight:bold;font-size:13px',
+						'color:inherit;font-size:12px'
+					);
+					return undefined;
+				},
+			};
 		});
 	</script>
 </body>
