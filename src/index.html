@@ -168,14 +168,13 @@
 						<path d="M7 5l5 5-5 5" />
 					</svg>
 				</a>
-				<a href="/gaming" class="relative flex items-center gap-3 border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
+				<a id="gaming-link" href="/gaming" class="relative flex items-center gap-3 border border-stone-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:bg-stone-100 dark:hover:bg-slate-800 transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-slate-700">
 					<svg class="h-5 w-5 shrink-0 text-stone-400 dark:text-slate-500" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M6.5 4h7a5.5 5.5 0 0 1 2.3 10.5L14 18h-2l-.8-3H8.8L8 18H6l-1.8-3.5A5.5 5.5 0 0 1 6.5 4z" />
 						<circle cx="7.5" cy="9" r="0.75" fill="currentColor" stroke="none" />
 						<circle cx="12.5" cy="9" r="0.75" fill="currentColor" stroke="none" />
 					</svg>
 					<span class="font-medium">Gaming</span>
-					<span id="players-online" class="hidden text-[10px] leading-none font-semibold text-emerald-600 dark:text-emerald-400"></span>
 					<svg class="ml-auto h-4 w-4 shrink-0 text-gray-400 arrow-nudge" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M7 5l5 5-5 5" />
 					</svg>
@@ -564,11 +563,8 @@
 				.then(r => r.ok ? r.json() : [])
 				.then(servers => {
 					const total = servers.reduce((n, s) => n + (s.running && s.players ? s.players : 0), 0);
-					const el = document.getElementById('players-online');
-					if (el && total > 0) {
-						el.textContent = `${total} online`;
-						el.classList.remove('hidden');
-					}
+					const link = document.getElementById('gaming-link');
+					if (link && total > 0) link.classList.add('players-online-glow');
 				})
 				.catch(() => { });
 
