@@ -1,8 +1,19 @@
 **/node_modules/*
 **/build/*
 **/.vite/*
+**/.wrangler/
 .DS_Store
 .dev.vars
+.env
+.env.local
+.env.*.local
 
 # Full-size jellycat photos (2GB+) — uploaded to S3 separately via publish.sh
 src/public/img/jellycats/*.jpg
+
+# Raw camera originals for the photo route — kept locally as the input
+# to scripts/process-photos.sh; the resized/cropped webps under
+# src/public/img/photos/ are what the site actually serves.
+src/img/*
+!src/img/laura.jpg
+

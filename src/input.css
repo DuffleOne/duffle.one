@@ -1,187 +1,153 @@
 @import "tailwindcss" source("./");
 
-@custom-variant dark (&:where(.dark, .dark *));
+/*
+  Design tokens lifted from preview/tty-theme.jsx.
+  OKLCH literals are intentional: the accent harmony depends on identical
+  chroma + lightness, only hue varies. Don't substitute hex equivalents.
+*/
+@theme {
+	--color-tty-bg: #0a0c10;
+	--color-tty-bg2: #10141b;
+	--color-tty-bg3: #161c26;
+	--color-tty-bg4: #1d2533;
+	--color-tty-fg: #e2ebf6;
+	--color-tty-dim: #7d8a9c;
+	--color-tty-faint: #3a4555;
+	--color-tty-border: #1f2733;
+	--color-tty-border-hi: #2a3445;
 
-@layer utilities {
-	.banner-mask {
-		-webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 85%);
-		mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 85%);
-	}
+	--color-tty-green: oklch(82% 0.20 145);
+	--color-tty-pink: oklch(78% 0.20 0);
+	--color-tty-amber: oklch(85% 0.18 75);
+	--color-tty-cyan: oklch(82% 0.18 220);
+	--color-tty-violet: oklch(78% 0.20 295);
+	--color-tty-yellow: oklch(88% 0.18 100);
 
-	.portrait-pos {
-		object-position: center 28%;
-	}
+	--font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+	--font-display: 'Space Grotesk', 'Inter', sans-serif;
 
-	/* Quote fade-in utility */
-	.quote-fade-in {
-		animation: quoteFadeIn 600ms ease-out forwards;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.quote-fade-in {
-			animation: none;
-			opacity: 1;
-			transform: none;
-		}
-	}
-
-	/* Quote block styling */
-	.quote-block {
-		position: relative;
-		padding: 1.25rem 2rem;
-		border-radius: 0.75rem;
-	}
-
-	.quote-block::before {
-		content: "“";
-		position: absolute;
-		top: 0.5rem;
-		left: 0.75rem;
-		font-size: 2em;
-		line-height: 1;
-		color: rgb(214 211 209);
-		font-weight: 700;
-		pointer-events: none;
-	}
-
-	.quote-block::after {
-		content: "”";
-		position: absolute;
-		bottom: -0.5rem;
-		right: 0.75rem;
-		font-size: 2em;
-		line-height: 1;
-		font-weight: 700;
-		pointer-events: none;
-		color: rgb(214 211 209);
-	}
-
-	:where(.dark, .dark *) .quote-block::before,
-	:where(.dark, .dark *) .quote-block::after {
-		color: rgb(51 65 85);
-	}
-
-	/* Arrow nudge on card hover */
-	.arrow-nudge {
-		transition: transform 200ms ease;
-	}
-
-	a:hover .arrow-nudge {
-		transform: translateX(3px);
-	}
-
-	/* Dark mode: subtle glow shadows */
-	:where(.dark, .dark *) .hover\:shadow-md:hover {
-		box-shadow: 0 0 12px 0 rgb(56 189 248 / 0.06);
-	}
-
-	/* Tappable quote */
-	.quote-block {
-		cursor: pointer;
-		user-select: none;
-		-webkit-user-select: none;
-	}
-
-	/* Accessible accordion summary: hide default marker */
-	.accordion-summary::-webkit-details-marker {
-		display: none;
-	}
-	.accordion-summary::marker {
-		content: "";
-	}
-
-	/* Party mode (Konami code) */
-	.party-mode {
-		animation: partyBg 2s linear infinite;
-	}
-
-	.party-text {
-		background: linear-gradient(90deg, #f43f5e, #8b5cf6, #3b82f6, #22c55e, #eab308, #f97316, #ec4899);
-		background-size: 200% auto;
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		animation: rainbowText 2s linear infinite;
-	}
-
-	/* Staggered entrance animation */
-	.fade-up {
-		opacity: 0;
-		transform: translateY(12px);
-		animation: fadeUp 500ms ease-out forwards;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.fade-up {
-			animation: none;
-			opacity: 1;
-			transform: none;
-		}
-	}
+	/* Kill all default radii — terminal aesthetic is sharp 90° corners.
+	   The few rounded things (traffic lights) opt in explicitly. */
+	--radius-xs: 0;
+	--radius-sm: 0;
+	--radius-md: 0;
+	--radius-lg: 0;
+	--radius-xl: 0;
+	--radius-2xl: 0;
+	--radius-3xl: 0;
+	--radius-full: 9999px;
 }
 
-@layer base {
-	html {
-		font-family: "Nunito", sans-serif;
-		scroll-behavior: smooth;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		html {
-			scroll-behavior: auto;
-		}
-	}
+/*
+  Baseline. Only the SPA wants the dark mono full-viewport treatment;
+  other entry points (jellycats.html etc) keep Tailwind's preflight
+  defaults so they can scroll and use their own typography.
+  index.html opts in via <html class="tty-root">.
+*/
+html.tty-root,
+html.tty-root body,
+html.tty-root #app {
+	height: 100%;
+	background: var(--color-tty-bg);
+	color: var(--color-tty-fg);
 }
 
-@keyframes fadeUp {
-	0% {
-		opacity: 0;
-		transform: translateY(12px);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
+html.tty-root body {
+	font-family: var(--font-mono);
+	font-size: 13px;
+	line-height: 1.7;
+	overflow: hidden;
 }
 
-@keyframes partyBg {
-	0%, 100% { background-color: #fef2f2; }
-	14% { background-color: #fdf4ff; }
-	28% { background-color: #eff6ff; }
-	42% { background-color: #f0fdf4; }
-	57% { background-color: #fefce8; }
-	71% { background-color: #fff7ed; }
-	85% { background-color: #fdf2f8; }
+/* CRT effects ============================================================ */
+
+@keyframes ttyblink {
+	0%, 49% { opacity: 1; }
+	50%, 100% { opacity: 0; }
 }
 
-@keyframes partyBgDark {
-	0%, 100% { background-color: #1a0a0a; }
-	14% { background-color: #1a0a1a; }
-	28% { background-color: #0a0a1a; }
-	42% { background-color: #0a1a0a; }
-	57% { background-color: #1a1a0a; }
-	71% { background-color: #1a0f0a; }
-	85% { background-color: #1a0a14; }
+.tty {
+	position: relative;
+	isolation: isolate;
 }
 
-:where(.dark, .dark *) .party-mode {
-	animation-name: partyBgDark;
+/* hide scrollbars inside the window — content pane scrolls but no chrome */
+.tty *::-webkit-scrollbar { display: none; }
+.tty * { scrollbar-width: none; }
+
+/* horizontal scanlines */
+.tty-scan::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 1;
+	background: repeating-linear-gradient(
+		0deg,
+		rgba(255, 255, 255, 0.014) 0 1px,
+		transparent 1px 3px
+	);
+	mix-blend-mode: overlay;
 }
 
-@keyframes rainbowText {
-	0% { background-position: 0% center; }
-	100% { background-position: 200% center; }
+/* CRT corner vignette */
+.tty-vig::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 2;
+	background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.45));
 }
 
-@keyframes quoteFadeIn {
-	0% {
-		opacity: 0;
-		transform: translateY(6px);
-	}
+/* live content sits above the scanline + vignette pseudo layers */
+.tty-content { position: relative; z-index: 3; }
 
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
+/* phosphor blinking caret */
+.tty-caret {
+	display: inline-block;
+	width: 0.55em;
+	height: 1.05em;
+	background: var(--color-tty-green);
+	vertical-align: -3px;
+	margin-left: 2px;
+	animation: ttyblink 1.05s steps(2) infinite;
+	box-shadow: 0 0 8px var(--color-tty-green);
+}
+
+/* glow text-shadows. one per accent. */
+.tty-glow-g { text-shadow: 0 0 10px oklch(82% 0.20 145 / 0.5); }
+.tty-glow-a { text-shadow: 0 0 10px oklch(85% 0.18 75 / 0.5); }
+.tty-glow-p { text-shadow: 0 0 10px oklch(78% 0.20 0 / 0.5); }
+.tty-glow-c { text-shadow: 0 0 10px oklch(82% 0.18 220 / 0.5); }
+.tty-glow-v { text-shadow: 0 0 10px oklch(78% 0.20 295 / 0.5); }
+
+/*
+  Layered phosphor glow for the homepage wordmark. Three concentric
+  shadows: tight core (sharp), mid halo (warm body), outer bloom
+  (soft far light) — gives the CRT the depth the single-shadow
+  variant lacks.
+*/
+.tty-bloom-g {
+	text-shadow:
+		0 0 2px oklch(82% 0.20 145 / 0.95),
+		0 0 6px oklch(82% 0.20 145 / 0.65),
+		0 0 18px oklch(82% 0.20 145 / 0.40),
+		0 0 36px oklch(82% 0.20 145 / 0.20);
+}
+
+/* tabular numbers for tables that line up player counts / uptimes etc */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* reduced motion: kill blink + scanlines, keep glow */
+@media (prefers-reduced-motion: reduce) {
+	.tty-caret { animation: none; }
+	.tty-scan::before { display: none; }
+}
+
+/* Hover lift for interactive rows: sidebar entries, table rows, palette items.
+   The "active" / selected state usually has bg-tty-bg3 + a left accent border —
+   hover previews that. Implemented per-component since the accent varies. */
+.row-hover {
+	transition: background-color 80ms ease-out, border-color 80ms ease-out, color 80ms ease-out;
 }

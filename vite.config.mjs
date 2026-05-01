@@ -1,12 +1,21 @@
 import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'node:path'
 
 export default defineConfig({
 	root: 'src',
-	appType: 'mpa',
+	// .env files live at the project root, one level up from `root`.
+	envDir: '..',
 	plugins: [
+		vue(),
 		tailwindcss(),
 	],
+	resolve: {
+		alias: {
+			'@': path.resolve(process.cwd(), 'src'),
+		},
+	},
 	server: {
 		port: 3000,
 	},
@@ -20,16 +29,10 @@ export default defineConfig({
 		rollupOptions: {
 			input: {
 				index: 'src/index.html',
-				"404": 'src/404.html',
-				time: 'src/time.html',
-				cv: 'src/cv.html',
+				// Standalone vanity page kept verbatim from the prior site.
+				// It's outside the SPA — full page load, its own assets.
 				jellycats: 'src/jellycats.html',
-				gaming: 'src/gaming.html',
-				"user-guide": 'src/user-guide.html',
 			},
 		},
-	},
-	optimizeDeps: {
-		entries: ['src/index.html', 'src/404.html', 'src/time.html', 'src/cv.html', 'src/jellycats.html', 'src/gaming.html', 'src/user-guide.html'],
 	},
 })
