@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# macOS workaround: brewed python@3.14 needs a newer libexpat than
+# /usr/lib/libexpat.1.dylib provides (the AWS CLI loads pyexpat which
+# fails). SIP strips DYLD_* on protected-binary exec, so set it here
+# so all aws invocations below inherit it. Harmless if the path
+# doesn't exist (other OS / non-Homebrew) - DYLD just silently skips.
+export DYLD_LIBRARY_PATH="${DYLD_LIBRARY_PATH:-}/opt/homebrew/opt/expat/lib"
+
 (npm run build)
 
 BUILD_DIR=${BUILD_DIR:-./build}
