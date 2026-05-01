@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sips:*)",
+      "Bash(npm run *)",
+      "Bash(git add *)"
+    ]
+  }
+}
