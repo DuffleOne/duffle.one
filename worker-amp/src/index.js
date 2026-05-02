@@ -29,7 +29,7 @@ export default {
 				.filter((inst) => inst.Module !== "ADS")
 				.map((inst) => ({
 					name: inst.FriendlyName,
-					game: inst.ModuleDisplayName,
+					game: inst.ModuleDisplayName ?? inst.Module ?? null,
 					running: inst.Running && inst.AppState === 20,
 					players: inst.Metrics?.["Active Users"]?.RawValue ?? null,
 					maxPlayers: inst.Metrics?.["Active Users"]?.MaxValue ?? null,
