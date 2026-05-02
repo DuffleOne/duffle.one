@@ -190,7 +190,7 @@ export const SITE = {
 	] satisfies GameServer[],
 
 	cv: {
-		title: "Founding Engineer at Clove",
+		title: "Founding Engineer",
 		email: "laura@duffle.one",
 		summary:
 			"Founding engineer building 0→1 products. Helped scale Cuvva from 4 people to 100+, and a system from 10 policies a week to hundreds per second. Photographer, ballet, 3D printing on the side.",
@@ -198,7 +198,7 @@ export const SITE = {
 			"Helping build Cuvva from a team of 4 to over 100 people, and scaling a system from 10 policies a week to hundreds per second. Nothing beats being there from the very beginning.",
 		experience: [
 			{
-				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – now", loc: "London", href: "https://clove.com",
+				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – Mar 2026", loc: "London", href: "https://clove.com",
 				tech: ["Go", "PostgreSQL", "React", "BigQuery", "GCP"],
 				bullets: [
 					"Joined before a single line of code existed. Created the repository and built the entire backend framework in Go from scratch (layout, services, libraries, all the infrastructure).",
