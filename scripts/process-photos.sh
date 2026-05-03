@@ -13,7 +13,10 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 mkdir -p "$OUT_DIR"
 
-# Stable ordering as listed in the original folder.
+# Stable ordering as listed in the original folder. Indices below
+# correspond to the data.ts entries (p01 = first, p02 = second, etc).
+# Sources for some early frames are no longer in src/img/ — the script
+# logs a "missing" line and skips them; the existing webps stay put.
 FILES=(
 	"3T1A0207.jpg"
 	"_T1A5198.jpg"
@@ -22,6 +25,21 @@ FILES=(
 	"_T1A5937.jpg"
 	"_65A6871.png"
 	"_W1A2676.png"
+	"3H5A2453.jpg"
+	"3T1A0166.jpg"
+	"_65A0771.jpg"
+	"_65A0958.jpg"
+	"_65A0975.jpg"
+	"_65A0989.jpg"
+	"_65A1480.jpg"
+	"_65A3441.png"
+	"_65A3553.png"
+	"_65A3692.png"
+	"_65A4066.jpg"
+	"_65A6877.png"
+	"_65A9366.jpg"
+	"_T1A5878.jpg"
+	"_T1A6132.jpg"
 )
 
 # Convert decimal exposure (seconds) into the conventional shutter notation.
