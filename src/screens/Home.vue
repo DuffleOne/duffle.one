@@ -20,7 +20,7 @@ import { useTheme } from "../composables/useTheme";
 const { label: weather } = useWeather();
 const { today } = useToday();
 const { servers, stats } = useServers();
-const { quote, attribution } = useQuoteRotation();
+const { quote } = useQuoteRotation();
 const { choice: themeChoice, resolved, cycle } = useTheme();
 
 const projects = SITE.projects;
@@ -165,7 +165,7 @@ const themeLabel = computed(() => {
 			<div class="footer">
 				<span class="footer-side">End of index</span>
 				<span class="footer-quote">
-					<span class="quote-line fade-in" :key="quote">"{{ quote }}" — {{ attribution }}</span>
+					<span class="quote-line fade-in" :key="quote">"{{ quote }}"</span>
 				</span>
 				<span class="footer-side"><a href="mailto:laura@duffle.one" class="link">Pitch: laura@duffle.one →</a></span>
 			</div>
