@@ -30,6 +30,7 @@ const cvHighlights = computed(() => SITE.cv.experience.slice(0, 4));
 const githubHref = SITE.socials.find((s) => s.id === "github")?.href ?? "#";
 const igHref = SITE.socials.find((s) => s.id === "ig")?.href ?? "#";
 const liHref = SITE.socials.find((s) => s.id === "linkedin")?.href ?? "#";
+const glassHref = SITE.socials.find((s) => s.id === "glass")?.href ?? "#";
 
 const themeLabel = computed(() => {
 	if (themeChoice.value === "system") return `auto · ${resolved.value}`;
@@ -45,7 +46,7 @@ const themeLabel = computed(() => {
 				<div class="label dot-prefix">Laura Miller — personal</div>
 				<p class="lede">
 					Founding engineer, photographer, 3D-print enthusiast.
-					Currently building Clove. Based in London.
+					Currently at an early-stage startup. Based in London.
 				</p>
 				<ul class="link-list">
 					<li>
@@ -70,6 +71,12 @@ const themeLabel = computed(() => {
 						<a :href="liHref" target="_blank" rel="me noopener" class="row">
 							<span class="row-key">linkedin</span>
 							<span class="row-val">/in/duffle</span>
+						</a>
+					</li>
+					<li>
+						<a :href="glassHref" target="_blank" rel="me noopener" class="row">
+							<span class="row-key">glass</span>
+							<span class="row-val">/duffle</span>
 						</a>
 					</li>
 					<li>
