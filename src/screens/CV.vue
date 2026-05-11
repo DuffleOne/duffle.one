@@ -1,112 +1,215 @@
 <script setup lang="ts">
-/*
-  CV route — `less laura.cv`. Section header + summary callout +
-  experience list + education / skills two-up + footer rule.
-*/
-import { SITE, type Education } from "../site/data";
-import { findRouteById } from "../site/routes";
-import type { Accent } from "../types/accent";
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import SectionHeader from "../components/headers/SectionHeader.vue";
-import Prompt from "../components/atoms/Prompt.vue";
-import Callout from "../components/cards/Callout.vue";
-import Tag from "../components/atoms/Tag.vue";
-import ExperienceEntry from "./cv/ExperienceEntry.vue";
+import { computed } from "vue";
+import { SITE } from "../site/data";
+import { useToday } from "../composables/useToday";
+import { useTheme } from "../composables/useTheme";
 
-const route = findRouteById("cv")!;
-const SKILL_ACCENTS: Accent[] = ["green", "cyan", "amber", "pink", "violet"];
+const { today } = useToday();
+const { choice: themeChoice, resolved, cycle } = useTheme();
+const themeLabel = computed(() => {
+	if (themeChoice.value === "system") return `auto · ${resolved.value}`;
+	return themeChoice.value;
+});
 
-// `education: []` widens to `never[]` via `satisfies`, so coerce here so the
-// template can read its fields when entries do exist later.
-const education = SITE.cv.education as Education[];
-const hasEducation = education.length > 0;
-
-// Rough line count for the manpage-style footer. Sum of bullets + tech rows
-// + a couple of header lines per role, rounded to feel honest without being
-// fiddly to maintain.
-const lineCount = (() => {
-	let n = 12; // header, summary callout, proud-of callout, skills, etc.
-	for (const e of SITE.cv.experience) {
-		n += 2 + e.bullets.length + (e.tech?.length ? 1 : 0);
-	}
-	n += hasEducation ? education.length * 3 : 0;
-	return n;
-})();
+const experience = SITE.cv.experience;
+const skills = SITE.cv.skills;
 </script>
 
 <template>
-	<TtyChrome
-		:title="route.titleBarText"
-		status-path="cv"
-		active-id="cv"
-		:accent="route.accent"
-	>
-		<ContentPane :padding-x="34" :padding-y="30" :gap="20">
-			<SectionHeader n="06" accent="violet">
-				./cv<span class="text-tty-violet">.txt</span>
-				<span class="text-tty-dim font-mono text-[12px] ml-3 tracking-[0]">
-					{{ SITE.cv.title }}
-				</span>
-			</SectionHeader>
-
-			<div class="text-tty-dim text-[11.5px]">
-				<Prompt cmd="less ~/cv.txt" route="cv"/>
-			</div>
-
-			<Callout accent="violet" padding="14px 18px">
-				<div class="text-tty-fg" style="font-size: 13px; line-height: 1.6;">
-					{{ SITE.cv.summary }}
+	<main class="page">
+		<div class="grid">
+			<header class="topbar">
+				<RouterLink to="/" class="back">← duffle.one</RouterLink>
+				<div class="meta">
+					<span>CV</span>
+					<span class="tnum">{{ today }}</span>
+					<span>London</span>
+					<button type="button" class="theme-btn" @click="cycle">{{ themeLabel }}</button>
 				</div>
-			</Callout>
+			</header>
 
-			<Callout accent="amber" padding="12px 18px">
-				<div class="text-tty-amber text-[10.5px] tracking-[2px] mb-1">── PROUD OF</div>
-				<div class="text-tty-fg" style="font-size: 13px; line-height: 1.6;">
-					{{ SITE.cv.proudOf }}
+			<div class="hairline-line"/>
+
+			<section class="intro">
+				<h1 class="title">CV</h1>
+				<p class="summary">{{ SITE.cv.summary }}</p>
+				<p class="contact">
+					<a href="mailto:laura@duffle.one" class="link">laura@duffle.one</a>
+				</p>
+			</section>
+
+			<section class="block">
+				<div class="label">Experience</div>
+				<ol class="roles">
+					<li v-for="e in experience" :key="e.slug">
+						<RouterLink :to="`/cv/${e.slug}`" class="role-link">
+							<div class="role-head">
+								<span class="role-co">{{ e.co }}</span>
+								<span class="role-when tnum">{{ e.when }}</span>
+							</div>
+							<div class="role-sub">
+								<span class="role-role">{{ e.role }}</span>
+								<span class="role-loc">· {{ e.loc }}</span>
+							</div>
+							<p class="role-blurb">{{ e.bullets[0] }}</p>
+							<div class="role-tech">
+								<span v-for="t in (e.tech ?? [])" :key="t" class="tag">{{ t }}</span>
+							</div>
+							<div class="role-more">Read more →</div>
+						</RouterLink>
+					</li>
+				</ol>
+			</section>
+
+			<section class="block">
+				<div class="label">Skills</div>
+				<div class="skills">
+					<span v-for="s in skills" :key="s" class="tag">{{ s }}</span>
 				</div>
-			</Callout>
+			</section>
 
-			<div class="text-tty-amber text-[10.5px] tracking-[2px] mt-1">── EXPERIENCE</div>
-			<div class="flex flex-col gap-4">
-				<ExperienceEntry
-					v-for="(e, i) in SITE.cv.experience"
-					:key="i"
-					:entry="e"
-				/>
-			</div>
-
-			<div :class="hasEducation ? 'grid grid-cols-1 md:grid-cols-2 gap-6 mt-2' : 'mt-2'">
-				<div v-if="hasEducation">
-					<div class="text-tty-amber text-[10.5px] tracking-[2px] mb-2">── EDUCATION</div>
-					<div v-for="(ed, i) in education" :key="i">
-						<div class="font-display tracking-[-0.2px]" style="font-size: 17px;">
-							{{ ed.degree }}
-							<span class="text-tty-faint">·</span>
-							<span class="text-tty-green">{{ ed.school }}</span>
-						</div>
-						<div class="text-tty-dim text-[11.5px] mt-px">{{ ed.when }}</div>
-						<div class="text-tty-fg text-[12px] mt-1">{{ ed.note }}</div>
-					</div>
-				</div>
-				<div>
-					<div class="text-tty-amber text-[10.5px] tracking-[2px] mb-2">── SKILLS</div>
-					<div class="flex flex-wrap gap-[6px]">
-						<Tag
-							v-for="(s, i) in SITE.cv.skills"
-							:key="s"
-							:accent="SKILL_ACCENTS[i % SKILL_ACCENTS.length]"
-						>{{ s }}</Tag>
-					</div>
-				</div>
-			</div>
-
-			<div
-				class="mt-auto pt-3 border-t border-tty-border flex flex-col sm:flex-row justify-between gap-1 text-[11px] text-tty-faint"
-			>
-				<span>{{ SITE.cv.email }}</span>
-				<span>:LINES {{ lineCount }} of {{ lineCount }} (END)</span>
-			</div>
-		</ContentPane>
-	</TtyChrome>
+			<footer class="footer">
+				<span>End of CV</span>
+				<span><a href="mailto:laura@duffle.one" class="link">Pitch: laura@duffle.one →</a></span>
+			</footer>
+		</div>
+	</main>
 </template>
+
+<style scoped>
+.page {
+	min-height: 100vh;
+	background: var(--bg);
+	color: var(--ink);
+	padding: clamp(24px, 5vw, 80px);
+}
+.grid {
+	max-width: 880px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+}
+
+.topbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+.back {
+	font-size: 13px;
+	color: var(--ink);
+	border-bottom: 1px solid var(--rule);
+	transition: border-color 120ms ease;
+}
+.back:hover { border-bottom-color: var(--ink); }
+
+.meta {
+	display: flex;
+	gap: 16px;
+	font-size: 11px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: var(--dim);
+	flex-wrap: wrap;
+}
+.theme-btn {
+	background: transparent; border: 0; font: inherit;
+	color: var(--dim); letter-spacing: 1.6px; text-transform: uppercase;
+	cursor: pointer; padding: 0;
+}
+.theme-btn:hover { color: var(--ink); }
+
+.hairline-line { border-top: 1px solid var(--ink); }
+
+.title {
+	font-size: clamp(56px, 14vw, 120px);
+	line-height: 0.9;
+	letter-spacing: -0.04em;
+	font-weight: 500;
+	margin: 0;
+}
+.summary {
+	font-size: 16px;
+	line-height: 1.6;
+	max-width: 640px;
+	margin: 16px 0 8px;
+}
+.contact { font-size: 14px; color: var(--dim); margin: 0; }
+
+.label {
+	font-size: 10px;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--dim);
+	font-weight: 500;
+	margin-bottom: 16px;
+}
+
+.roles { list-style: none; margin: 0; padding: 0; }
+.roles li { border-bottom: 1px solid var(--rule); }
+.roles li:last-child { border-bottom: 0; }
+.role-link {
+	display: block;
+	padding: 18px 0;
+	color: var(--ink);
+	transition: opacity 120ms ease;
+}
+.role-link:hover { opacity: 0.78; }
+
+.role-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 12px;
+}
+.role-co { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.role-when { font-size: 13px; color: var(--dim); white-space: nowrap; }
+.role-sub { font-size: 14px; color: var(--dim); margin-top: 2px; }
+.role-loc { margin-left: 6px; }
+.role-blurb {
+	margin: 10px 0 12px;
+	font-size: 14px;
+	line-height: 1.55;
+	max-width: 640px;
+}
+.role-tech {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 10px;
+}
+.tag {
+	font-size: 11px;
+	letter-spacing: 0.4px;
+	color: var(--dim);
+	border: 1px solid var(--rule);
+	padding: 2px 8px;
+}
+.role-more {
+	font-size: 12px;
+	letter-spacing: 0.6px;
+	color: var(--dim);
+}
+
+.skills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.footer {
+	border-top: 1px solid var(--ink);
+	padding-top: 14px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 11px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: var(--dim);
+	gap: 16px;
+	flex-wrap: wrap;
+}
+</style>

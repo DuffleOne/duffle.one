@@ -1,28 +1,16 @@
 <script setup lang="ts">
 /*
-  Root component. Hosts the routed screen, the palette overlay, and
-  registers global hotkeys. Mode + accent + statusPath flow from the
-  current route's meta into the chrome via the screens themselves —
-  App.vue stays thin.
+  Root: theme bootstrap + router outlet. Everything else lives in the
+  individual screens — App.vue stays thin so the home page can own its
+  full-viewport layout without fighting a wrapper.
 */
-import { useRouter } from "vue-router";
-import { useHotkeys } from "./composables/useHotkeys";
-import { usePalette } from "./composables/usePalette";
-import PaletteOverlay from "./components/overlay/PaletteOverlay.vue";
+import { useTheme } from "./composables/useTheme";
 
-const router = useRouter();
-const palette = usePalette();
-
-useHotkeys(router, {
-	openPalette: () => palette.open(),
-	closePalette: () => palette.close(),
-	isPaletteOpen: () => palette.isPaletteOpen(),
-});
+useTheme();
 </script>
 
 <template>
-	<RouterView v-slot="{ Component }">
-		<component :is="Component"/>
+	<RouterView v-slot="{ Component, route }">
+		<component :is="Component" :key="route.fullPath"/>
 	</RouterView>
-	<PaletteOverlay/>
 </template>

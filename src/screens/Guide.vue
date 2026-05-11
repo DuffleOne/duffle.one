@@ -1,88 +1,176 @@
 <script setup lang="ts">
-/*
-  User guide route - manpage layout. Top + bottom rules + sections
-  driven by SITE.guide. NAME / ABOUT / N freeform sections /
-  VALUES / EXIT STATUS.
-*/
+import { computed } from "vue";
 import { SITE } from "../site/data";
-import { findRouteById } from "../site/routes";
-import type { Accent } from "../types/accent";
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import ManPageRule from "../components/headers/ManPageRule.vue";
-import ManSection from "../components/headers/ManSection.vue";
-import ValueRow from "./guide/ValueRow.vue";
+import { useToday } from "../composables/useToday";
+import { useTheme } from "../composables/useTheme";
 
-const route = findRouteById("guide")!;
+const { today } = useToday();
+const { choice: themeChoice, resolved, cycle } = useTheme();
+const themeLabel = computed(() => {
+	if (themeChoice.value === "system") return `auto · ${resolved.value}`;
+	return themeChoice.value;
+});
 
-const VALUE_ACCENTS: Accent[] = ["green", "amber", "pink", "cyan", "violet"];
-
-// Split "laura - rest of name line" so the leading word can stay green.
-const nameParts = (() => {
-	const raw = SITE.guide.name;
-	const sepIdx = raw.indexOf(" ");
-	if (sepIdx === -1) return { head: raw, tail: "" };
-	return { head: raw.slice(0, sepIdx), tail: raw.slice(sepIdx) };
-})();
+const guide = SITE.guide;
 </script>
 
 <template>
-	<TtyChrome
-		:title="route.titleBarText"
-		status-path="guide"
-		active-id="guide"
-		:accent="route.accent"
-	>
-		<ContentPane :padding-x="26" :padding-y="22" :gap="12">
-			<ManPageRule left="LAURA(1)" mid="USER COMMANDS" right="LAURA(1)" position="top"/>
-
-			<ManSection heading="NAME">
-				<div class="text-tty-fg">
-					<span class="text-tty-green">{{ nameParts.head }}</span>{{ nameParts.tail }}
+	<main class="page">
+		<div class="grid">
+			<header class="topbar">
+				<RouterLink to="/" class="back">← duffle.one</RouterLink>
+				<div class="meta">
+					<span>User guide</span>
+					<span class="tnum">{{ today }}</span>
+					<button type="button" class="theme-btn" @click="cycle">{{ themeLabel }}</button>
 				</div>
-			</ManSection>
+			</header>
 
-			<ManSection heading="ABOUT">
-				<div class="flex flex-col gap-[8px] text-tty-fg text-[12.5px]">
-					<p v-for="(p, i) in SITE.guide.about" :key="i" class="m-0">{{ p }}</p>
+			<div class="hairline-line"/>
+
+			<section class="intro">
+				<h1 class="title">User guide</h1>
+				<p class="lede">{{ guide.intro }}</p>
+				<div class="about">
+					<p v-for="(p, i) in guide.about" :key="i">{{ p }}</p>
 				</div>
-			</ManSection>
+			</section>
 
-			<ManSection
-				v-for="(s, i) in SITE.guide.sections"
-				:key="i"
-				:heading="`── ${s.h.toUpperCase()}`"
-			>
-				<div class="flex flex-col gap-[8px] text-tty-fg text-[12.5px]">
-					<p v-for="(p, j) in s.body" :key="j" class="m-0">{{ p }}</p>
+			<section v-for="s in guide.sections" :key="s.h" class="section">
+				<h2 class="h2">{{ s.h }}</h2>
+				<div class="body">
+					<p v-for="(p, i) in s.body" :key="i">{{ p }}</p>
 				</div>
-			</ManSection>
+			</section>
 
-			<ManSection heading="VALUES">
-				<div class="flex flex-col gap-[10px]">
-					<ValueRow
-						v-for="(v, i) in SITE.guide.values"
-						:key="i"
-						:n="i + 1"
-						:heading="v.h"
-						:body="v.b"
-						:accent="VALUE_ACCENTS[i % VALUE_ACCENTS.length]"
-					/>
-				</div>
-			</ManSection>
+			<section class="block">
+				<div class="label">Values</div>
+				<dl class="values">
+					<template v-for="v in guide.values" :key="v.h">
+						<dt>{{ v.h }}</dt>
+						<dd>{{ v.b }}</dd>
+					</template>
+				</dl>
+			</section>
 
-			<ManSection heading="EXIT STATUS">
-				<div class="text-tty-dim text-[12px]">
-					<span class="text-tty-green">0</span> all good ·
-					<span class="text-tty-amber">1</span> needs a walk ·
-					<span class="text-tty-pink">2</span> needs feedback ·
-					<span class="text-tty-violet">137</span> meeting ran over
-				</div>
-			</ManSection>
-
-			<div class="mt-auto">
-				<ManPageRule left="DUFFLE.ONE" mid="v26.4 · 2026-04" right="LAURA(1)" position="bottom"/>
-			</div>
-		</ContentPane>
-	</TtyChrome>
+			<footer class="footer">
+				<span>End of guide</span>
+				<span><a href="mailto:laura@duffle.one" class="link">laura@duffle.one →</a></span>
+			</footer>
+		</div>
+	</main>
 </template>
+
+<style scoped>
+.page {
+	min-height: 100vh;
+	background: var(--bg);
+	color: var(--ink);
+	padding: clamp(24px, 5vw, 80px);
+}
+.grid {
+	max-width: 720px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+.topbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+.back {
+	font-size: 13px;
+	color: var(--ink);
+	border-bottom: 1px solid var(--rule);
+}
+.back:hover { border-bottom-color: var(--ink); }
+.meta { display: flex; gap: 16px; font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--dim); flex-wrap: wrap; }
+.theme-btn { background: transparent; border: 0; font: inherit; color: var(--dim); letter-spacing: 1.6px; text-transform: uppercase; cursor: pointer; padding: 0; }
+.theme-btn:hover { color: var(--ink); }
+.hairline-line { border-top: 1px solid var(--ink); }
+
+.title {
+	font-size: clamp(56px, 14vw, 120px);
+	line-height: 0.9;
+	letter-spacing: -0.04em;
+	font-weight: 500;
+	margin: 0;
+}
+.lede {
+	font-size: 17px;
+	line-height: 1.6;
+	margin: 18px 0 0;
+	max-width: 640px;
+	color: var(--ink);
+}
+.about { margin-top: 16px; }
+.about p {
+	margin: 12px 0;
+	font-size: 15px;
+	line-height: 1.7;
+	color: var(--ink);
+}
+
+.section {
+	border-top: 1px solid var(--rule);
+	padding-top: 24px;
+}
+.h2 {
+	font-size: 22px;
+	font-weight: 500;
+	letter-spacing: -0.01em;
+	margin: 0 0 12px;
+}
+.body p {
+	margin: 10px 0;
+	font-size: 15px;
+	line-height: 1.7;
+}
+
+.label {
+	font-size: 10px;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--dim);
+	font-weight: 500;
+	margin-bottom: 12px;
+}
+
+.values {
+	margin: 0;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 14px;
+}
+.values dt {
+	font-size: 15px;
+	font-weight: 500;
+}
+.values dd {
+	margin: 4px 0 0;
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--dim);
+	padding-bottom: 12px;
+	border-bottom: 1px dotted var(--rule);
+}
+.values dd:last-of-type { border-bottom: 0; }
+
+.footer {
+	border-top: 1px solid var(--ink);
+	padding-top: 14px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 11px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: var(--dim);
+	flex-wrap: wrap;
+	gap: 16px;
+}
+</style>

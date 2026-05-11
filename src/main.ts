@@ -11,14 +11,10 @@ const router = createRouter({
 			path: r.path,
 			name: r.id,
 			component: r.component,
-			meta: { route: r.id, accent: r.accent, title: r.titleBarText },
 		})),
-		// Anything else falls through to the sudo/404 easter egg.
 		{
 			path: "/:pathMatch(.*)*",
-			name: "sudo",
-			component: () => import("./screens/Sudo.vue"),
-			meta: { route: "sudo", accent: "pink", title: "laura@duffle: ~ · sudo: an error has occurred" },
+			redirect: "/",
 		},
 	],
 	scrollBehavior: () => ({ top: 0 }),

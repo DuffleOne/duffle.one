@@ -1,25 +1,35 @@
 /*
-  Route registry. Single source of truth for the sidebar, the router,
-  hotkeys, and the palette. Add a route here and it shows up everywhere.
-
-  `id` is the internal/code name (matches preview/tty-theme.jsx where
-  "gaming" is the historical id); `label` is what the sidebar shows;
-  `path` is the public URL.
+  Route registry for the new design-C site. The legacy TTY screens
+  (Photo, Projects, Servers, Sudo, Home/cv/guide subfolders) are no
+  longer referenced by main.ts and will get cleaned up; the compat
+  exports below exist purely so the leftover .vue files still
+  typecheck until they're removed.
 */
 
 import type { Component } from "vue";
-import type { Accent } from "../types/accent";
 
-export type RouteId = "home" | "projects" | "photo" | "gaming" | "guide" | "cv";
+export type RouteId =
+	| "home"
+	| "cv"
+	| "cv-role"
+	| "guide"
+	// legacy ids, kept so the old TTY components still typecheck
+	| "projects"
+	| "photo"
+	| "gaming"
+	| "sudo";
+
+export type Accent = "green" | "amber" | "pink" | "cyan" | "violet";
 
 export type RouteSpec = {
 	id: RouteId;
-	label: string;
-	key: string;
 	path: string;
-	accent: Accent;
-	titleBarText: string;
 	component: () => Promise<Component>;
+	// Legacy fields used by the old TTY chrome. Optional now.
+	label?: string;
+	key?: string;
+	accent?: Accent;
+	titleBarText?: string;
 };
 
 export const routes: RouteSpec[] = [
@@ -29,53 +39,35 @@ export const routes: RouteSpec[] = [
 		key: "1",
 		path: "/",
 		accent: "green",
-		titleBarText: "laura@duffle: ~ · fish · 96×42",
+		titleBarText: "duffle.one",
 		component: () => import("../screens/Home.vue"),
-	},
-	{
-		id: "projects",
-		label: "projects",
-		key: "2",
-		path: "/projects",
-		accent: "amber",
-		titleBarText: "laura@duffle: ~/projects · ls",
-		component: () => import("../screens/Projects.vue"),
-	},
-	{
-		id: "photo",
-		label: "photo",
-		key: "3",
-		path: "/photo",
-		accent: "pink",
-		titleBarText: "laura@duffle: ~/photo · feh contact-sheet",
-		component: () => import("../screens/Photo.vue"),
-	},
-	{
-		id: "gaming",
-		label: "servers",
-		key: "4",
-		path: "/servers",
-		accent: "cyan",
-		titleBarText: "laura@duffle: ~/servers · systemctl status",
-		component: () => import("../screens/Servers.vue"),
-	},
-	{
-		id: "guide",
-		label: "user-guide",
-		key: "5",
-		path: "/guide",
-		accent: "amber",
-		titleBarText: "laura@duffle: ~/guide · man laura(1)",
-		component: () => import("../screens/Guide.vue"),
 	},
 	{
 		id: "cv",
 		label: "cv",
-		key: "6",
+		key: "2",
 		path: "/cv",
 		accent: "violet",
-		titleBarText: "laura@duffle: ~/cv · less laura.cv",
+		titleBarText: "duffle.one — CV",
 		component: () => import("../screens/CV.vue"),
+	},
+	{
+		id: "cv-role",
+		label: "cv-role",
+		key: "3",
+		path: "/cv/:slug",
+		accent: "violet",
+		titleBarText: "duffle.one — CV",
+		component: () => import("../screens/CVRole.vue"),
+	},
+	{
+		id: "guide",
+		label: "user-guide",
+		key: "4",
+		path: "/guide",
+		accent: "amber",
+		titleBarText: "duffle.one — user guide",
+		component: () => import("../screens/Guide.vue"),
 	},
 ];
 

@@ -43,6 +43,7 @@ export type GameServer = {
 	imageUrl?: string | null;
 };
 export type Experience = {
+	slug: string;
 	co: string;
 	role: string;
 	when: string;
@@ -213,6 +214,7 @@ export const SITE = {
 			"Helping build Cuvva from a team of 4 to over 100 people, and scaling a system from 10 policies a week to hundreds per second. Nothing beats being there from the very beginning.",
 		experience: [
 			{
+				slug: "clove",
 				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – Mar 2026", loc: "London", href: "https://clove.com",
 				tech: ["Go", "PostgreSQL", "React", "BigQuery", "GCP"],
 				bullets: [
@@ -221,6 +223,7 @@ export const SITE = {
 				],
 			},
 			{
+				slug: "paddle",
 				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 – Jul 2025", loc: "London", href: "https://paddle.com",
 				tech: ["PHP", "SQL", "AWS", "Go", "Snowflake", "Laravel"],
 				bullets: [
@@ -230,6 +233,7 @@ export const SITE = {
 				],
 			},
 			{
+				slug: "incident-io",
 				co: "incident.io", role: "Technical Lead, Product Engineer", when: "May 2024 – Nov 2024", loc: "London", href: "https://incident.io",
 				tech: ["React", "GCP", "Go", "Postgres"],
 				bullets: [
@@ -242,6 +246,7 @@ export const SITE = {
 				],
 			},
 			{
+				slug: "mojo",
 				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 – May 2024", loc: "London", href: "https://mymojo.com",
 				tech: ["Go", "MongoDB", "GCP", "BigQuery", "dbt", "React Native"],
 				bullets: [
@@ -255,6 +260,7 @@ export const SITE = {
 				],
 			},
 			{
+				slug: "cuvva",
 				co: "Cuvva", role: "Founding Engineer", when: "May 2016 – Apr 2022", loc: "London", href: "https://cuvva.com",
 				tech: ["Go", "Node.js", "MongoDB", "AWS", "Kubernetes", "Postgres"],
 				bullets: [
@@ -270,6 +276,7 @@ export const SITE = {
 				],
 			},
 			{
+				slug: "whitechapel-mission",
 				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 – now", loc: "London", href: "https://whitechapel.org.uk",
 				tech: ["PHP", "JavaScript", "Vite", "MySQL", "Laravel"],
 				bullets: [
