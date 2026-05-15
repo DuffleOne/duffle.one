@@ -35,6 +35,21 @@
 	}
 }
 
+@font-face {
+	font-family: 'Alcyone';
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+	src: url('/fonts/alcyone/Alcyone-Regular.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Alcyone';
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+	src: url('/fonts/alcyone/Alcyone-Medium.woff2') format('woff2');
+}
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -42,7 +57,7 @@ html, body {
 	padding: 0;
 	background: var(--bg);
 	color: var(--ink);
-	font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+	font-family: 'Alcyone', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 	font-weight: 400;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
