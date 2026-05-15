@@ -94,15 +94,20 @@ const themeLabel = computed(() => {
 				</ul>
 			</section>
 
-			<!-- TOP-RIGHT — meta strip -->
-			<header class="cell meta">
-				<span>Index</span>
-				<span class="tnum">{{ today }}</span>
-				<span>London, {{ weather }}</span>
-				<button type="button" class="theme-btn" :title="`Theme: ${themeLabel}`" @click="cycle">
-					{{ themeLabel }}
-				</button>
-			</header>
+			<!-- TOP-RIGHT — meta strip + rotating pull quote anchored bottom -->
+			<aside class="cell meta-col">
+				<header class="meta">
+					<span>Index</span>
+					<span class="tnum">{{ today }}</span>
+					<span>London, {{ weather }}</span>
+					<button type="button" class="theme-btn" :title="`Theme: ${themeLabel}`" @click="cycle">
+						{{ themeLabel }}
+					</button>
+				</header>
+				<blockquote class="pull">
+					<p class="pull-text fade-in" :key="quote">&ldquo;{{ quote }}&rdquo;</p>
+				</blockquote>
+			</aside>
 
 			<div class="hairline-row"><span class="hairline-line"/></div>
 
@@ -161,12 +166,9 @@ const themeLabel = computed(() => {
 				<h1 class="wordmark">duffle<span class="dot-sep">.</span>one</h1>
 			</div>
 
-			<!-- HAIRLINE 2 + rotating quote footer -->
+			<!-- HAIRLINE 2 + sign-off -->
 			<div class="footer">
 				<span class="footer-side">End of index</span>
-				<span class="footer-quote">
-					<span class="quote-line fade-in" :key="quote">"{{ quote }}"</span>
-				</span>
 				<span class="footer-side"><a href="mailto:laura@duffle.one" class="link">Pitch: laura@duffle.one →</a></span>
 			</div>
 		</div>
@@ -237,9 +239,13 @@ const themeLabel = computed(() => {
 .row-val { color: var(--ink); }
 .row:last-child { border-bottom: 0; }
 
-.meta {
-	grid-column: 8 / span 5;
+.meta-col {
+	grid-column: 7 / span 6;
 	grid-row: 1;
+	display: flex;
+	flex-direction: column;
+}
+.meta {
 	display: flex;
 	justify-content: space-between;
 	gap: 16px;
@@ -250,6 +256,20 @@ const themeLabel = computed(() => {
 	color: var(--dim);
 	padding-top: 4px;
 	flex-wrap: wrap;
+}
+
+.pull {
+	margin: auto 0 0 0;
+	padding: 0;
+}
+.pull-text {
+	font-size: clamp(20px, 2.2vw, 26px);
+	line-height: 1.35;
+	font-weight: 400;
+	color: var(--ink);
+	margin: 0;
+	letter-spacing: -0.005em;
+	text-wrap: balance;
 }
 
 .theme-btn {
@@ -353,8 +373,8 @@ const themeLabel = computed(() => {
 	grid-row: 5;
 	border-top: 1px solid var(--ink);
 	padding-top: 14px;
-	display: grid;
-	grid-template-columns: auto 1fr auto;
+	display: flex;
+	justify-content: space-between;
 	gap: 16px;
 	font-size: 11px;
 	letter-spacing: 1.6px;
@@ -363,18 +383,6 @@ const themeLabel = computed(() => {
 	align-items: baseline;
 }
 .footer-side { white-space: nowrap; }
-.footer-quote {
-	text-align: center;
-	letter-spacing: 0;
-	text-transform: none;
-	font-size: 12px;
-	color: var(--ink);
-	min-width: 0;
-}
-.quote-line {
-	display: inline-block;
-	max-width: 100%;
-}
 
 /* Mobile: stack everything in a single column. */
 @media (max-width: 899px) {
@@ -385,12 +393,15 @@ const themeLabel = computed(() => {
 		gap: 28px;
 		min-height: 0;
 	}
+	.meta-col { gap: 20px; }
 	.meta {
 		justify-content: flex-start;
 		gap: 12px 18px;
 	}
+	.pull { margin-top: 0; }
+	.pull-text { font-size: clamp(18px, 5vw, 22px); }
 	.hairline-row { display: none; }
-	.links, .meta, .block, .domain, .footer {
+	.links, .meta-col, .block, .domain, .footer {
 		grid-column: auto;
 		grid-row: auto;
 	}
@@ -399,12 +410,11 @@ const themeLabel = computed(() => {
 		font-size: clamp(60px, 18vw, 140px);
 	}
 	.footer {
-		grid-template-columns: 1fr;
+		flex-direction: column;
 		text-align: left;
 		gap: 8px;
 		padding-top: 16px;
 	}
-	.footer-quote { text-align: left; }
 	.footer-side { letter-spacing: 1.4px; }
 }
 </style>

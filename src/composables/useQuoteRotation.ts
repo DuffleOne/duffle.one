@@ -1,5 +1,5 @@
 /*
-  Quote rotation. Shuffles the pool once at session start (Fisher–Yates),
+  Quote rotation. Shuffles the pool once at session start (Fisher-Yates),
   then walks through the shuffled order, never repeating until the whole
   list has been seen. When the cycle ends, reshuffle and start again.
 
