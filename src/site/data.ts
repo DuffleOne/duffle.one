@@ -173,8 +173,21 @@ export const SITE = {
 			"Helping build Cuvva from a team of 4 to over 100 people, and scaling a system from 10 policies a week to hundreds per second. Nothing beats being there from the very beginning.",
 		experience: [
 			{
+				slug: "yardstick",
+				co: "Yardstick", role: "Founding Engineer", when: "now", loc: "London",
+				tech: ["Go", "React", "AWS", "Postgres", "Expo"],
+				bullets: [
+					"Advising the CEO on long-term strategy and representing engineering in those decisions.",
+					"Shaping the product roadmap alongside Laura T and Katherine.",
+					"Building the iOS and Android apps with Luke.",
+					"Own the backend, data, and infrastructure layers, inherited from HAJ and others.",
+					"Migrating the database structures to support more complex financial modelling.",
+					"Writing new features end-to-end from conception to deployment.",
+				],
+			},
+			{
 				slug: "clove",
-				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – Mar 2026", loc: "London", href: "https://clove.com",
+				co: "Clove", role: "Founding Engineer", when: "Aug 2025 - Mar 2026", loc: "London", href: "https://clove.com",
 				tech: ["Go", "PostgreSQL", "React", "BigQuery", "GCP"],
 				bullets: [
 					"Joined before a single line of code existed. Created the repository and built the entire backend framework in Go from scratch (layout, services, libraries, all the infrastructure).",
@@ -183,7 +196,7 @@ export const SITE = {
 			},
 			{
 				slug: "paddle",
-				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 – Jul 2025", loc: "London", href: "https://paddle.com",
+				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 - Jul 2025", loc: "London", href: "https://paddle.com",
 				tech: ["PHP", "SQL", "AWS", "Go", "Snowflake", "Laravel"],
 				bullets: [
 					"Formed and led a new team responsible for the ledger, the core area of the codebase for a merchant of record.",
@@ -193,7 +206,7 @@ export const SITE = {
 			},
 			{
 				slug: "incident-io",
-				co: "incident.io", role: "Technical Lead, Product Engineer", when: "May 2024 – Nov 2024", loc: "London", href: "https://incident.io",
+				co: "incident.io", role: "Technical Lead", when: "May 2024 - Nov 2024", loc: "London", href: "https://incident.io",
 				tech: ["React", "GCP", "Go", "Postgres"],
 				bullets: [
 					"Promoted to technical lead within weeks of joining, owning the roadmap for a product squad.",
@@ -206,7 +219,7 @@ export const SITE = {
 			},
 			{
 				slug: "mojo",
-				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 – May 2024", loc: "London", href: "https://mymojo.com",
+				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 - May 2024", loc: "London", href: "https://mymojo.com",
 				tech: ["Go", "MongoDB", "GCP", "BigQuery", "dbt", "React Native"],
 				bullets: [
 					"Joined as the sole backend engineer and built the entire backend function from scratch.",
@@ -220,7 +233,7 @@ export const SITE = {
 			},
 			{
 				slug: "cuvva",
-				co: "Cuvva", role: "Founding Engineer", when: "May 2016 – Apr 2022", loc: "London", href: "https://cuvva.com",
+				co: "Cuvva", role: "Founding Engineer", when: "May 2016 - Apr 2022", loc: "London", href: "https://cuvva.com",
 				tech: ["Go", "Node.js", "MongoDB", "AWS", "Kubernetes", "Postgres"],
 				bullets: [
 					"4th employee. Grew the engineering team from 2 engineers to a 30+ person multi-discipline organisation.",
@@ -236,7 +249,7 @@ export const SITE = {
 			},
 			{
 				slug: "whitechapel-mission",
-				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 – now", loc: "London", href: "https://whitechapel.org.uk",
+				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 - now", loc: "London", href: "https://whitechapel.org.uk",
 				tech: ["PHP", "JavaScript", "Vite", "MySQL", "Laravel"],
 				bullets: [
 					"Led a full migration to the cloud and modernised the platform onto the latest Laravel stack.",
