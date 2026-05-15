@@ -37,7 +37,7 @@ src/
 	App.vue                 root: <router-view> + palette overlay + global hotkeys
 	input.css               Tailwind import + @theme tokens + tty-* effects
 	site/
-		data.ts               all copy: socials, projects, photos, gaming, cv, guide
+		data.ts               all copy: socials, projects, gaming, cv, guide
 		routes.ts             route registry (id, label, key, accent, path, component)
 	types/
 		accent.ts             accent palette + helpers

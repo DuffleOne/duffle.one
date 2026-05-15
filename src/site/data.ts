@@ -19,20 +19,6 @@ export type Project = {
 	tech?: string[];
 	stats?: ProjectStat[];
 };
-export type Photo = {
-	id: string;
-	title: string;
-	src: string;
-	camera: string;
-	lens: string;
-	focal: string;
-	aperture: string;
-	shutter: string;
-	iso: string;
-	taken: string;
-	bytes: number;
-	place?: string;
-};
 export type GameServer = {
 	id: string;
 	title: string;
@@ -167,33 +153,6 @@ export const SITE = {
 		"a whisper at her future funeral",
 		"the vibes",
 	],
-
-	// Real frames from the camera roll. Resized + cropped to 4:5 webp by
-	// scripts/process-photos.sh; EXIF extracted from each original.
-	photography: [
-		{ id: "p01", title: "Frame 01", src: "/img/photos/01.webp", camera: "Canon EOS R5m2", lens: "RF100mm F2.8 L Macro IS USM", focal: "100mm", aperture: "f/2.8", shutter: "1/125", iso: "5000", taken: "2026-02-07", bytes: 39828 },
-		{ id: "p02", title: "Frame 02", src: "/img/photos/02.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "500mm", aperture: "f/7.1", shutter: "1/8000", iso: "12800", taken: "2026-04-18", bytes: 83734 },
-		{ id: "p03", title: "Frame 03", src: "/img/photos/03.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "167mm", aperture: "f/5.0", shutter: "1/8000", iso: "12800", taken: "2026-04-18", bytes: 61586 },
-		{ id: "p04", title: "Frame 04", src: "/img/photos/04.webp", camera: "Canon EOS R5m2", lens: "RF50mm F1.4 L VCM", focal: "50mm", aperture: "f/1.4", shutter: "1/8000", iso: "100", taken: "2026-04-25", bytes: 64866 },
-		{ id: "p05", title: "Frame 05", src: "/img/photos/05.webp", camera: "Canon EOS R5m2", lens: "RF70-200mm F2.8 L IS USM", focal: "70mm", aperture: "f/2.8", shutter: "1/800", iso: "100", taken: "2026-04-25", bytes: 166146 },
-		{ id: "p06", title: "Frame 06", src: "/img/photos/06.webp", camera: "Canon EOS R6m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "176mm", aperture: "f/5.0", shutter: "1/2",   iso: "200",   taken: "2025-12-13", bytes: 113650 },
-		{ id: "p07", title: "Frame 07", src: "/img/photos/07.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "472mm", aperture: "f/7.1", shutter: "1/4000", iso: "6400", taken: "2025-12-20", bytes: 32984 },
-		{ id: "p08", title: "Frame 08", src: "/img/photos/08.webp", camera: "Canon EOS R6m2", lens: "RF100mm F2.8 L Macro IS USM",  focal: "100mm", aperture: "f/2.8", shutter: "1/100",  iso: "25600", taken: "2025-09-27", bytes: 48654 },
-		{ id: "p09", title: "Frame 09", src: "/img/photos/09.webp", camera: "Canon EOS R5m2", lens: "RF100mm F2.8 L Macro IS USM",  focal: "100mm", aperture: "f/2.8", shutter: "1/100",  iso: "3200",  taken: "2026-02-07", bytes: 40358 },
-		{ id: "p10", title: "Frame 10", src: "/img/photos/10.webp", camera: "Canon EOS R6m2", lens: "RF50mm F1.4 L VCM",            focal: "50mm",  aperture: "f/1.4", shutter: "1/250",  iso: "2000",  taken: "2026-01-11", bytes: 31832 },
-		{ id: "p11", title: "Frame 11", src: "/img/photos/11.webp", camera: "Canon EOS R6m2", lens: "RF50mm F1.4 L VCM",            focal: "50mm",  aperture: "f/1.4", shutter: "1/80",   iso: "250",   taken: "2026-01-21", bytes: 110726 },
-		{ id: "p12", title: "Frame 12", src: "/img/photos/12.webp", camera: "Canon EOS R6m2", lens: "RF50mm F1.4 L VCM",            focal: "50mm",  aperture: "f/1.4", shutter: "1/1250", iso: "200",   taken: "2026-01-23", bytes: 14260 },
-		{ id: "p13", title: "Frame 13", src: "/img/photos/13.webp", camera: "Canon EOS R6m2", lens: "RF50mm F1.4 L VCM",            focal: "50mm",  aperture: "f/1.4", shutter: "1/125",  iso: "200",   taken: "2026-01-24", bytes: 73226 },
-		{ id: "p14", title: "Frame 14", src: "/img/photos/14.webp", camera: "Canon EOS R6m2", lens: "RF70-200mm F2.8 L IS USM",     focal: "95mm",  aperture: "f/2.8", shutter: "1/8000", iso: "200",   taken: "2026-02-14", bytes: 178368 },
-		{ id: "p15", title: "Frame 15", src: "/img/photos/15.webp", camera: "Canon EOS R6m2", lens: "RF70-200mm F2.8 L IS USM",     focal: "200mm", aperture: "f/2.8", shutter: "1/250",  iso: "800",   taken: "2025-10-26", bytes: 109272 },
-		{ id: "p16", title: "Frame 16", src: "/img/photos/16.webp", camera: "Canon EOS R6m2", lens: "RF100mm F2.8 L Macro IS USM",  focal: "100mm", aperture: "f/2.8", shutter: "1/500",  iso: "200",   taken: "2025-10-28", bytes: 50224 },
-		{ id: "p17", title: "Frame 17", src: "/img/photos/17.webp", camera: "Canon EOS R6m2", lens: "RF70-200mm F2.8 L IS USM",     focal: "200mm", aperture: "f/2.8", shutter: "1/2500", iso: "200",   taken: "2025-11-04", bytes: 49350 },
-		{ id: "p18", title: "Frame 18", src: "/img/photos/18.webp", camera: "Canon EOS R6m2", lens: "RF24-70mm F2.8 L IS USM",      focal: "30mm",  aperture: "f/2.8", shutter: "1/2500", iso: "200",   taken: "2025-06-19", bytes: 138096 },
-		{ id: "p19", title: "Frame 19", src: "/img/photos/19.webp", camera: "Canon EOS R6m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "176mm", aperture: "f/5.0", shutter: "1/2",   iso: "200",   taken: "2025-12-13", bytes: 126084 },
-		{ id: "p20", title: "Frame 20", src: "/img/photos/20.webp", camera: "Canon EOS R6m2", lens: "RF50mm F1.4 L VCM",            focal: "50mm",  aperture: "f/1.4", shutter: "1/60",   iso: "4000",  taken: "2025-07-29", bytes: 89382 },
-		{ id: "p21", title: "Frame 21", src: "/img/photos/21.webp", camera: "Canon EOS R5m2", lens: "RF50mm F1.4 L VCM",            focal: "50mm",  aperture: "f/1.4", shutter: "1/5000", iso: "100",   taken: "2026-04-25", bytes: 98024 },
-		{ id: "p22", title: "Frame 22", src: "/img/photos/22.webp", camera: "Canon EOS R5m2", lens: "RF70-200mm F2.8 L IS USM",     focal: "147mm", aperture: "f/2.8", shutter: "1/1600", iso: "100",   taken: "2026-04-25", bytes: 187576 },
-	] satisfies Photo[],
 
 	// Static fallback that mirrors the names returned by the AMP worker.
 	// useServers() replaces this on mount when VITE_SERVERS_API resolves.
