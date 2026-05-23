@@ -2,7 +2,7 @@
   "name": "amp-servers",
   "private": true,
   "scripts": {
-    "dev": "bun run dev.js",
+    "dev": "deno task dev",
     "deploy": "wrangler deploy"
   },
   "devDependencies": {
