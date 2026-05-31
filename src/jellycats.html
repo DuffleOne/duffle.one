@@ -12,7 +12,6 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-	<link href="./input.css" rel="stylesheet">
 
 	<style>
 		* {
@@ -21,8 +20,10 @@
 			box-sizing: border-box;
 		}
 
-		/* input.css ships dark theme tokens that flip --bg/--ink on :root under
-		   prefers-color-scheme: dark. Pin the html canvas so this page stays light. */
+		/* Light-only page with its own palette. We deliberately don't link the
+		   shared input.css: its dark theme tokens flip --bg/--ink under
+		   prefers-color-scheme: dark, and Vite bundles that stylesheet after this
+		   inline block, so it would override the pins below and darken the page. */
 		html {
 			background: #faf6f1;
 			color: #3d2c22;
