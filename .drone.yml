@@ -24,18 +24,32 @@ steps:
       - name: aws
         path: /root/.aws
     commands:
-      # Sync the built site. Exclude the entry HTML (re-uploaded below with
-      # no-cache headers) and the full-size jellycat jpgs: those live only in
-      # S3 (gitignored, ~2GB, pushed from local via publish.sh), so without the
-      # exclude the --delete would wipe all of them on every deploy.
-      - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete --exclude "index.html" --exclude "jellycats.html" --exclude "img/jellycats/*.jpg"
-      # Entry HTML: text/html, no caching, so each deploy invalidates straight
-      # away. The hashed asset bundles can cache long; these two can't.
-      - aws s3 cp /build/index.html s3://duffle.one/index.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
-      - aws s3 cp /build/jellycats.html s3://duffle.one/jellycats.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
-      # SPA fallback: any unknown path serves index.html so the hash router can
-      # take over. Real files (jellycats.html, /img/*) still serve directly.
-      - aws s3 website s3://duffle.one/ --index-document index.html --error-document index.html
+      # The aws-cli step intermittently can't reach S3 on its very first
+      # connection. When the build_site container is torn down, netavark's
+      # per-network resolver (aardvark-dns) briefly reloads, and a lookup that
+      # lands in that window fails as "Could not connect to the endpoint URL".
+      # A few seconds later the network has settled, so retry rides over it.
+      - |
+        retry() {
+          n=0
+          until "$@"; do
+            n=$((n + 1))
+            if [ "$n" -ge 5 ]; then echo "still failing after $n attempts"; return 1; fi
+            echo "attempt $n failed, retrying in 5s..."; sleep 5
+          done
+        }
+        # Sync the built site. Exclude the entry HTML (re-uploaded below with
+        # no-cache headers) and the full-size jellycat jpgs: those live only in
+        # S3 (gitignored, ~2GB, pushed from local via publish.sh), so without
+        # the exclude the --delete would wipe all of them on every deploy.
+        retry aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete --exclude "index.html" --exclude "jellycats.html" --exclude "img/jellycats/*.jpg"
+        # Entry HTML: text/html, no caching, so each deploy invalidates straight
+        # away. The hashed asset bundles can cache long; these two can't.
+        retry aws s3 cp /build/index.html s3://duffle.one/index.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
+        retry aws s3 cp /build/jellycats.html s3://duffle.one/jellycats.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
+        # SPA fallback: any unknown path serves index.html so the hash router can
+        # take over. Real files (jellycats.html, /img/*) still serve directly.
+        retry aws s3 website s3://duffle.one/ --index-document index.html --error-document index.html
     depends_on:
       - build_site
     when:
@@ -53,6 +67,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 7ffac5a7da784fcee2eed4a068df71b14ce931e643de62a7635e12135b85a75b
+hmac: e7789ca07b728bff2b748548249c37b61b2518477b6bdf10b26dbec30d149e9b
 
 ...
