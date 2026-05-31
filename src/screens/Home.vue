@@ -31,6 +31,7 @@ const githubHref = SITE.socials.find((s) => s.id === "github")?.href ?? "#";
 const igHref = SITE.socials.find((s) => s.id === "ig")?.href ?? "#";
 const liHref = SITE.socials.find((s) => s.id === "linkedin")?.href ?? "#";
 const glassHref = SITE.socials.find((s) => s.id === "glass")?.href ?? "#";
+const steamHref = SITE.socials.find((s) => s.id === "steam")?.href ?? "#";
 
 const themeLabel = computed(() => {
 	if (themeChoice.value === "system") return `auto · ${resolved.value}`;
@@ -77,6 +78,12 @@ const themeLabel = computed(() => {
 						<a :href="glassHref" target="_blank" rel="me noopener" class="row">
 							<span class="row-key">glass</span>
 							<span class="row-val">/duffle</span>
+						</a>
+					</li>
+					<li>
+						<a :href="steamHref" target="_blank" rel="me noopener" class="row">
+							<span class="row-key">steam</span>
+							<span class="row-val">DuffleOne</span>
 						</a>
 					</li>
 					<li>
