@@ -80,7 +80,7 @@ export const SITE = {
 		{
 			id: "jellycats", name: "Jellycats",
 			blurb: "A vanity gallery of every Jellycat I own.",
-			description: "48 photographed plushies across nine categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
+			description: "55 photographed plushies across nine categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
 			year: "2023", tag: "archive", href: "/jellycats.html",
 			tech: ["photo", "vanilla css", "vanity"],
 		},

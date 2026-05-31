@@ -10,3 +10,7 @@
 
 # Full-size jellycat photos (2GB+) — uploaded to S3 separately via publish.sh
 src/public/img/jellycats/*.jpg
+
+# Raw camera drop-zone for new gallery shots (processed by
+# scripts/convert-new-jellycats.sh, then the originals live in img/jellycats/)
+src/public/img/new/
