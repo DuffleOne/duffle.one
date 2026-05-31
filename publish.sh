@@ -8,6 +8,9 @@ set -euo pipefail
 # doesn't exist (other OS / non-Homebrew) - DYLD just silently skips.
 export DYLD_LIBRARY_PATH="${DYLD_LIBRARY_PATH:-}/opt/homebrew/opt/expat/lib"
 
+# Publish under the dfl profile so every aws call below picks up its creds.
+export AWS_PROFILE=dfl
+
 (npm run build)
 
 BUILD_DIR=${BUILD_DIR:-./build}
