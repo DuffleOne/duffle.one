@@ -24,10 +24,18 @@ steps:
       - name: aws
         path: /root/.aws
     commands:
-      - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete
+      # Sync the built site. Exclude the entry HTML (re-uploaded below with
+      # no-cache headers) and the full-size jellycat jpgs: those live only in
+      # S3 (gitignored, ~2GB, pushed from local via publish.sh), so without the
+      # exclude the --delete would wipe all of them on every deploy.
+      - aws s3 sync /build s3://duffle.one --acl public-read --follow-symlinks --delete --exclude "index.html" --exclude "jellycats.html" --exclude "img/jellycats/*.jpg"
+      # Entry HTML: text/html, no caching, so each deploy invalidates straight
+      # away. The hashed asset bundles can cache long; these two can't.
       - aws s3 cp /build/index.html s3://duffle.one/index.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
-      - aws s3 cp /build/404.html s3://duffle.one/404.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
-      - aws s3 website s3://duffle.one/ --index-document index.html --error-document 404.html
+      - aws s3 cp /build/jellycats.html s3://duffle.one/jellycats.html --acl public-read --content-type text/html --cache-control "no-cache, no-store, must-revalidate" --metadata-directive REPLACE
+      # SPA fallback: any unknown path serves index.html so the hash router can
+      # take over. Real files (jellycats.html, /img/*) still serve directly.
+      - aws s3 website s3://duffle.one/ --index-document index.html --error-document index.html
     depends_on:
       - build_site
     when:
@@ -35,6 +43,7 @@ steps:
         - master
       event:
         - push
+        - promote
 
 volumes:
   - name: build
@@ -44,6 +53,6 @@ volumes:
       path: /root/.aws
 ---
 kind: signature
-hmac: 2a4142c1ac91623ada905a99d83bfcaca9dfc760f78b81119e34966514ebbec2
+hmac: 7ffac5a7da784fcee2eed4a068df71b14ce931e643de62a7635e12135b85a75b
 
 ...
