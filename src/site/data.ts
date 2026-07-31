@@ -1,9 +1,8 @@
 /*
   Single source of truth for all copy + content.
   Lifted directly from the prior duffle.one (the static MPA that lived
-  in src/index.html, src/cv.html, src/gaming.html, src/user-guide.html)
-  and re-shaped for the TTY layout. Voice is part of the design, don't
-  paraphrase.
+  in src/index.html, src/cv.html, src/user-guide.html) and re-shaped for
+  the TTY layout. Voice is part of the design, don't paraphrase.
 */
 
 export type Social = { id: string; label: string; handle: string; href: string };
@@ -18,15 +17,6 @@ export type Project = {
 	description?: string;
 	tech?: string[];
 	stats?: ProjectStat[];
-};
-export type GameServer = {
-	id: string;
-	title: string;
-	game: string;
-	status: "online" | "idle" | "offline";
-	players: string;
-	uptime: string;
-	imageUrl?: string | null;
 };
 export type Experience = {
 	slug: string;
@@ -153,16 +143,6 @@ export const SITE = {
 		"a whisper at her future funeral",
 		"the vibes",
 	],
-
-	// Static fallback that mirrors the names returned by the AMP worker.
-	// useServers() replaces this on mount when VITE_SERVERS_API resolves.
-	gaming: [
-		{ id: "g1", title: "Blue Collar Crimes", game: "Unturned", status: "offline", players: "0 / 10", uptime: "—" },
-		{ id: "g2", title: "Josh and Laura", game: "Enshrouded", status: "offline", players: "—", uptime: "—" },
-		{ id: "g3", title: "Fraudulent Paperwork", game: "V Rising", status: "offline", players: "—", uptime: "—" },
-		{ id: "g4", title: "duffle.one", game: "Minecraft", status: "offline", players: "—", uptime: "—" },
-		{ id: "g5", title: "ts3.duffle.one", game: "TeamSpeak 3", status: "offline", players: "—", uptime: "—" },
-	] satisfies GameServer[],
 
 	cv: {
 		title: "Founding Engineer",

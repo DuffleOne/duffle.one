@@ -1,9 +1,9 @@
 /*
   Route registry for the new design-C site. The legacy TTY screens
-  (Photo, Projects, Servers, Sudo, Home/cv/guide subfolders) are no
-  longer referenced by main.ts and will get cleaned up; the compat
-  exports below exist purely so the leftover .vue files still
-  typecheck until they're removed.
+  (Photo, Projects, Sudo, Home/cv/guide subfolders) are no longer
+  referenced by main.ts and will get cleaned up; the compat exports
+  below exist purely so the leftover .vue files still typecheck until
+  they're removed.
 */
 
 import type { Component } from "vue";
@@ -16,7 +16,6 @@ export type RouteId =
 	// legacy ids, kept so the old TTY components still typecheck
 	| "projects"
 	| "photo"
-	| "gaming"
 	| "sudo";
 
 export type Accent = "green" | "amber" | "pink" | "cyan" | "violet";

@@ -14,3 +14,7 @@ src/public/img/jellycats/*.jpg
 # Raw camera drop-zone for new gallery shots (processed by
 # scripts/convert-new-jellycats.sh, then the originals live in img/jellycats/)
 src/public/img/new/
+
+# Camera originals dropped straight into img/. Only the derived webp
+# (e.g. hero.webp) gets committed and published.
+src/public/img/*.JPG

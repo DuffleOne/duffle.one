@@ -6,20 +6,17 @@
   Live data:
    - weather from Open-Meteo (London)
    - date from the browser clock
-   - game servers from the AMP worker (sorted online-first by players)
    - rotating quote walks a shuffled cycle of the full pool
 */
 import { computed } from "vue";
 import { SITE } from "../site/data";
 import { useWeather } from "../composables/useWeather";
-import { useServers } from "../composables/useServers";
 import { useQuoteRotation } from "../composables/useQuoteRotation";
 import { useToday } from "../composables/useToday";
 import { useTheme } from "../composables/useTheme";
 
 const { label: weather } = useWeather();
 const { today } = useToday();
-const { servers, stats } = useServers();
 const { quote } = useQuoteRotation();
 const { choice: themeChoice, resolved, cycle } = useTheme();
 
@@ -118,6 +115,23 @@ const themeLabel = computed(() => {
 
 			<div class="hairline-row"><span class="hairline-line"/></div>
 
+			<!-- BANNER — full-width plate, the one photograph on the page -->
+			<figure class="banner">
+				<img
+					class="banner-img"
+					src="/img/hero.webp"
+					alt="Speaking after dinner in a wood-panelled hall, candles and silverware down the table."
+					width="1280"
+					height="818"
+					loading="eager"
+					decoding="async"
+				/>
+				<figcaption class="banner-cap">
+					<span>Speaking after dinner</span>
+					<span class="tnum">28.05.2026</span>
+				</figcaption>
+			</figure>
+
 			<!-- 01 — Projects -->
 			<section class="cell block block-projects">
 				<div class="label">01 — Projects</div>
@@ -148,26 +162,6 @@ const themeLabel = computed(() => {
 				<RouterLink to="/cv" class="see-all">Full CV →</RouterLink>
 			</section>
 
-			<!-- 03 — Game servers -->
-			<section class="cell block block-servers">
-				<div class="label">03 — Game servers · {{ stats.live }} live</div>
-				<ol class="ord">
-					<li
-						v-for="s in servers.slice(0, 6)"
-						:key="s.id"
-						class="srv-row row-dotted"
-						:class="{ dim: s.status === 'offline' }"
-					>
-						<span class="dot" :class="`dot-${s.status}`"/>
-						<span class="srv-body">
-							<span class="srv-title">{{ s.title }}</span>
-							<span class="srv-game"> · {{ s.game }}</span>
-						</span>
-						<span class="players tnum">{{ s.players }}</span>
-					</li>
-				</ol>
-			</section>
-
 			<!-- DOMAIN — bottom-anchored, the wordmark -->
 			<div class="cell domain">
 				<h1 class="wordmark">duffle<span class="dot-sep">.</span>one</h1>
@@ -193,7 +187,7 @@ const themeLabel = computed(() => {
 .grid {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: auto auto auto auto auto;
+	grid-template-rows: auto auto auto auto auto auto;
 	column-gap: 24px;
 	row-gap: 28px;
 	max-width: 1280px;
@@ -302,13 +296,54 @@ const themeLabel = computed(() => {
 	margin-top: 4px;
 }
 
+/*
+  Banner. Ships the full frame and lets object-fit do the cropping, so the
+  wide letterbox on desktop and the near-full frame on mobile both come out
+  of one file. 38% keeps the speaker's head inside the desktop crop.
+*/
+.banner {
+	grid-column: 1 / -1;
+	grid-row: 3;
+	margin: 0;
+}
+.banner-img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 2.8;
+	object-fit: cover;
+	object-position: center 38%;
+}
+:root[data-theme="dark"] .banner-img {
+	filter: brightness(0.88) saturate(0.94);
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme]) .banner-img {
+		filter: brightness(0.88) saturate(0.94);
+	}
+}
+.banner-cap {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	padding-top: 9px;
+	border-top: 1px dotted var(--rule);
+	margin-top: 10px;
+	font-size: 10px;
+	letter-spacing: 1.8px;
+	text-transform: uppercase;
+	color: var(--dim);
+}
+
+/*
+  Two blocks now, sat on the same column edges as the row above: projects
+  under the links, CV under the meta/quote column.
+*/
 .block { font-size: 14px; }
-.block-projects { grid-column: 1 / span 4; grid-row: 3; }
-.block-cv       { grid-column: 5 / span 4; grid-row: 3; }
-.block-servers  { grid-column: 9 / span 4; grid-row: 3; }
+.block-projects { grid-column: 1 / span 4; grid-row: 4; }
+.block-cv       { grid-column: 7 / span 6; grid-row: 4; }
 
 .ord { margin: 0; padding: 0; list-style: none; }
-.proj-row, .cv-row, .srv-row {
+.proj-row, .cv-row {
 	display: grid;
 	padding: 7px 0;
 	border-bottom: 1px dotted var(--rule);
@@ -317,7 +352,7 @@ const themeLabel = computed(() => {
 	gap: 8px;
 }
 .proj-row { grid-template-columns: 28px 1fr 44px; }
-.proj-row:last-child, .cv-row:last-child, .srv-row:last-child { border-bottom: 0; }
+.proj-row:last-child, .cv-row:last-child { border-bottom: 0; }
 .idx { color: var(--faint); }
 .proj-body { color: var(--ink); display: block; }
 .proj-body:hover { color: var(--ink); }
@@ -341,27 +376,9 @@ const themeLabel = computed(() => {
 }
 .see-all:hover { border-bottom-color: var(--ink); }
 
-.srv-row {
-	grid-template-columns: 12px 1fr auto;
-	align-items: center;
-	font-size: 13px;
-}
-.srv-row.dim { color: var(--faint); }
-.srv-row.dim .srv-game { color: var(--faint); }
-.dot {
-	width: 6px; height: 6px; border-radius: 50%;
-	background: var(--ink);
-}
-.dot-offline { background: var(--faint); }
-.dot-idle { background: var(--dim); }
-.dot-online { background: var(--ink); }
-.srv-title { font-weight: 500; }
-.srv-game { color: var(--dim); }
-.players { color: var(--dim); }
-
 .domain {
 	grid-column: 1 / span 8;
-	grid-row: 4;
+	grid-row: 5;
 	align-self: end;
 	margin-top: 24px;
 }
@@ -377,7 +394,7 @@ const themeLabel = computed(() => {
 
 .footer {
 	grid-column: 1 / -1;
-	grid-row: 5;
+	grid-row: 6;
 	border-top: 1px solid var(--ink);
 	padding-top: 14px;
 	display: flex;
@@ -408,10 +425,12 @@ const themeLabel = computed(() => {
 	.pull { margin-top: 0; }
 	.pull-text { font-size: clamp(18px, 5vw, 22px); }
 	.hairline-row { display: none; }
-	.links, .meta-col, .block, .domain, .footer {
+	.links, .meta-col, .block, .banner, .domain, .footer {
 		grid-column: auto;
 		grid-row: auto;
 	}
+	/* Nearly the source ratio, so the whole room reads on a narrow screen. */
+	.banner-img { aspect-ratio: 16 / 10; }
 	.domain { margin-top: 8px; }
 	.wordmark {
 		font-size: clamp(60px, 18vw, 140px);
