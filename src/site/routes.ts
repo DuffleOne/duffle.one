@@ -3,18 +3,20 @@
   subpage masthead nav. Add a route here and it shows up everywhere.
 
   `id` is the internal/code name; `label` is what the masthead shows;
-  `path` is the public URL; `title` lands in document.title.
+  `path` is the public URL; `title` lands in document.title. Routes
+  flagged `nav: false` stay out of the masthead (detail pages).
 */
 
 import type { Component } from "vue";
 
-export type RouteId = "home" | "projects" | "photo" | "guide" | "cv";
+export type RouteId = "home" | "cv" | "cv-role" | "guide";
 
 export type RouteSpec = {
 	id: RouteId;
 	label: string;
 	path: string;
 	title: string;
+	nav?: false;
 	component: () => Promise<Component>;
 };
 
@@ -27,18 +29,19 @@ export const routes: RouteSpec[] = [
 		component: () => import("../screens/Home.vue"),
 	},
 	{
-		id: "projects",
-		label: "projects",
-		path: "/projects",
-		title: "Projects · duffle.one",
-		component: () => import("../screens/Projects.vue"),
+		id: "cv",
+		label: "cv",
+		path: "/cv",
+		title: "Where I've worked · duffle.one",
+		component: () => import("../screens/CV.vue"),
 	},
 	{
-		id: "photo",
-		label: "photographs",
-		path: "/photo",
-		title: "Photographs · duffle.one",
-		component: () => import("../screens/Photo.vue"),
+		id: "cv-role",
+		label: "cv-role",
+		path: "/cv/:slug",
+		title: "CV · duffle.one",
+		nav: false,
+		component: () => import("../screens/CVRole.vue"),
 	},
 	{
 		id: "guide",
@@ -46,13 +49,6 @@ export const routes: RouteSpec[] = [
 		path: "/guide",
 		title: "A user guide to me · duffle.one",
 		component: () => import("../screens/Guide.vue"),
-	},
-	{
-		id: "cv",
-		label: "cv",
-		path: "/cv",
-		title: "Where I've worked · duffle.one",
-		component: () => import("../screens/CV.vue"),
 	},
 ];
 

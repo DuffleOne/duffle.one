@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="color-scheme" content="light">
 	<title>The Jellycat Collection</title>
 
 	<link rel="icon" href="/jellycats-favicon.png" type="image/png" sizes="512x512">
@@ -11,13 +12,21 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-	<link href="./input.css" rel="stylesheet">
 
 	<style>
 		* {
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
+		}
+
+		/* Light-only page with its own palette. We deliberately don't link the
+		   shared input.css: its dark theme tokens flip --bg/--ink under
+		   prefers-color-scheme: dark, and Vite bundles that stylesheet after this
+		   inline block, so it would override the pins below and darken the page. */
+		html {
+			background: #faf6f1;
+			color: #3d2c22;
 		}
 
 		body {
@@ -629,6 +638,63 @@
 				images: ["bunny_five_l.jpg", "bunny_five_xl.jpg", "bunny_five_bums_line.jpg", "bunny_five_bums_pyramid.jpg"],
 				wide: true,
 			},
+			{
+				name: "Puddlesea",
+				type: "Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_puddlesea_p.jpg",
+				images: ["bunny_puddlesea_p.jpg", "bunny_puddlesea_l.jpg"],
+			},
+			{
+				name: "Thistlepop",
+				type: "Blossom Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_thistlepop_p.jpg",
+				images: ["bunny_thistlepop_p.jpg", "bunny_thistlepop_l.jpg"],
+			},
+			{
+				name: "Blushkin",
+				type: "Blossom Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_blushkin_p.jpg",
+				images: ["bunny_blushkin_p.jpg", "bunny_blushkin_l.jpg"],
+			},
+			{
+				name: "Wheat",
+				type: "Flufflet Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_wheat_p.jpg",
+				images: ["bunny_wheat_p.jpg", "bunny_wheat_l.jpg"],
+			},
+			{
+				name: "Oat",
+				type: "Flufflet Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_oat_p.jpg",
+				images: ["bunny_oat_p.jpg", "bunny_oat_l.jpg"],
+			},
+			{
+				name: "Barley",
+				type: "Flufflet Bunny",
+				description: "",
+				category: "Bunnies",
+				thumb: "bunny_barley_p.jpg",
+				images: ["bunny_barley_p.jpg", "bunny_barley_l.jpg"],
+			},
+			{
+				name: "The Flufflets",
+				type: "Flufflet Bunnies",
+				description: "Wheat, Oat and Barley",
+				category: "Bunnies",
+				thumb: "bunny_flufflets_l.jpg",
+				images: ["bunny_flufflets_l.jpg", "bunny_flufflets_p.jpg"],
+				wide: true,
+			},
 
 			// ─── Dragons ──────────────────────────────────────────
 			{
@@ -804,6 +870,14 @@
 				category: "Sea Creatures",
 				thumb: "fish_p.jpg",
 				images: ["fish_p.jpg", "fish_l.jpg"],
+			},
+			{
+				name: "Fancy Carp",
+				type: "Carp",
+				description: "",
+				category: "Sea Creatures",
+				thumb: "carp_p.jpg",
+				images: ["carp_p.jpg", "carp_l.jpg"],
 			},
 			{
 				name: "Three Octopi",

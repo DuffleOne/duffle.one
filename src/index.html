@@ -9,14 +9,28 @@
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1a19"/>
 		<link rel="icon" href="/favicon.png" type="image/png"/>
 		<link rel="manifest" href="/site.webmanifest"/>
+		<link rel="preload" href="/fonts/alcyone/Alcyone-Light.woff2" as="font" type="font/woff2" crossorigin/>
+		<link rel="preload" href="/fonts/alcyone/Alcyone-LightItalic.woff2" as="font" type="font/woff2" crossorigin/>
+		<link rel="preload" href="/fonts/alcyone/Alcyone-Medium.woff2" as="font" type="font/woff2" crossorigin/>
 		<link rel="preconnect" href="https://fonts.googleapis.com"/>
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&display=swap"/>
+		<script>
+			// Apply persisted theme before paint to avoid a flash.
+			(function () {
+				try {
+					var v = localStorage.getItem("duffle:theme");
+					if (v === "light" || v === "dark") {
+						document.documentElement.setAttribute("data-theme", v);
+					}
+				} catch (e) { /* ignore */ }
+			})();
+		</script>
 	</head>
 	<body class="antialiased">
 		<noscript>
 			<div style="padding:24px;font-family:Georgia,serif;color:#201f1d">
-				This site needs JavaScript to set its type.
+				duffle.one needs JavaScript to render. Try a modern browser, or email laura@duffle.one.
 			</div>
 		</noscript>
 		<div id="app"></div>

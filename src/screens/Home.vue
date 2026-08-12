@@ -8,26 +8,20 @@
 import { computed } from "vue";
 import { SITE } from "../site/data";
 import { useWeather } from "../composables/useWeather";
+import { useToday } from "../composables/useToday";
 import PaperSheet from "../components/paper/PaperSheet.vue";
 import PlateFigure from "../components/paper/PlateFigure.vue";
 import QuoteBlock from "../components/paper/QuoteBlock.vue";
+import ThemeToggle from "../components/paper/ThemeToggle.vue";
 
 const { label: weatherLabel } = useWeather();
+const { today } = useToday();
 
-// "11.08.2026" — the dateline renders dotted, not slashed.
-const today = new Intl.DateTimeFormat("en-GB", {
-	day: "2-digit",
-	month: "2-digit",
-	year: "numeric",
-})
-	.format(new Date())
-	.replaceAll("/", ".");
-
-type ElsewhereRow = { label: string; text: string; href?: string; to?: string };
+type ElsewhereRow = { label: string; text: string; href?: string; to?: string; external?: boolean };
 
 const elsewhere = computed<ElsewhereRow[]>(() => [
 	{ label: "email", text: SITE.email, href: `mailto:${SITE.email}` },
-	...SITE.socials.map((s) => ({ label: s.label.toLowerCase(), text: s.handle, href: s.href })),
+	...SITE.socials.map((s) => ({ label: s.label.toLowerCase(), text: s.handle, href: s.href, external: true })),
 	{ label: "user guide", text: "read →", to: "/guide" },
 ]);
 
@@ -41,6 +35,7 @@ const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 				<span>{{ SITE.name }}</span>
 				<span>London · {{ weatherLabel }}</span>
 				<span>{{ today }}</span>
+				<ThemeToggle/>
 			</header>
 
 			<h1 class="m-0 mt-[34px] mb-[26px] text-center font-display font-light text-[clamp(56px,12.5vw,146px)] leading-[0.9] tracking-[-0.03em]">duffle<span class="text-accent">.</span>one</h1>
@@ -60,10 +55,11 @@ const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 
 				<PlateFigure
 					:src="SITE.hero.src"
-					:alt="SITE.hero.caption"
+					:alt="SITE.hero.alt"
 					:caption="SITE.hero.caption"
 					:meta="SITE.hero.date"
 					h="290px"
+					eager
 				/>
 
 				<div class="flex flex-col gap-2.5">
@@ -76,7 +72,12 @@ const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 					>
 						<span class="text-ink-mute">{{ row.label }}</span>
 						<RouterLink v-if="row.to" :to="row.to">{{ row.text }}</RouterLink>
-						<a v-else :href="row.href">{{ row.text }}</a>
+						<a
+							v-else
+							:href="row.href"
+							:target="row.external ? '_blank' : undefined"
+							:rel="row.external ? 'me noopener' : undefined"
+						>{{ row.text }}</a>
 					</div>
 				</div>
 			</div>
@@ -85,12 +86,11 @@ const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 				<section class="flex flex-col gap-4">
 					<div class="flex items-baseline justify-between border-b border-rule pb-2">
 						<span class="font-display font-medium text-[26px]">Projects</span>
-						<RouterLink to="/projects" class="meta-caps border-b border-accent">More →</RouterLink>
 					</div>
 					<div class="grid grid-cols-[26px_1fr_auto] items-baseline gap-x-3.5 gap-y-2.5 text-[15px] leading-[1.6]">
 						<template v-for="(p, i) in SITE.projects" :key="p.id">
 							<span class="text-accent tnum">{{ String(i + 1).padStart(2, "0") }}</span>
-							<span><a :href="p.href" class="font-medium">{{ p.name }}</a> <span class="text-ink-mute">· {{ p.blurb }}</span></span>
+							<span><a :href="p.href" target="_blank" rel="noopener" class="font-medium">{{ p.name }}</a> <span class="text-ink-mute">· {{ p.blurb }}</span></span>
 							<span class="text-ink-faint tnum text-[13px]">{{ p.year }}</span>
 						</template>
 					</div>
@@ -104,8 +104,11 @@ const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 						<RouterLink to="/cv" class="meta-caps border-b border-accent">More →</RouterLink>
 					</div>
 					<div class="grid grid-cols-[1fr_auto] items-baseline gap-x-3.5 gap-y-2.5 text-[15px] leading-[1.6]">
-						<template v-for="e in employers" :key="e.co">
-							<span><span class="font-medium">{{ e.co }}</span> <span class="text-ink-mute">— {{ e.role }}</span></span>
+						<template v-for="e in employers" :key="e.slug">
+							<RouterLink :to="`/cv/${e.slug}`" class="group text-ink">
+								<span class="font-medium group-hover:text-accent-hover">{{ e.co }}</span>
+								<span class="text-ink-mute"> — {{ e.role }}</span>
+							</RouterLink>
 							<span
 								class="tnum text-[13px]"
 								:class="e.years === 'now' ? 'text-accent-ink' : 'text-ink-faint'"

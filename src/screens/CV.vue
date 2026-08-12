@@ -2,9 +2,9 @@
 /*
   /cv — "Where I've worked" (design 1a subpage). Title row with the
   contact block, a "Most proud of" lead, then one hairline row per
-  role: company / years / stack on the left, role + prose on the
-  right. The design shows single-paragraph roles; entries keep their
-  full bullet content, set as stacked paragraphs in the same style.
+  role: company / years / stack on the left, role and the first
+  bullet as a standfirst on the right, with the full story a click
+  away on /cv/:slug.
 */
 import { SITE } from "../site/data";
 import PaperSheet from "../components/paper/PaperSheet.vue";
@@ -32,26 +32,21 @@ import PageMasthead from "../components/paper/PageMasthead.vue";
 
 			<div
 				v-for="e in SITE.cv.experience"
-				:key="e.co"
+				:key="e.slug"
 				class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule"
 			>
 				<div class="flex flex-col gap-1">
-					<a
-						v-if="e.href"
-						:href="e.href"
+					<RouterLink
+						:to="`/cv/${e.slug}`"
 						class="font-display font-medium text-[26px] leading-tight text-ink hover:text-accent-hover"
-					>{{ e.co }}</a>
-					<span v-else class="font-display font-medium text-[26px] leading-tight">{{ e.co }}</span>
+					>{{ e.co }}</RouterLink>
 					<div class="text-[12px] tracking-[0.14em] uppercase text-ink-faint tnum">{{ e.years }} · {{ e.loc }}</div>
 					<div v-if="e.tech?.length" class="mt-1.5 text-[13px] italic text-ink-mute">{{ e.tech.join(" · ") }}</div>
 				</div>
 				<div class="flex flex-col gap-[9px]">
 					<div class="font-display font-medium text-[24px] leading-tight">{{ e.role }}</div>
-					<p
-						v-for="(b, i) in e.bullets"
-						:key="i"
-						class="m-0 text-[15px] leading-[1.7] text-ink-soft"
-					>{{ b }}</p>
+					<p class="m-0 text-[15px] leading-[1.7] text-ink-soft">{{ e.bullets[0] }}</p>
+					<RouterLink :to="`/cv/${e.slug}`" class="meta-caps mt-1">Read more →</RouterLink>
 				</div>
 			</div>
 

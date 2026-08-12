@@ -8,6 +8,9 @@ set -euo pipefail
 # doesn't exist (other OS / non-Homebrew) - DYLD just silently skips.
 export DYLD_LIBRARY_PATH="${DYLD_LIBRARY_PATH:-}/opt/homebrew/opt/expat/lib"
 
+# Publish under the dfl profile so every aws call below picks up its creds.
+export AWS_PROFILE=dfl
+
 (npm run build)
 
 BUILD_DIR=${BUILD_DIR:-./build}
@@ -15,14 +18,17 @@ BUILD_DIR=${BUILD_DIR:-./build}
 # Sync everything except the entry HTML (which we re-upload below with
 # explicit no-cache headers so deploys actually invalidate). Skip the
 # full-size jellycat jpgs — they're synced separately from local source
-# below since they aren't in git.
+# below since they aren't in git. Also skip camera originals sitting in
+# img/: vite copies the whole public dir, and only the derived webp is
+# meant to go public.
 aws s3 sync "$BUILD_DIR" s3://duffle.one \
 	--acl public-read \
 	--follow-symlinks \
 	--delete \
 	--exclude "index.html" \
 	--exclude "jellycats.html" \
-	--exclude "img/jellycats/*.jpg"
+	--exclude "img/jellycats/*.jpg" \
+	--exclude "img/*.JPG"
 
 # Entry HTML: text/html, no caching, every request hits S3 fresh.
 # The asset bundle filenames are content-hashed by Vite so the rest of

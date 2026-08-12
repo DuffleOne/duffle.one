@@ -1,12 +1,11 @@
 /*
   Single source of truth for all copy + content.
-  Lifted from the prior duffle.one MPA, carried through the tty SPA,
-  and now feeding the broadsheet layout. Voice is part of the design,
-  don't paraphrase.
+  Lifted from the prior duffle.one MPA, carried through the tty and
+  design-C sites, now feeding the broadsheet layout. Voice is part of
+  the design, don't paraphrase.
 */
 
 export type Social = { id: string; label: string; handle: string; href: string };
-export type ProjectStat = { label: string; value: string; accent?: "green" | "amber" | "pink" | "cyan" | "violet" };
 export type Project = {
 	id: string;
 	name: string;
@@ -16,23 +15,9 @@ export type Project = {
 	href: string;
 	description?: string;
 	tech?: string[];
-	stats?: ProjectStat[];
-};
-export type Photo = {
-	id: string;
-	title: string;
-	src: string;
-	camera: string;
-	lens: string;
-	focal: string;
-	aperture: string;
-	shutter: string;
-	iso: string;
-	taken: string;
-	bytes: number;
-	place?: string;
 };
 export type Experience = {
+	slug: string;
 	co: string;
 	role: string;
 	when: string;
@@ -71,6 +56,7 @@ export const SITE = {
 	// The landing plate. Caption + date render as the figure's meta row.
 	hero: {
 		src: "/img/hero.webp",
+		alt: "Speaking after dinner in a wood-panelled hall, candles and silverware down the table.",
 		caption: "Speaking after dinner",
 		date: "28.05.2026",
 	},
@@ -108,14 +94,14 @@ export const SITE = {
 		{
 			id: "jellycats", name: "Jellycats",
 			blurb: "A vanity gallery of all 55 I own.",
-			description: "Fifty-five photographed plushies across nine categories — bunnies, dragons, birds, dogs, farm, sea creatures, forest, and a few honorary members. Click any thumbnail for the full-size plate.",
+			description: "55 photographed plushies across nine categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
 			year: "2023", tag: "archive", href: "/jellycats.html",
 			tech: ["photo", "vanilla css", "vanity"],
 		},
 	] satisfies Project[],
 
 	// 37 quotes lifted verbatim from the old src/index.html rotation pool.
-	// Order matters only for the initial pick — useQuoteRotation shuffles.
+	// useQuoteRotation walks a shuffled cycle of the whole list.
 	quotePool: [
 		"At museums, she's allowed to touch the art.",
 		"Both sides of her pillow are cool.",
@@ -157,45 +143,8 @@ export const SITE = {
 		"When the cops pull her over, she lets the cops off with a warning.",
 	],
 
-	// Used as the initial seed for the rotation; the composable picks
-	// a random one on first paint and then cycles every few seconds.
-	quote: "In school, bullies gave her their lunch money.",
-
-	// Random attributions, paired fresh with each quote rotation so
-	// the source changes alongside the line. Tongue-in-cheek; nobody
-	// actually said any of these (well, mum did).
-	quoteAttributions: [
-		"mum, allegedly",
-		"the dog, telepathically",
-		"an ex, before things went south",
-		"a Slack reaction emoji",
-		"a stranger on the Northern line",
-		"her therapist, off the record",
-		"a barista who got her order wrong",
-		"Wikipedia, citation needed",
-		"an Uber driver, 2am",
-		"a man at a hen do, slurring",
-		"her HR file (redacted)",
-		"a fortune cookie in Camden",
-		"the unauthorised biography",
-		"a whisper at her future funeral",
-		"the vibes",
-	],
-
-	// Real frames from the camera roll. Resized + cropped to 4:5 webp by
-	// scripts/process-photos.sh; EXIF extracted from each original.
-	photography: [
-		{ id: "p01", title: "Frame 01", src: "/img/photos/01.webp", camera: "Canon EOS R5m2", lens: "RF100mm F2.8 L Macro IS USM", focal: "100mm", aperture: "f/2.8", shutter: "1/125", iso: "5000", taken: "2026-02-07", bytes: 39828 },
-		{ id: "p02", title: "Frame 02", src: "/img/photos/02.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "500mm", aperture: "f/7.1", shutter: "1/8000", iso: "12800", taken: "2026-04-18", bytes: 83734 },
-		{ id: "p03", title: "Frame 03", src: "/img/photos/03.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "167mm", aperture: "f/5.0", shutter: "1/8000", iso: "12800", taken: "2026-04-18", bytes: 61586 },
-		{ id: "p04", title: "Frame 04", src: "/img/photos/04.webp", camera: "Canon EOS R5m2", lens: "RF50mm F1.4 L VCM", focal: "50mm", aperture: "f/1.4", shutter: "1/8000", iso: "100", taken: "2026-04-25", bytes: 64866 },
-		{ id: "p05", title: "Frame 05", src: "/img/photos/05.webp", camera: "Canon EOS R5m2", lens: "RF70-200mm F2.8 L IS USM", focal: "70mm", aperture: "f/2.8", shutter: "1/800", iso: "100", taken: "2026-04-25", bytes: 166146 },
-		{ id: "p06", title: "Frame 06", src: "/img/photos/06.webp", camera: "Canon EOS R6m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "176mm", aperture: "f/5.0", shutter: "1/2",   iso: "200",   taken: "2025-12-13", bytes: 113650 },
-		{ id: "p07", title: "Frame 07", src: "/img/photos/07.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "472mm", aperture: "f/7.1", shutter: "1/4000", iso: "6400", taken: "2025-12-20", bytes: 32984 },
-	] satisfies Photo[],
-
 	cv: {
-		title: "Founding Engineer at Yardstick",
+		title: "Founding Engineer",
 		email: "laura@duffle.one",
 		summary:
 			"Founding engineer building 0→1 products. Helped scale Cuvva from 4 people to 100+, and a system from 10 policies a week to hundreds per second. Photographer, ballet, 3D printing on the side.",
@@ -203,14 +152,21 @@ export const SITE = {
 			"Cuvva went from four of us to over a hundred people while I was there, and the system went from ten policies a week to hundreds a second. Being there from the start is hard to beat.",
 		experience: [
 			{
-				co: "Yardstick", role: "Founding Engineer", when: "2026 – now", years: "now", loc: "London", href: "https://yardstick.money",
+				slug: "yardstick",
+				co: "Yardstick", role: "Founding Engineer", when: "now", years: "now", loc: "London", href: "https://yardstick.money",
 				tech: ["Go", "React", "AWS", "Postgres", "Expo"],
 				bullets: [
-					"Working with the CEO on where things are going, shaping the roadmap, building the iOS and Android apps, and looking after the backend, data and infrastructure.",
+					"Advising the CEO on long-term strategy and representing engineering in those decisions.",
+					"Shaping the product roadmap alongside Laura T and Katherine.",
+					"Building the iOS and Android apps with Luke.",
+					"Own the backend, data, and infrastructure layers, inherited from HAJ and others.",
+					"Migrating the database structures to support more complex financial modelling.",
+					"Writing new features end-to-end from conception to deployment.",
 				],
 			},
 			{
-				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – 2026", years: "2025 – 2026", loc: "London", href: "https://clove.com",
+				slug: "clove",
+				co: "Clove", role: "Founding Engineer", when: "Aug 2025 - Mar 2026", years: "2025 – 2026", loc: "London", href: "https://clove.com",
 				tech: ["Go", "PostgreSQL", "React", "BigQuery", "GCP"],
 				bullets: [
 					"Joined before a single line of code existed. Created the repository and built the entire backend framework in Go from scratch (layout, services, libraries, all the infrastructure).",
@@ -218,7 +174,8 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 – Jul 2025", years: "2025", loc: "London", href: "https://paddle.com",
+				slug: "paddle",
+				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 - Jul 2025", years: "2025", loc: "London", href: "https://paddle.com",
 				tech: ["PHP", "SQL", "AWS", "Go", "Snowflake", "Laravel"],
 				bullets: [
 					"Formed and led a new team responsible for the ledger, the core area of the codebase for a merchant of record.",
@@ -227,7 +184,8 @@ export const SITE = {
 				],
 			},
 			{
-				co: "incident.io", role: "Technical Lead, Product Engineer", when: "May 2024 – Nov 2024", years: "2024", loc: "London", href: "https://incident.io",
+				slug: "incident-io",
+				co: "incident.io", role: "Technical Lead", when: "May 2024 - Nov 2024", years: "2024", loc: "London", href: "https://incident.io",
 				tech: ["React", "GCP", "Go", "Postgres"],
 				bullets: [
 					"Promoted to technical lead within weeks of joining, owning the roadmap for a product squad.",
@@ -239,7 +197,8 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 – May 2024", years: "2022 – 2024", loc: "London", href: "https://mymojo.com",
+				slug: "mojo",
+				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 - May 2024", years: "2022 – 2024", loc: "London", href: "https://mymojo.com",
 				tech: ["Go", "MongoDB", "GCP", "BigQuery", "dbt", "React Native"],
 				bullets: [
 					"Joined as the sole backend engineer and built the entire backend function from scratch.",
@@ -252,7 +211,8 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Cuvva", role: "Founding Engineer", when: "May 2016 – Apr 2022", years: "2016 – 2022", loc: "London", href: "https://cuvva.com",
+				slug: "cuvva",
+				co: "Cuvva", role: "Founding Engineer", when: "May 2016 - Apr 2022", years: "2016 – 2022", loc: "London", href: "https://cuvva.com",
 				tech: ["Go", "Node.js", "MongoDB", "AWS", "Kubernetes", "Postgres"],
 				bullets: [
 					"4th employee. Grew the engineering team from 2 engineers to a 30+ person multi-discipline organisation.",
@@ -267,7 +227,8 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 – now", years: "2012 – now", loc: "London", href: "https://whitechapel.org.uk", volunteer: true,
+				slug: "whitechapel-mission",
+				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 - now", years: "2012 – now", loc: "London", href: "https://whitechapel.org.uk", volunteer: true,
 				tech: ["PHP", "JavaScript", "Vite", "MySQL", "Laravel"],
 				bullets: [
 					"Led a full migration to the cloud and modernised the platform onto the latest Laravel stack.",
@@ -288,8 +249,8 @@ export const SITE = {
 		],
 	},
 
-	// User-guide content. The TTY/manpage layout renders this as one
-	// ManSection per top-level entry, with body paragraphs flowing inside.
+	// User-guide content, rendered by the guide screen as one row per
+	// section with the values two-up at the end.
 	guide: {
 		name: "laura, a person; founding engineer, photographer, 3d-print enthusiast.",
 		intro: "A practical guide to working with me, with less guesswork.",

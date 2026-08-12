@@ -1,38 +1,45 @@
 /*
-  Rotating quote + attribution. Picks a fresh quote from SITE.quotePool
-  every `intervalMs`, never repeats the previous one. Picks a random
-  attribution alongside it from SITE.quoteAttributions.
+  Quote rotation. Shuffles the pool once at session start (Fisher-Yates),
+  then walks the shuffled order, never repeating until the whole list
+  has been seen; reshuffles and goes again when it runs dry.
 
-  Reduced motion suppresses the fade transition (handled by the
-  consumer via CSS); the rotation itself still happens on schedule.
+  Rotation pauses while the tab is hidden — throttled renderers just
+  pile up unfinished fade transitions otherwise.
 */
 
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { SITE } from "../site/data";
 
-function pickDifferent(pool: string[], prev: string): string {
-	if (pool.length <= 1) return pool[0];
-	let next = pool[Math.floor(Math.random() * pool.length)];
-	let guard = 0;
-	while (next === prev && guard < 8) {
-		next = pool[Math.floor(Math.random() * pool.length)];
-		guard++;
+function shuffle<T>(input: readonly T[]): T[] {
+	const arr = [...input];
+	for (let i = arr.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[arr[i], arr[j]] = [arr[j], arr[i]];
 	}
-	return next;
+	return arr;
 }
 
-export function useQuoteRotation(intervalMs = 5_000) {
-	const quote = ref(pickDifferent(SITE.quotePool, ""));
-	const attribution = ref(pickDifferent(SITE.quoteAttributions, ""));
+function cycler<T>(source: readonly T[]) {
+	let queue: T[] = shuffle(source);
+	let idx = 0;
+	return () => {
+		if (idx >= queue.length) {
+			queue = shuffle(source);
+			idx = 0;
+		}
+		return queue[idx++];
+	};
+}
+
+export function useQuoteRotation(intervalMs = 8_000) {
+	const nextQuote = cycler(SITE.quotePool);
+	const quote = ref(nextQuote());
 	const tick = ref(0);
 	let timer: ReturnType<typeof setInterval> | null = null;
 
 	function rotate() {
-		// Hidden tabs get throttled renderers; rotating there just piles
-		// up unfinished fade transitions. Resume when the tab is back.
 		if (typeof document !== "undefined" && document.hidden) return;
-		quote.value = pickDifferent(SITE.quotePool, quote.value);
-		attribution.value = pickDifferent(SITE.quoteAttributions, attribution.value);
+		quote.value = nextQuote();
 		tick.value += 1;
 	}
 
@@ -44,5 +51,5 @@ export function useQuoteRotation(intervalMs = 5_000) {
 		if (timer) clearInterval(timer);
 	});
 
-	return { quote, attribution, tick, rotate };
+	return { quote, tick, rotate };
 }

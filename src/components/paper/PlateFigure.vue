@@ -3,7 +3,7 @@
   A photograph matted on the surface — the design system's "plate"
   treatment: mat border, archival grade on the print, and an 11px
   caption row (caption left, meta right). The optional `extra` slot
-  adds a line under the caption (the photo page uses it for EXIF).
+  adds a line under the caption.
 */
 defineProps<{
 	src: string;
@@ -12,6 +12,8 @@ defineProps<{
 	meta?: string;
 	// Fixed print height (e.g. "290px"); omit to keep the natural ratio.
 	h?: string;
+	// Above-the-fold plates load eagerly (the landing hero).
+	eager?: boolean;
 }>();
 </script>
 
@@ -23,7 +25,8 @@ defineProps<{
 				:alt="alt"
 				class="plate-img block w-full object-cover"
 				:style="h ? { height: h } : undefined"
-				loading="lazy"
+				:loading="eager ? 'eager' : 'lazy'"
+				decoding="async"
 			/>
 		</div>
 		<figcaption class="flex justify-between gap-3 text-[11px] tracking-[0.18em] uppercase text-ink-faint tnum">

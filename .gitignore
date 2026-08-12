@@ -11,9 +11,10 @@
 # Full-size jellycat photos (2GB+) — uploaded to S3 separately via publish.sh
 src/public/img/jellycats/*.jpg
 
-# Raw camera originals for the photo route — kept locally as the input
-# to scripts/process-photos.sh; the resized/cropped webps under
-# src/public/img/photos/ are what the site actually serves.
-src/img/*
-!src/img/laura.jpg
+# Raw camera drop-zone for new gallery shots (processed by
+# scripts/convert-new-jellycats.sh, then the originals live in img/jellycats/)
+src/public/img/new/
 
+# Camera originals dropped straight into img/. Only the derived webp
+# (e.g. hero.webp) gets committed and published.
+src/public/img/*.JPG
