@@ -9,9 +9,8 @@
 
 	<link rel="icon" href="/jellycats-favicon.png" type="image/png" sizes="512x512">
 	<link rel="apple-touch-icon" href="/jellycats-favicon.png">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+	<link rel="preload" href="/fonts/alcyone/Alcyone-Regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="/fonts/alcyone/Alcyone-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
 
 	<style>
 		* {
@@ -29,8 +28,15 @@
 			color: #3d2c22;
 		}
 
+		/* The site face, self-hosted; same files the SPA uses. Alcyone
+		   tops out at semibold, so nothing here asks for 700. */
+		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-RegularItalic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+
 		body {
-			font-family: 'Quicksand', sans-serif;
+			font-family: 'Alcyone', system-ui, sans-serif;
 			background: #faf6f1;
 			color: #3d2c22;
 			-webkit-font-smoothing: antialiased;
@@ -64,7 +70,7 @@
 
 		.hero-title {
 			font-size: clamp(2rem, 5vw, 3.5rem);
-			font-weight: 700;
+			font-weight: 600;
 			color: #fff;
 			letter-spacing: -0.02em;
 			line-height: 1.15;
@@ -188,7 +194,7 @@
 		.card-category {
 			display: inline-block;
 			font-size: 0.7rem;
-			font-weight: 700;
+			font-weight: 600;
 			text-transform: uppercase;
 			letter-spacing: 0.06em;
 			padding: 0.2rem 0.6rem;
@@ -198,7 +204,7 @@
 
 		.card-name {
 			font-size: 1.15rem;
-			font-weight: 700;
+			font-weight: 600;
 			line-height: 1.3;
 			color: #3d2c22;
 		}
@@ -206,7 +212,7 @@
 		.card-type {
 			font-size: 0.82rem;
 			color: #a8937a;
-			font-weight: 500;
+			font-weight: 400;
 			font-style: italic;
 			margin-top: 0.1rem;
 		}
@@ -370,7 +376,7 @@
 
 		.lightbox-name {
 			font-size: 1.2rem;
-			font-weight: 700;
+			font-weight: 600;
 			color: #fff;
 		}
 
