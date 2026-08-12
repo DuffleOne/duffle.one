@@ -1,88 +1,67 @@
 <script setup lang="ts">
 /*
-  User guide route - manpage layout. Top + bottom rules + sections
-  driven by SITE.guide. NAME / ABOUT / N freeform sections /
-  VALUES / EXIT STATUS.
+  /guide — "A user guide to me". Centred opening, the About story in
+  hairline-parted newspaper columns, then one row per section in the
+  CV's label-and-prose pattern, closing with the values two-up.
 */
 import { SITE } from "../site/data";
-import { findRouteById } from "../site/routes";
-import type { Accent } from "../types/accent";
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import ManPageRule from "../components/headers/ManPageRule.vue";
-import ManSection from "../components/headers/ManSection.vue";
-import ValueRow from "./guide/ValueRow.vue";
-
-const route = findRouteById("guide")!;
-
-const VALUE_ACCENTS: Accent[] = ["green", "amber", "pink", "cyan", "violet"];
-
-// Split "laura - rest of name line" so the leading word can stay green.
-const nameParts = (() => {
-	const raw = SITE.guide.name;
-	const sepIdx = raw.indexOf(" ");
-	if (sepIdx === -1) return { head: raw, tail: "" };
-	return { head: raw.slice(0, sepIdx), tail: raw.slice(sepIdx) };
-})();
+import PaperSheet from "../components/paper/PaperSheet.vue";
+import PageMasthead from "../components/paper/PageMasthead.vue";
+import PageTitle from "../components/paper/PageTitle.vue";
 </script>
 
 <template>
-	<TtyChrome
-		:title="route.titleBarText"
-		status-path="guide"
-		active-id="guide"
-		:accent="route.accent"
-	>
-		<ContentPane :padding-x="26" :padding-y="22" :gap="12">
-			<ManPageRule left="LAURA(1)" mid="USER COMMANDS" right="LAURA(1)" position="top"/>
+	<PaperSheet>
+		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
+			<PageMasthead active="guide"/>
 
-			<ManSection heading="NAME">
-				<div class="text-tty-fg">
-					<span class="text-tty-green">{{ nameParts.head }}</span>{{ nameParts.tail }}
-				</div>
-			</ManSection>
+			<div class="mx-auto max-w-[880px] pt-8">
+				<PageTitle title="A user guide to me" :subtitle="SITE.guide.intro"/>
 
-			<ManSection heading="ABOUT">
-				<div class="flex flex-col gap-[8px] text-tty-fg text-[12.5px]">
-					<p v-for="(p, i) in SITE.guide.about" :key="i" class="m-0">{{ p }}</p>
-				</div>
-			</ManSection>
-
-			<ManSection
-				v-for="(s, i) in SITE.guide.sections"
-				:key="i"
-				:heading="`── ${s.h.toUpperCase()}`"
-			>
-				<div class="flex flex-col gap-[8px] text-tty-fg text-[12.5px]">
-					<p v-for="(p, j) in s.body" :key="j" class="m-0">{{ p }}</p>
-				</div>
-			</ManSection>
-
-			<ManSection heading="VALUES">
-				<div class="flex flex-col gap-[10px]">
-					<ValueRow
-						v-for="(v, i) in SITE.guide.values"
+				<div class="guide-cols py-7 border-b border-rule">
+					<p
+						v-for="(p, i) in SITE.guide.about"
 						:key="i"
-						:n="i + 1"
-						:heading="v.h"
-						:body="v.b"
-						:accent="VALUE_ACCENTS[i % VALUE_ACCENTS.length]"
-					/>
+						class="m-0 mb-3.5 last:mb-0 text-[15.5px] leading-[1.75] prose-just"
+					>{{ p }}</p>
 				</div>
-			</ManSection>
 
-			<ManSection heading="EXIT STATUS">
-				<div class="text-tty-dim text-[12px]">
-					<span class="text-tty-green">0</span> all good ·
-					<span class="text-tty-amber">1</span> needs a walk ·
-					<span class="text-tty-pink">2</span> needs feedback ·
-					<span class="text-tty-violet">137</span> meeting ran over
+				<div
+					v-for="s in SITE.guide.sections"
+					:key="s.h"
+					class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule"
+				>
+					<div class="font-display font-medium text-[24px] leading-tight">{{ s.h }}</div>
+					<div class="flex flex-col gap-[9px]">
+						<p
+							v-for="(p, i) in s.body"
+							:key="i"
+							class="m-0 text-[15px] leading-[1.7] text-ink-soft"
+						>{{ p }}</p>
+					</div>
 				</div>
-			</ManSection>
 
-			<div class="mt-auto">
-				<ManPageRule left="DUFFLE.ONE" mid="v26.4 · 2026-04" right="LAURA(1)" position="bottom"/>
+				<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7">
+					<div class="meta-caps text-accent-ink pt-1">Values</div>
+					<div class="grid sm:grid-cols-2 gap-x-[30px] gap-y-5">
+						<div v-for="v in SITE.guide.values" :key="v.h">
+							<div class="font-display font-medium text-[19px] leading-tight">{{ v.h }}</div>
+							<div class="mt-1 text-[14px] leading-[1.65] text-ink-soft">{{ v.b }}</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</ContentPane>
-	</TtyChrome>
+		</div>
+	</PaperSheet>
 </template>
+
+<style scoped>
+/* About reads as parted columns on wide sheets, one flow on mobile. */
+@media (min-width: 768px) {
+	.guide-cols {
+		columns: 2;
+		column-gap: 38px;
+		column-rule: 1px solid var(--color-rule);
+	}
+}
+</style>

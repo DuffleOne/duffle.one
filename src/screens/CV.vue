@@ -1,112 +1,64 @@
 <script setup lang="ts">
 /*
-  CV route — `less laura.cv`. Section header + summary callout +
-  experience list + education / skills two-up + footer rule.
+  /cv — "Where I've worked" (design 1a subpage). Title row with the
+  contact block, a "Most proud of" lead, then one hairline row per
+  role: company / years / stack on the left, role + prose on the
+  right. The design shows single-paragraph roles; entries keep their
+  full bullet content, set as stacked paragraphs in the same style.
 */
-import { SITE, type Education } from "../site/data";
-import { findRouteById } from "../site/routes";
-import type { Accent } from "../types/accent";
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import SectionHeader from "../components/headers/SectionHeader.vue";
-import Prompt from "../components/atoms/Prompt.vue";
-import Callout from "../components/cards/Callout.vue";
-import Tag from "../components/atoms/Tag.vue";
-import ExperienceEntry from "./cv/ExperienceEntry.vue";
-
-const route = findRouteById("cv")!;
-const SKILL_ACCENTS: Accent[] = ["green", "cyan", "amber", "pink", "violet"];
-
-// `education: []` widens to `never[]` via `satisfies`, so coerce here so the
-// template can read its fields when entries do exist later.
-const education = SITE.cv.education as Education[];
-const hasEducation = education.length > 0;
-
-// Rough line count for the manpage-style footer. Sum of bullets + tech rows
-// + a couple of header lines per role, rounded to feel honest without being
-// fiddly to maintain.
-const lineCount = (() => {
-	let n = 12; // header, summary callout, proud-of callout, skills, etc.
-	for (const e of SITE.cv.experience) {
-		n += 2 + e.bullets.length + (e.tech?.length ? 1 : 0);
-	}
-	n += hasEducation ? education.length * 3 : 0;
-	return n;
-})();
+import { SITE } from "../site/data";
+import PaperSheet from "../components/paper/PaperSheet.vue";
+import PageMasthead from "../components/paper/PageMasthead.vue";
 </script>
 
 <template>
-	<TtyChrome
-		:title="route.titleBarText"
-		status-path="cv"
-		active-id="cv"
-		:accent="route.accent"
-	>
-		<ContentPane :padding-x="34" :padding-y="30" :gap="20">
-			<SectionHeader n="06" accent="violet">
-				./cv<span class="text-tty-violet">.txt</span>
-				<span class="text-tty-dim font-mono text-[12px] ml-3 tracking-[0]">
-					{{ SITE.cv.title }}
-				</span>
-			</SectionHeader>
+	<PaperSheet>
+		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
+			<PageMasthead active="cv"/>
 
-			<div class="text-tty-dim text-[11.5px]">
-				<Prompt cmd="less ~/cv.txt" route="cv"/>
+			<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3 border-b-2 border-ink pb-4 pt-8">
+				<h2 class="m-0 font-display font-light text-[clamp(40px,6vw,64px)] leading-none">Where I've worked</h2>
+				<div class="text-right text-[12px] tracking-[0.14em] uppercase text-ink-faint leading-[1.9]">
+					{{ SITE.name }}<br>
+					Engineer · London<br>
+					{{ SITE.cv.email }}
+				</div>
 			</div>
 
-			<Callout accent="violet" padding="14px 18px">
-				<div class="text-tty-fg" style="font-size: 13px; line-height: 1.6;">
-					{{ SITE.cv.summary }}
-				</div>
-			</Callout>
-
-			<Callout accent="amber" padding="12px 18px">
-				<div class="text-tty-amber text-[10.5px] tracking-[2px] mb-1">── PROUD OF</div>
-				<div class="text-tty-fg" style="font-size: 13px; line-height: 1.6;">
-					{{ SITE.cv.proudOf }}
-				</div>
-			</Callout>
-
-			<div class="text-tty-amber text-[10.5px] tracking-[2px] mt-1">── EXPERIENCE</div>
-			<div class="flex flex-col gap-4">
-				<ExperienceEntry
-					v-for="(e, i) in SITE.cv.experience"
-					:key="i"
-					:entry="e"
-				/>
-			</div>
-
-			<div :class="hasEducation ? 'grid grid-cols-1 md:grid-cols-2 gap-6 mt-2' : 'mt-2'">
-				<div v-if="hasEducation">
-					<div class="text-tty-amber text-[10.5px] tracking-[2px] mb-2">── EDUCATION</div>
-					<div v-for="(ed, i) in education" :key="i">
-						<div class="font-display tracking-[-0.2px]" style="font-size: 17px;">
-							{{ ed.degree }}
-							<span class="text-tty-faint">·</span>
-							<span class="text-tty-green">{{ ed.school }}</span>
-						</div>
-						<div class="text-tty-dim text-[11.5px] mt-px">{{ ed.when }}</div>
-						<div class="text-tty-fg text-[12px] mt-1">{{ ed.note }}</div>
-					</div>
-				</div>
-				<div>
-					<div class="text-tty-amber text-[10.5px] tracking-[2px] mb-2">── SKILLS</div>
-					<div class="flex flex-wrap gap-[6px]">
-						<Tag
-							v-for="(s, i) in SITE.cv.skills"
-							:key="s"
-							:accent="SKILL_ACCENTS[i % SKILL_ACCENTS.length]"
-						>{{ s }}</Tag>
-					</div>
-				</div>
+			<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule">
+				<div class="meta-caps text-accent-ink">Most proud of</div>
+				<p class="m-0 text-[16px] leading-[1.75] prose-just">{{ SITE.cv.proudOf }}</p>
 			</div>
 
 			<div
-				class="mt-auto pt-3 border-t border-tty-border flex flex-col sm:flex-row justify-between gap-1 text-[11px] text-tty-faint"
+				v-for="e in SITE.cv.experience"
+				:key="e.co"
+				class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule"
 			>
-				<span>{{ SITE.cv.email }}</span>
-				<span>:LINES {{ lineCount }} of {{ lineCount }} (END)</span>
+				<div class="flex flex-col gap-1">
+					<a
+						v-if="e.href"
+						:href="e.href"
+						class="font-display font-medium text-[26px] leading-tight text-ink hover:text-accent-hover"
+					>{{ e.co }}</a>
+					<span v-else class="font-display font-medium text-[26px] leading-tight">{{ e.co }}</span>
+					<div class="text-[12px] tracking-[0.14em] uppercase text-ink-faint tnum">{{ e.years }} · {{ e.loc }}</div>
+					<div v-if="e.tech?.length" class="mt-1.5 text-[13px] italic text-ink-mute">{{ e.tech.join(" · ") }}</div>
+				</div>
+				<div class="flex flex-col gap-[9px]">
+					<div class="font-display font-medium text-[24px] leading-tight">{{ e.role }}</div>
+					<p
+						v-for="(b, i) in e.bullets"
+						:key="i"
+						class="m-0 text-[15px] leading-[1.7] text-ink-soft"
+					>{{ b }}</p>
+				</div>
 			</div>
-		</ContentPane>
-	</TtyChrome>
+
+			<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7">
+				<div class="meta-caps text-accent-ink">Skills</div>
+				<div class="text-[14px] italic leading-[1.9] text-ink-mute">{{ SITE.cv.skills.join(" · ") }}</div>
+			</div>
+		</div>
+	</PaperSheet>
 </template>

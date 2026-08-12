@@ -28,6 +28,9 @@ export function useQuoteRotation(intervalMs = 5_000) {
 	let timer: ReturnType<typeof setInterval> | null = null;
 
 	function rotate() {
+		// Hidden tabs get throttled renderers; rotating there just piles
+		// up unfinished fade transitions. Resume when the tab is back.
+		if (typeof document !== "undefined" && document.hidden) return;
 		quote.value = pickDifferent(SITE.quotePool, quote.value);
 		attribution.value = pickDifferent(SITE.quoteAttributions, attribution.value);
 		tick.value += 1;

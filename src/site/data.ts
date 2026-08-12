@@ -1,9 +1,8 @@
 /*
   Single source of truth for all copy + content.
-  Lifted directly from the prior duffle.one (the static MPA that lived
-  in src/index.html, src/cv.html, src/gaming.html, src/user-guide.html)
-  and re-shaped for the TTY layout. Voice is part of the design, don't
-  paraphrase.
+  Lifted from the prior duffle.one MPA, carried through the tty SPA,
+  and now feeding the broadsheet layout. Voice is part of the design,
+  don't paraphrase.
 */
 
 export type Social = { id: string; label: string; handle: string; href: string };
@@ -33,23 +32,19 @@ export type Photo = {
 	bytes: number;
 	place?: string;
 };
-export type GameServer = {
-	id: string;
-	title: string;
-	game: string;
-	status: "online" | "idle" | "offline";
-	players: string;
-	uptime: string;
-	imageUrl?: string | null;
-};
 export type Experience = {
 	co: string;
 	role: string;
 	when: string;
+	// Years-only form shown by the broadsheet design ("2016 – 2022", "now");
+	// `when` keeps the full months as canonical data.
+	years: string;
 	loc: string;
 	href?: string;
 	tech?: string[];
 	bullets: string[];
+	// Volunteering rows stay on /cv but off the landing employer list.
+	volunteer?: boolean;
 };
 export type Education = { school: string; degree: string; when: string; note: string };
 export type GuideSection = { h: string; body: string[] };
@@ -58,14 +53,34 @@ export type GuideValue = { h: string; b: string };
 export const SITE = {
 	name: "Laura Miller",
 	domain: "duffle.one",
-	tagline: "Founding engineer, photographer, 3D designer.",
+	email: "laura@duffle.one",
+	tagline: "Engineer, photographer, occasional 3D printer",
+
+	// Landing-page About column. The second paragraph carries an inline
+	// link on the current employer, hence the split shape.
+	about: {
+		lead: "I've been an engineer for about fifteen years, usually at small companies right at the start. Six of those were at Cuvva, which I still think of fondly. Photography, ballet and 3D printing take up most of the rest.",
+		current: {
+			pre: "Currently at ",
+			company: "Yardstick",
+			href: "https://yardstick.money",
+			post: ", an early-stage startup. Previously Clove, Paddle, incident.io, Mojo and Cuvva.",
+		},
+	},
+
+	// The landing plate. Caption + date render as the figure's meta row.
+	hero: {
+		src: "/img/hero.webp",
+		caption: "Speaking after dinner",
+		date: "28.05.2026",
+	},
 
 	socials: [
 		{ id: "github", label: "GitHub", handle: "@DuffleOne", href: "https://github.com/DuffleOne" },
 		{ id: "linkedin", label: "LinkedIn", handle: "/in/duffle", href: "https://www.linkedin.com/in/duffle/" },
 		{ id: "ig", label: "Instagram", handle: "@duffle.one", href: "https://instagram.com/duffle.one" },
-		{ id: "steam", label: "Steam", handle: "DuffleOne", href: "https://steamcommunity.com/id/DuffleOne" },
 		{ id: "glass", label: "Glass", handle: "/duffle", href: "https://glass.photo/duffle" },
+		{ id: "steam", label: "Steam", handle: "DuffleOne", href: "https://steamcommunity.com/id/DuffleOne" },
 	] satisfies Social[],
 
 	projects: [
@@ -92,8 +107,8 @@ export const SITE = {
 		},
 		{
 			id: "jellycats", name: "Jellycats",
-			blurb: "A vanity gallery of every Jellycat I own.",
-			description: "48 photographed plushies across nine categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
+			blurb: "A vanity gallery of all 55 I own.",
+			description: "Fifty-five photographed plushies across nine categories — bunnies, dragons, birds, dogs, farm, sea creatures, forest, and a few honorary members. Click any thumbnail for the full-size plate.",
 			year: "2023", tag: "archive", href: "/jellycats.html",
 			tech: ["photo", "vanilla css", "vanity"],
 		},
@@ -179,26 +194,23 @@ export const SITE = {
 		{ id: "p07", title: "Frame 07", src: "/img/photos/07.webp", camera: "Canon EOS R5m2", lens: "RF100-500mm F4.5-7.1 L IS USM", focal: "472mm", aperture: "f/7.1", shutter: "1/4000", iso: "6400", taken: "2025-12-20", bytes: 32984 },
 	] satisfies Photo[],
 
-	// Static fallback that mirrors the names returned by the AMP worker.
-	// useServers() replaces this on mount when VITE_SERVERS_API resolves.
-	gaming: [
-		{ id: "g1", title: "Blue Collar Crimes", game: "Unturned", status: "offline", players: "0 / 10", uptime: "—" },
-		{ id: "g2", title: "Josh and Laura", game: "Enshrouded", status: "offline", players: "—", uptime: "—" },
-		{ id: "g3", title: "Fraudulent Paperwork", game: "V Rising", status: "offline", players: "—", uptime: "—" },
-		{ id: "g4", title: "duffle.one", game: "Minecraft", status: "offline", players: "—", uptime: "—" },
-		{ id: "g5", title: "ts3.duffle.one", game: "TeamSpeak 3", status: "offline", players: "—", uptime: "—" },
-	] satisfies GameServer[],
-
 	cv: {
-		title: "Founding Engineer at Clove",
+		title: "Founding Engineer at Yardstick",
 		email: "laura@duffle.one",
 		summary:
 			"Founding engineer building 0→1 products. Helped scale Cuvva from 4 people to 100+, and a system from 10 policies a week to hundreds per second. Photographer, ballet, 3D printing on the side.",
 		proudOf:
-			"Helping build Cuvva from a team of 4 to over 100 people, and scaling a system from 10 policies a week to hundreds per second. Nothing beats being there from the very beginning.",
+			"Cuvva went from four of us to over a hundred people while I was there, and the system went from ten policies a week to hundreds a second. Being there from the start is hard to beat.",
 		experience: [
 			{
-				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – now", loc: "London", href: "https://clove.com",
+				co: "Yardstick", role: "Founding Engineer", when: "2026 – now", years: "now", loc: "London", href: "https://yardstick.money",
+				tech: ["Go", "React", "AWS", "Postgres", "Expo"],
+				bullets: [
+					"Working with the CEO on where things are going, shaping the roadmap, building the iOS and Android apps, and looking after the backend, data and infrastructure.",
+				],
+			},
+			{
+				co: "Clove", role: "Founding Engineer", when: "Aug 2025 – 2026", years: "2025 – 2026", loc: "London", href: "https://clove.com",
 				tech: ["Go", "PostgreSQL", "React", "BigQuery", "GCP"],
 				bullets: [
 					"Joined before a single line of code existed. Created the repository and built the entire backend framework in Go from scratch (layout, services, libraries, all the infrastructure).",
@@ -206,7 +218,7 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 – Jul 2025", loc: "London", href: "https://paddle.com",
+				co: "Paddle", role: "Staff Engineer", when: "Mar 2025 – Jul 2025", years: "2025", loc: "London", href: "https://paddle.com",
 				tech: ["PHP", "SQL", "AWS", "Go", "Snowflake", "Laravel"],
 				bullets: [
 					"Formed and led a new team responsible for the ledger, the core area of the codebase for a merchant of record.",
@@ -215,7 +227,7 @@ export const SITE = {
 				],
 			},
 			{
-				co: "incident.io", role: "Technical Lead, Product Engineer", when: "May 2024 – Nov 2024", loc: "London", href: "https://incident.io",
+				co: "incident.io", role: "Technical Lead, Product Engineer", when: "May 2024 – Nov 2024", years: "2024", loc: "London", href: "https://incident.io",
 				tech: ["React", "GCP", "Go", "Postgres"],
 				bullets: [
 					"Promoted to technical lead within weeks of joining, owning the roadmap for a product squad.",
@@ -227,7 +239,7 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 – May 2024", loc: "London", href: "https://mymojo.com",
+				co: "Mojo", role: "Lead Backend Engineer", when: "Apr 2022 – May 2024", years: "2022 – 2024", loc: "London", href: "https://mymojo.com",
 				tech: ["Go", "MongoDB", "GCP", "BigQuery", "dbt", "React Native"],
 				bullets: [
 					"Joined as the sole backend engineer and built the entire backend function from scratch.",
@@ -240,7 +252,7 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Cuvva", role: "Founding Engineer", when: "May 2016 – Apr 2022", loc: "London", href: "https://cuvva.com",
+				co: "Cuvva", role: "Founding Engineer", when: "May 2016 – Apr 2022", years: "2016 – 2022", loc: "London", href: "https://cuvva.com",
 				tech: ["Go", "Node.js", "MongoDB", "AWS", "Kubernetes", "Postgres"],
 				bullets: [
 					"4th employee. Grew the engineering team from 2 engineers to a 30+ person multi-discipline organisation.",
@@ -255,7 +267,7 @@ export const SITE = {
 				],
 			},
 			{
-				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 – now", loc: "London", href: "https://whitechapel.org.uk",
+				co: "Whitechapel Mission", role: "Volunteering", when: "Mar 2012 – now", years: "2012 – now", loc: "London", href: "https://whitechapel.org.uk", volunteer: true,
 				tech: ["PHP", "JavaScript", "Vite", "MySQL", "Laravel"],
 				bullets: [
 					"Led a full migration to the cloud and modernised the platform onto the latest Laravel stack.",

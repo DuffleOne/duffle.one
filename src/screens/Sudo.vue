@@ -1,77 +1,29 @@
 <script setup lang="ts">
 /*
-  Sudo / 404 easter egg. Mounted directly via the catch-all route
-  (any unknown URL lands here) and from the in-app "egg #3" shortcut.
+  404 — the catch-all. A page that never made this edition.
 */
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import Prompt from "../components/atoms/Prompt.vue";
-import Caret from "../components/atoms/Caret.vue";
-import Callout from "../components/cards/Callout.vue";
-import Kbd from "../components/atoms/Kbd.vue";
-import Tag from "../components/atoms/Tag.vue";
-
-const ascii = ` ┌─────────────────────────┐
- │   ERR · NOT THAT EASY   │
- └────────────┬────────────┘
-              │
-       ╔══════▼══════╗
-       ║   404·ish   ║
-       ╚═════════════╝`;
+import PaperSheet from "../components/paper/PaperSheet.vue";
+import PageMasthead from "../components/paper/PageMasthead.vue";
 </script>
 
 <template>
-	<TtyChrome
-		title="laura@duffle: ~ · sudo: an error has occurred"
-		status-path="sudo"
-		active-id="sudo"
-		accent="pink"
-	>
-		<ContentPane :padding-x="28" :padding-y="26" :gap="14">
-			<Prompt cmd="sudo hire laura" route="sudo"/>
+	<PaperSheet>
+		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
+			<PageMasthead/>
 
-			<div class="text-tty-pink text-[12px] tty-glow-p">
-				[sudo] password for guest: <span class="text-tty-fg">•••••••••</span>
-			</div>
-			<div class="text-tty-amber text-[12px] tty-glow-a">Sorry, try again.</div>
-			<div class="text-tty-amber text-[12px] tty-glow-a">Sorry, try again.</div>
-			<div class="text-tty-pink text-[12px] tty-glow-p">
-				sudo: 3 incorrect password attempts
-			</div>
+			<div class="flex flex-col items-center text-center pt-14 pb-12">
+				<div class="meta-caps text-ink-faint">duffle.one</div>
+				<h2 class="m-0 mt-6 font-display font-light text-[clamp(96px,20vw,146px)] leading-none tnum">404</h2>
+				<div class="mt-4 font-display font-light italic text-[clamp(20px,3vw,28px)] text-ink-soft">This page was never typeset.</div>
 
-			<pre
-				class="text-tty-pink m-0 my-3 tty-glow-p whitespace-pre overflow-x-auto"
-				style="font-size: 11px; line-height: 1.18;"
-			>{{ ascii }}</pre>
-
-			<Callout accent="amber" :weight="3" padding="14px 16px">
-				<div class="text-tty-amber text-[11px] tracking-[2px] mb-1">── ALTERNATIVE ROUTES</div>
-				<div class="text-tty-fg text-[12.5px] leading-[1.7]">
-					<div>
-						<span class="text-tty-green">1.</span>
-						draft a real email at
-						<a class="text-tty-cyan hover:underline" href="mailto:laura@duffle.one">laura@duffle.one</a>
-					</div>
-					<div>
-						<span class="text-tty-green">2.</span>
-						dm me on instagram, but be cute about it
-					</div>
-					<div>
-						<span class="text-tty-green">3.</span>
-						press <Kbd>?</Kbd> for the user guide first
-					</div>
+				<div class="flex items-center gap-3.5 my-8">
+					<span class="h-px w-[90px] bg-rule-dot"></span>
+					<span class="h-[5px] w-[5px] rotate-45 bg-accent"></span>
+					<span class="h-px w-[90px] bg-rule-dot"></span>
 				</div>
-			</Callout>
 
-			<div class="mt-auto flex gap-[14px] items-center">
-				<Tag accent="pink" :filled="true">EASTER EGG · 03</Tag>
-				<span class="text-tty-faint text-[11px]">9 more hidden in the shell. good luck.</span>
+				<RouterLink to="/" class="text-[15.5px]">Back to the index →</RouterLink>
 			</div>
-
-			<div class="flex items-baseline">
-				<Prompt route="sudo" :glow="true"/>
-				<Caret/>
-			</div>
-		</ContentPane>
-	</TtyChrome>
+		</div>
+	</PaperSheet>
 </template>

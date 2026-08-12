@@ -1,104 +1,52 @@
 <script setup lang="ts">
 /*
-  Photo route: section header + exiftool prompt + 3-col contact sheet
-  + EXIF side panel + footer hints. Click a cell or press ←/→ to cycle.
+  /photo — the plates. Each frame sits matted with its caption and
+  date, EXIF condensed to one italic line. Closes with the Glass link.
 */
-import { onBeforeUnmount, onMounted, ref } from "vue";
 import { SITE } from "../site/data";
-import { findRouteById } from "../site/routes";
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import SectionHeader from "../components/headers/SectionHeader.vue";
-import Prompt from "../components/atoms/Prompt.vue";
-import Kbd from "../components/atoms/Kbd.vue";
-import PhotoCell from "./photo/PhotoCell.vue";
-import ExifPanel from "./photo/ExifPanel.vue";
+import PaperSheet from "../components/paper/PaperSheet.vue";
+import PageMasthead from "../components/paper/PageMasthead.vue";
+import PageTitle from "../components/paper/PageTitle.vue";
+import PlateFigure from "../components/paper/PlateFigure.vue";
 
-const route = findRouteById("photo")!;
-const selected = ref(1); // matches the design's "▸ SEL" on the second cell
-
-function onKey(e: KeyboardEvent) {
-	const editable = e.target instanceof HTMLElement
-		&& (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable);
-	if (editable) return;
-
-	if (e.key === "ArrowRight") {
-		e.preventDefault();
-		selected.value = (selected.value + 1) % SITE.photography.length;
-	} else if (e.key === "ArrowLeft") {
-		e.preventDefault();
-		selected.value = (selected.value - 1 + SITE.photography.length) % SITE.photography.length;
-	}
+// "2026-02-07" → "07.02.2026", matching the site's dotted datelines.
+function fmtDate(iso: string): string {
+	return iso.split("-").reverse().join(".");
 }
 
-onMounted(() => window.addEventListener("keydown", onKey));
-onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
+const glass = SITE.socials.find((s) => s.id === "glass");
 </script>
 
 <template>
-	<TtyChrome
-		:title="route.titleBarText"
-		status-path="photo"
-		active-id="photo"
-		:accent="route.accent"
-	>
-		<ContentPane :padding-x="26" :padding-y="22" :gap="12">
-			<SectionHeader n="03" accent="pink">
-				./photo<span class="text-tty-pink">.roll</span>
-			</SectionHeader>
+	<PaperSheet>
+		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
+			<PageMasthead active="photo"/>
 
-			<div class="text-tty-dim text-[11.5px]">
-				<Prompt cmd="exiftool ./*.{raw,jpg} | head -40" route="photo"/>
-			</div>
+			<div class="pt-8">
+				<PageTitle title="Photographs" subtitle="Real frames from the camera roll."/>
 
-			<div class="photo-layout gap-[14px] flex-1 min-h-0">
-				<div class="contact-sheet gap-[10px]">
-					<PhotoCell
-						v-for="(p, i) in SITE.photography"
+				<div class="grid sm:grid-cols-2 gap-x-8 gap-y-9 py-8">
+					<PlateFigure
+						v-for="p in SITE.photography"
 						:key="p.id"
-						:photo="p"
-						:index="i"
-						:selected="i === selected"
-						@select="selected = i"
-					/>
+						:src="p.src"
+						:alt="p.title"
+						:caption="p.title"
+						:meta="fmtDate(p.taken)"
+					>
+						<template #extra>
+							<div class="text-[13px] italic text-ink-mute">
+								{{ p.camera }} · {{ p.focal }} · {{ p.aperture }} · {{ p.shutter }} · ISO {{ p.iso }}
+							</div>
+						</template>
+					</PlateFigure>
 				</div>
-				<ExifPanel :photo="SITE.photography[selected]" :index="selected"/>
-			</div>
 
-			<div class="text-tty-faint text-[11px]">
-				←/→ navigate ·
-				<Kbd>f</Kbd> fullscreen ·
-				<Kbd>i</Kbd> exif ·
-				<Kbd>r</Kbd> roll-mode
+				<footer class="flex flex-wrap justify-between gap-2 pt-4 border-t border-rule meta-caps text-ink-faint">
+					<span>{{ SITE.photography.length }} plates</span>
+					<a v-if="glass" :href="glass.href">More on Glass →</a>
+				</footer>
 			</div>
-		</ContentPane>
-	</TtyChrome>
+		</div>
+	</PaperSheet>
 </template>
-
-<style scoped>
-.photo-layout {
-	display: flex;
-	flex-direction: column;
-}
-@media (min-width: 768px) {
-	.photo-layout {
-		display: grid;
-		grid-template-columns: 1fr 240px;
-	}
-}
-
-.contact-sheet {
-	display: grid;
-	grid-template-columns: 1fr;
-}
-@media (min-width: 480px) {
-	.contact-sheet {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-}
-@media (min-width: 768px) {
-	.contact-sheet {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-}
-</style>

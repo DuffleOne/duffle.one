@@ -1,153 +1,137 @@
 @import "tailwindcss" source("./");
 
 /*
-  Design tokens lifted from preview/tty-theme.jsx.
-  OKLCH literals are intentional: the accent harmony depends on identical
-  chroma + lightness, only hue varies. Don't substitute hex equivalents.
+  Design tokens for the "Broadsheet" refresh (Claude Design handoff,
+  Classical design system). Semantic names, light values here, dark
+  values overridden below under prefers-color-scheme. Utilities
+  reference the vars, so the whole site flips with the OS theme.
+
+  ink scale: ink (body) → ink-soft (secondary prose) → ink-mute
+  (labels) → ink-faint (11px meta rows). accent is the decorative
+  gold (numerals, the wordmark dot); accent-ink is the readable
+  variant used for links and kickers.
 */
 @theme {
-	--color-tty-bg: #0a0c10;
-	--color-tty-bg2: #10141b;
-	--color-tty-bg3: #161c26;
-	--color-tty-bg4: #1d2533;
-	--color-tty-fg: #e2ebf6;
-	--color-tty-dim: #7d8a9c;
-	--color-tty-faint: #3a4555;
-	--color-tty-border: #1f2733;
-	--color-tty-border-hi: #2a3445;
+	--color-paper: #f3f2f2;
+	--color-mat: #eae9e9;
 
-	--color-tty-green: oklch(82% 0.20 145);
-	--color-tty-pink: oklch(78% 0.20 0);
-	--color-tty-amber: oklch(85% 0.18 75);
-	--color-tty-cyan: oklch(82% 0.18 220);
-	--color-tty-violet: oklch(78% 0.20 295);
-	--color-tty-yellow: oklch(88% 0.18 100);
+	--color-ink: #201f1d;
+	--color-ink-soft: #444141;
+	--color-ink-mute: #605d5d;
+	--color-ink-faint: #7d7979;
 
-	--font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-	--font-display: 'Space Grotesk', 'Inter', sans-serif;
+	--color-accent: #b68235;
+	--color-accent-ink: #7d5411;
+	--color-accent-hover: #a06f24;
 
-	/* Kill all default radii — terminal aesthetic is sharp 90° corners.
-	   The few rounded things (traffic lights) opt in explicitly. */
-	--radius-xs: 0;
-	--radius-sm: 0;
-	--radius-md: 0;
-	--radius-lg: 0;
-	--radius-xl: 0;
-	--radius-2xl: 0;
-	--radius-3xl: 0;
-	--radius-full: 9999px;
+	--color-rule: rgba(32, 31, 29, 0.16);
+	--color-rule-dot: rgba(32, 31, 29, 0.3);
+
+	--font-display: "Alcyone", system-ui, sans-serif;
+	--font-body: "Lora", Georgia, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-paper: #1b1a19;
+		--color-mat: #2a2827;
+
+		--color-ink: #eae9e9;
+		--color-ink-soft: #c4c1c1;
+		--color-ink-mute: #a8a4a4;
+		--color-ink-faint: #918d8d;
+
+		--color-accent: #e1ad66;
+		--color-accent-ink: #e1ad66;
+		--color-accent-hover: #facb8d;
+
+		--color-rule: rgba(234, 233, 233, 0.14);
+		--color-rule-dot: rgba(234, 233, 233, 0.26);
+	}
 }
 
 /*
-  Baseline. Only the SPA wants the dark mono full-viewport treatment;
-  other entry points (jellycats.html etc) keep Tailwind's preflight
-  defaults so they can scroll and use their own typography.
-  index.html opts in via <html class="tty-root">.
+  Alcyone — the site's display face, full family supplied by the user
+  (licence PDF at the repo root). Only the cuts the design uses.
 */
-html.tty-root,
-html.tty-root body,
-html.tty-root #app {
-	height: 100%;
-	background: var(--color-tty-bg);
-	color: var(--color-tty-fg);
-}
-
-html.tty-root body {
-	font-family: var(--font-mono);
-	font-size: 13px;
-	line-height: 1.7;
-	overflow: hidden;
-}
-
-/* CRT effects ============================================================ */
-
-@keyframes ttyblink {
-	0%, 49% { opacity: 1; }
-	50%, 100% { opacity: 0; }
-}
-
-.tty {
-	position: relative;
-	isolation: isolate;
-}
-
-/* hide scrollbars inside the window — content pane scrolls but no chrome */
-.tty *::-webkit-scrollbar { display: none; }
-.tty * { scrollbar-width: none; }
-
-/* horizontal scanlines */
-.tty-scan::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	pointer-events: none;
-	z-index: 1;
-	background: repeating-linear-gradient(
-		0deg,
-		rgba(255, 255, 255, 0.014) 0 1px,
-		transparent 1px 3px
-	);
-	mix-blend-mode: overlay;
-}
-
-/* CRT corner vignette */
-.tty-vig::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	pointer-events: none;
-	z-index: 2;
-	background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.45));
-}
-
-/* live content sits above the scanline + vignette pseudo layers */
-.tty-content { position: relative; z-index: 3; }
-
-/* phosphor blinking caret */
-.tty-caret {
-	display: inline-block;
-	width: 0.55em;
-	height: 1.05em;
-	background: var(--color-tty-green);
-	vertical-align: -3px;
-	margin-left: 2px;
-	animation: ttyblink 1.05s steps(2) infinite;
-	box-shadow: 0 0 8px var(--color-tty-green);
-}
-
-/* glow text-shadows. one per accent. */
-.tty-glow-g { text-shadow: 0 0 10px oklch(82% 0.20 145 / 0.5); }
-.tty-glow-a { text-shadow: 0 0 10px oklch(85% 0.18 75 / 0.5); }
-.tty-glow-p { text-shadow: 0 0 10px oklch(78% 0.20 0 / 0.5); }
-.tty-glow-c { text-shadow: 0 0 10px oklch(82% 0.18 220 / 0.5); }
-.tty-glow-v { text-shadow: 0 0 10px oklch(78% 0.20 295 / 0.5); }
+@font-face { font-family: "Alcyone"; src: url("/fonts/Alcyone-Light.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Alcyone"; src: url("/fonts/Alcyone-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Alcyone"; src: url("/fonts/Alcyone-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Alcyone"; src: url("/fonts/Alcyone-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Alcyone"; src: url("/fonts/Alcyone-LightItalic.woff2") format("woff2"); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: "Alcyone"; src: url("/fonts/Alcyone-RegularItalic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
 
 /*
-  Layered phosphor glow for the homepage wordmark. Three concentric
-  shadows: tight core (sharp), mid halo (warm body), outer bloom
-  (soft far light) — gives the CRT the depth the single-shadow
-  variant lacks.
+  Baseline. Scoped to html.paper-root (set by index.html) so the
+  standalone jellycats.html entry keeps plain preflight defaults —
+  same trick the tty design used with .tty-root. Lives in the base
+  layer so utility classes (text-ink on a link, say) still win.
 */
-.tty-bloom-g {
-	text-shadow:
-		0 0 2px oklch(82% 0.20 145 / 0.95),
-		0 0 6px oklch(82% 0.20 145 / 0.65),
-		0 0 18px oklch(82% 0.20 145 / 0.40),
-		0 0 36px oklch(82% 0.20 145 / 0.20);
+@layer base {
+	html.paper-root,
+	html.paper-root body {
+		background: var(--color-paper);
+		color: var(--color-ink);
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	html.paper-root a {
+		color: var(--color-accent-ink);
+		text-decoration: none;
+	}
+	html.paper-root a:hover {
+		color: var(--color-accent-hover);
+	}
+
+	html.paper-root ::selection {
+		background: #ffe3bf;
+		color: #201f1d;
+	}
+
+	html.paper-root :focus {
+		outline: none;
+	}
+	html.paper-root :focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+	}
 }
 
-/* tabular numbers for tables that line up player counts / uptimes etc */
-.tnum { font-variant-numeric: tabular-nums; }
+/* Recurring type styles ================================================== */
 
-/* reduced motion: kill blink + scanlines, keep glow */
-@media (prefers-reduced-motion: reduce) {
-	.tty-caret { animation: none; }
-	.tty-scan::before { display: none; }
+/* 11px small-caps meta rows: mastheads, figcaptions, kickers, footers.
+   Registered as utilities so they compose with variants and can be
+   overridden by later utility classes where a use site differs. */
+@utility meta-caps {
+	font-size: 11px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
 }
 
-/* Hover lift for interactive rows: sidebar entries, table rows, palette items.
-   The "active" / selected state usually has bg-tty-bg3 + a left accent border —
-   hover previews that. Implemented per-component since the accent varies. */
-.row-hover {
-	transition: background-color 80ms ease-out, border-color 80ms ease-out, color 80ms ease-out;
+/* Justified body prose with hyphenation, per the design's About column. */
+@utility prose-just {
+	text-align: justify;
+	hyphens: auto;
+	text-wrap: pretty;
+}
+
+/*
+  Photographs sit matted on the surface with a warm archival grade
+  (the design system's "plate" treatment). Dark mode dims the print
+  slightly so it doesn't glow against the dark sheet.
+*/
+.plate-img {
+	filter: sepia(0.14) saturate(0.92) contrast(1.02);
+}
+@media (prefers-color-scheme: dark) {
+	.plate-img {
+		filter: sepia(0.2) saturate(0.9) contrast(1.02) brightness(0.9);
+	}
+}
+
+/* tabular numbers for dates, years and player counts */
+@utility tnum {
+	font-variant-numeric: tabular-nums;
 }

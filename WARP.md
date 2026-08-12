@@ -5,24 +5,24 @@ Working notes for WARP (warp.dev) and other AI assistants in this repo.
 ## Project overview
 
 Personal site for Laura Miller (`duffle.one`). Single-page Vue 3 app with a
-TTY/terminal aesthetic — fixed window chrome (titlebar + sidebar +
-statusbar) wrapping a content pane that swaps between routes. Hosted as
-static files on AWS S3.
+broadsheet/print aesthetic — a full-bleed paper page, Alcyone display type
+over Lora body serif, gold accents, hairline rules. Light and dark follow
+`prefers-color-scheme`. Hosted as static files on AWS S3.
 
-The current visual design is the "tty" handoff in `design_handoff_duffle_one/`.
+The visual design came from a Claude Design handoff ("Broadsheet", on the
+Classical design system); the previous tty/terminal design is gone.
 
 ## Stack
 
 - Vue 3 (`<script setup>` SFCs) + vue-router (hash mode for S3)
 - Vite 8 + TypeScript + Tailwind CSS v4 (`@theme` for tokens)
-- No backend. Live game-server data fetched at runtime from the AMP
-  Cloudflare worker in `worker-amp/`.
+- No backend.
 
 ## Commands
 
 ```bash
 npm install        # one-time
-npm run dev        # vite dev server on :3000
+npm run dev        # vite dev server on :3000 (PORT env overrides)
 npm run typecheck  # vue-tsc --noEmit
 npm run build      # typecheck + production bundle into ./build
 ./publish.sh       # build + deploy to s3://duffle.one
@@ -32,71 +32,48 @@ npm run build      # typecheck + production bundle into ./build
 
 ```
 src/
-	index.html              SPA shell + fonts
-	main.ts                 vue + router bootstrap
-	App.vue                 root: <router-view> + palette overlay + global hotkeys
-	input.css               Tailwind import + @theme tokens + tty-* effects
+	index.html              SPA shell + Lora from Google Fonts
+	main.ts                 vue + router bootstrap, document.title sync
+	App.vue                 bare router outlet
+	input.css               Tailwind import + @theme tokens + dark
+	                        overrides + Alcyone @font-face + base styles
+	                        (scoped to html.paper-root so jellycats.html
+	                        keeps preflight defaults)
 	site/
-		data.ts               all copy: socials, projects, photos, gaming, cv, guide
-		routes.ts             route registry (id, label, key, accent, path, component)
-	types/
-		accent.ts             accent palette + helpers
-		safelist.ts           Tailwind v4 JIT safelist
+		data.ts               all copy: bio, socials, projects, photos, cv, guide
+		routes.ts             route registry (id, label, path, title, component)
 	composables/
-		useClock.ts           live London clock for status bar
-		useSyncTimer.ts       "synced X ago" since mount
+		useWeather.ts         London weather for the landing dateline (Open-Meteo)
+		useQuoteRotation.ts   rotating quote (paused while the tab is hidden)
 		useReducedMotion.ts   prefers-reduced-motion ref
-		useHotkeys.ts         1-6 routes, ⌘K palette, Esc, ?, sudo egg
-		usePalette.ts         palette state + fuzzy match
-		useServers.ts         AMP worker poller (30s)
-	components/
-		atoms/                Kbd, Tag, Prompt, Caret, AccentDot, Glyph, Hairline
-		layout/               TtyChrome, TitleBar, TrafficLights, SideBar,
-		                      RouteList, RouteRow, ShellShortcuts, SysMonitor,
-		                      ResourceBar, StatusBar, ContentPane
-		headers/              SectionHeader, ManPageRule, ManSection
-		cards/                Callout, DetailCard, CornerFrame, StatBox, StatGrid
-		data/                 DataTable, DataTableRow, DottedRow, MetaTable
-		overlay/              PaletteOverlay, PaletteModal, PaletteRow
-		placeholders/         StripedPlaceholder
+	components/paper/
+		PaperSheet.vue        full-bleed page, content centred at 1180px
+		PageMasthead.vue      subpage brand + section nav over a hairline
+		PageTitle.vue         centred Alcyone title + optional standfirst
+		PlateFigure.vue       matted photograph with caption/meta row
+		QuoteBlock.vue        rotating quote between hairlines
 	screens/
-		Home.vue              + home/{HeroBlock, PortraitCard, SocialCard}
-		Projects.vue          + projects/{ProjectRow, ReadmeCard}
-		Photo.vue             + photo/{PhotoCell, ExifPanel}
-		Servers.vue           + servers/{ServerRow}
-		Guide.vue
-		CV.vue                + cv/{ExperienceEntry}
-		Sudo.vue
+		Home.vue              landing broadsheet (dateline, wordmark, About |
+		                      plate | Elsewhere, Projects | Where I've worked,
+		                      quote, footer)
+		Projects.vue          numbered catalogue entries
+		Photo.vue             plates with EXIF captions, Glass link
+		Guide.vue             user guide: parted-column About, section rows, values
+		CV.vue                Where I've worked: contact block, proud-of, roles
+		Sudo.vue              404 catch-all
+	public/                 static: fonts/ (Alcyone woff2), img/, favicons,
+	                        robots.txt, sitemap.xml, site.webmanifest
+	img/                    camera originals for scripts/process-photos.sh
+	jellycats.html          standalone vanity page, outside the SPA
 ```
 
-## Conventions
+## Notes
 
-- One screen per route under `screens/`. Each screen wraps `<TtyChrome>`,
-  picks an accent + title from its `routes.ts` entry, and assembles
-  shared components — no inline styling beyond what the design pixel-pegs.
-- Atoms are presentation-only and dumb — they take props, render markup.
-- Composables hold state + side effects (timers, fetch, hotkeys).
-- All accent colours route through `types/accent.ts`. Don't ship raw
-  hex/oklch in components.
-- Tailwind v4 class names that are composed with template literals
-  (`text-tty-${accent}`) need to be enumerated in `types/safelist.ts`
-  so the JIT generates them.
-
-## Routing + S3
-
-The router uses hash mode (`#/projects`) so any URL shape works on plain
-S3 without rewrites. `publish.sh` also sets index.html as the S3
-error-document — that lets bare paths like `/projects` still load the
-shell, and the router takes it from there.
-
-## Live data
-
-`useServers()` polls `VITE_SERVERS_API` every 30s and falls back to
-`SITE.gaming` if the env var is unset or the fetch fails. Set the env
-var via `.env.local`:
-
-```
-VITE_SERVERS_API=https://gaming.<account>.workers.dev
-```
-
-The worker is in `worker-amp/`; deploy with `wrangler deploy` from there.
+- Content edits go in `src/site/data.ts`. Voice is part of the design,
+  don't paraphrase.
+- Colour/typography tokens live in `src/input.css` under `@theme`, with
+  dark values overriding the same vars under `prefers-color-scheme: dark`.
+- Alcyone is licensed (licence PDF at the repo root); woff2s are vendored
+  in `src/public/fonts/`.
+- `worker-amp/` is the Cloudflare worker that fed the old game-servers
+  page. The page is gone; the worker is no longer used by the site.

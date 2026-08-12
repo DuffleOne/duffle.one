@@ -17,7 +17,9 @@ export default defineConfig({
 		},
 	},
 	server: {
-		port: 3000,
+		// PORT lets tooling (e.g. the Claude Code preview) assign a free
+		// port; plain `npm run dev` still lands on 3000.
+		port: Number(process.env.PORT) || 3000,
 	},
 	esbuild: {
 		target: 'es2022',

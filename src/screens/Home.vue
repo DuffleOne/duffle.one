@@ -1,101 +1,126 @@
 <script setup lang="ts">
 /*
-  Home route: ASCII wordmark (ANSI Shadow style), login meta with
-  document.lastModified for the "last login" timestamp, hairline,
-  two-col body (portrait + hero), trailing empty prompt + caret.
+  The landing broadsheet (design 2a/2b): dateline meta row, the
+  duffle.one masthead, tagline standfirst, About | plate | Elsewhere,
+  Projects | Where I've worked over a hairline-split grid, the
+  rotating quote, and the say-hello footer.
 */
 import { computed } from "vue";
-import { findRouteById } from "../site/routes";
-import TtyChrome from "../components/layout/TtyChrome.vue";
-import ContentPane from "../components/layout/ContentPane.vue";
-import Prompt from "../components/atoms/Prompt.vue";
-import Caret from "../components/atoms/Caret.vue";
-import Hairline from "../components/atoms/Hairline.vue";
-import PortraitCard from "./home/PortraitCard.vue";
-import HeroBlock from "./home/HeroBlock.vue";
+import { SITE } from "../site/data";
+import { useWeather } from "../composables/useWeather";
+import PaperSheet from "../components/paper/PaperSheet.vue";
+import PlateFigure from "../components/paper/PlateFigure.vue";
+import QuoteBlock from "../components/paper/QuoteBlock.vue";
 
-const route = findRouteById("home")!;
+const { label: weatherLabel } = useWeather();
 
-// ANSI Shadow rendering of "DUFFLE" — sharper edges than the half-block
-// variant, reads cleanly with the layered .tty-bloom-g phosphor glow.
-const wordmark = `██████╗ ██╗   ██╗███████╗███████╗██╗     ███████╗
-██╔══██╗██║   ██║██╔════╝██╔════╝██║     ██╔════╝
-██║  ██║██║   ██║█████╗  █████╗  ██║     █████╗
-██║  ██║██║   ██║██╔══╝  ██╔══╝  ██║     ██╔══╝
-██████╔╝╚██████╔╝██║     ██║     ███████╗███████╗
-╚═════╝  ╚═════╝ ╚═╝     ╚═╝     ╚══════╝╚══════╝`;
+// "11.08.2026" — the dateline renders dotted, not slashed.
+const today = new Intl.DateTimeFormat("en-GB", {
+	day: "2-digit",
+	month: "2-digit",
+	year: "numeric",
+})
+	.format(new Date())
+	.replaceAll("/", ".");
 
-// document.lastModified format: "MM/DD/YYYY HH:MM:SS" or RFC1123 depending
-// on browser. Parse and render as "tue 16:38". In SSR / vite-build this
-// runs at hydration, so the timestamp tracks the last deploy of the
-// rendered HTML.
-const lastLogin = computed(() => {
-	if (typeof document === "undefined") return "—";
-	const d = new Date(document.lastModified);
-	if (isNaN(d.getTime())) return "—";
-	const dow = d.toLocaleDateString("en-GB", { weekday: "short" }).toLowerCase();
-	const time = d.toLocaleTimeString("en-GB", {
-		hour: "2-digit",
-		minute: "2-digit",
-		hour12: false,
-	});
-	return `${dow} ${time}`;
-});
+type ElsewhereRow = { label: string; text: string; href?: string; to?: string };
+
+const elsewhere = computed<ElsewhereRow[]>(() => [
+	{ label: "email", text: SITE.email, href: `mailto:${SITE.email}` },
+	...SITE.socials.map((s) => ({ label: s.label.toLowerCase(), text: s.handle, href: s.href })),
+	{ label: "user guide", text: "read →", to: "/guide" },
+]);
+
+const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 </script>
 
 <template>
-	<TtyChrome
-		:title="route.titleBarText"
-		status-path="home"
-		active-id="home"
-		:accent="route.accent"
-	>
-		<ContentPane :padding-x="34" :padding-y="30" :gap="18">
-			<pre
-				class="wordmark text-tty-green m-0 tty-bloom-g whitespace-pre overflow-x-auto"
-			>{{ wordmark }}</pre>
+	<PaperSheet>
+		<div class="px-5 pt-6 pb-6 sm:px-8 md:px-14 md:pt-14 md:pb-10">
+			<header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 meta-caps text-ink-faint tnum border-b border-rule pb-3.5">
+				<span>{{ SITE.name }}</span>
+				<span>London · {{ weatherLabel }}</span>
+				<span>{{ today }}</span>
+			</header>
 
-			<div class="text-tty-dim text-[10.5px] md:text-[11.5px] tracking-[1.5px] truncate">
-				DUFFLE.ONE · v26.4 · last login: {{ lastLogin }} from 10.0.0.42
+			<h1 class="m-0 mt-[34px] mb-[26px] text-center font-display font-light text-[clamp(56px,12.5vw,146px)] leading-[0.9] tracking-[-0.03em]">duffle<span class="text-accent">.</span>one</h1>
+
+			<div class="flex items-center justify-center gap-[22px] pb-[22px] border-b-2 border-ink font-display font-light italic text-[clamp(17px,2.3vw,27px)] text-ink-soft">
+				<span class="hidden sm:block h-px w-[60px] bg-rule-dot"></span>
+				<span class="text-center">{{ SITE.tagline }}</span>
+				<span class="hidden sm:block h-px w-[60px] bg-rule-dot"></span>
 			</div>
 
-			<Hairline/>
+			<div class="grid gap-[38px] md:grid-cols-[1.05fr_1.5fr_1fr] pt-8 pb-[34px] border-b border-rule">
+				<div class="flex flex-col gap-3.5">
+					<div class="meta-caps text-accent-ink">About</div>
+					<p class="m-0 text-[15.5px] leading-[1.75] prose-just">{{ SITE.about.lead }}</p>
+					<p class="m-0 text-[15.5px] leading-[1.75] prose-just text-ink-soft">{{ SITE.about.current.pre }}<a :href="SITE.about.current.href">{{ SITE.about.current.company }}</a>{{ SITE.about.current.post }}</p>
+				</div>
 
-			<div class="home-grid items-start">
-				<PortraitCard/>
-				<HeroBlock/>
+				<PlateFigure
+					:src="SITE.hero.src"
+					:alt="SITE.hero.caption"
+					:caption="SITE.hero.caption"
+					:meta="SITE.hero.date"
+					h="290px"
+				/>
+
+				<div class="flex flex-col gap-2.5">
+					<div class="meta-caps text-accent-ink">Elsewhere</div>
+					<div
+						v-for="(row, i) in elsewhere"
+						:key="row.label"
+						class="flex justify-between gap-3 py-[7px] text-[14px]"
+						:class="i < elsewhere.length - 1 ? 'border-b border-dotted border-rule-dot' : ''"
+					>
+						<span class="text-ink-mute">{{ row.label }}</span>
+						<RouterLink v-if="row.to" :to="row.to">{{ row.text }}</RouterLink>
+						<a v-else :href="row.href">{{ row.text }}</a>
+					</div>
+				</div>
 			</div>
 
-			<div class="mt-auto text-tty-dim flex items-baseline">
-				<Prompt route="home" :glow="true"/>
-				<Caret/>
+			<div class="grid gap-[38px] md:grid-cols-[1fr_1px_1fr] pt-[30px] pb-[34px]">
+				<section class="flex flex-col gap-4">
+					<div class="flex items-baseline justify-between border-b border-rule pb-2">
+						<span class="font-display font-medium text-[26px]">Projects</span>
+						<RouterLink to="/projects" class="meta-caps border-b border-accent">More →</RouterLink>
+					</div>
+					<div class="grid grid-cols-[26px_1fr_auto] items-baseline gap-x-3.5 gap-y-2.5 text-[15px] leading-[1.6]">
+						<template v-for="(p, i) in SITE.projects" :key="p.id">
+							<span class="text-accent tnum">{{ String(i + 1).padStart(2, "0") }}</span>
+							<span><a :href="p.href" class="font-medium">{{ p.name }}</a> <span class="text-ink-mute">· {{ p.blurb }}</span></span>
+							<span class="text-ink-faint tnum text-[13px]">{{ p.year }}</span>
+						</template>
+					</div>
+				</section>
+
+				<div class="hidden md:block w-px bg-rule"></div>
+
+				<section class="flex flex-col gap-4">
+					<div class="flex items-baseline justify-between border-b border-rule pb-2">
+						<span class="font-display font-medium text-[26px]">Where I've worked</span>
+						<RouterLink to="/cv" class="meta-caps border-b border-accent">More →</RouterLink>
+					</div>
+					<div class="grid grid-cols-[1fr_auto] items-baseline gap-x-3.5 gap-y-2.5 text-[15px] leading-[1.6]">
+						<template v-for="e in employers" :key="e.co">
+							<span><span class="font-medium">{{ e.co }}</span> <span class="text-ink-mute">— {{ e.role }}</span></span>
+							<span
+								class="tnum text-[13px]"
+								:class="e.years === 'now' ? 'text-accent-ink' : 'text-ink-faint'"
+							>{{ e.years }}</span>
+						</template>
+					</div>
+				</section>
 			</div>
-		</ContentPane>
-	</TtyChrome>
+
+			<QuoteBlock/>
+
+			<footer class="flex flex-wrap justify-between gap-2 pt-[18px] meta-caps text-ink-faint">
+				<span>{{ SITE.domain }}</span>
+				<a :href="`mailto:${SITE.email}`">Say hello →</a>
+			</footer>
+		</div>
+	</PaperSheet>
 </template>
-
-<style scoped>
-.wordmark {
-	font-size: 9px;
-	line-height: 1.05;
-	letter-spacing: 0;
-}
-@media (min-width: 768px) {
-	.wordmark {
-		font-size: 12px;
-	}
-}
-
-.home-grid {
-	display: flex;
-	flex-direction: column;
-	gap: 22px;
-}
-@media (min-width: 768px) {
-	.home-grid {
-		display: grid;
-		grid-template-columns: 160px 1fr;
-		gap: 32px;
-	}
-}
-</style>

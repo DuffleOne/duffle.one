@@ -11,17 +11,22 @@ const router = createRouter({
 			path: r.path,
 			name: r.id,
 			component: r.component,
-			meta: { route: r.id, accent: r.accent, title: r.titleBarText },
+			meta: { route: r.id, title: r.title },
 		})),
-		// Anything else falls through to the sudo/404 easter egg.
+		// Anything else falls through to the 404 page.
 		{
 			path: "/:pathMatch(.*)*",
-			name: "sudo",
+			name: "notfound",
 			component: () => import("./screens/Sudo.vue"),
-			meta: { route: "sudo", accent: "pink", title: "laura@duffle: ~ · sudo: an error has occurred" },
+			meta: { route: "notfound", title: "Not found · duffle.one" },
 		},
 	],
 	scrollBehavior: () => ({ top: 0 }),
+});
+
+router.afterEach((to) => {
+	const title = to.meta.title;
+	if (typeof title === "string") document.title = title;
 });
 
 createApp(App).use(router).mount("#app");
