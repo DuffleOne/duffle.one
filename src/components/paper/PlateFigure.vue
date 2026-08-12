@@ -26,6 +26,7 @@ defineProps<{
 				class="plate-img block w-full object-cover"
 				:style="h ? { height: h } : undefined"
 				:loading="eager ? 'eager' : 'lazy'"
+				:fetchpriority="eager ? 'high' : undefined"
 				decoding="async"
 			/>
 		</div>

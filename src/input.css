@@ -60,7 +60,12 @@
 		color-scheme: dark;
 	}
 
-	html.paper-root,
+	/* Body copy is 15px, but it must live on <body>: sizing <html> would
+	   rescale rem and with it every Tailwind spacing utility. */
+	html.paper-root {
+		background: var(--color-paper);
+		transition: background-color 200ms ease;
+	}
 	html.paper-root body {
 		background: var(--color-paper);
 		color: var(--color-ink);

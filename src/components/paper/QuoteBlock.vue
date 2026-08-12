@@ -12,7 +12,7 @@ const { reduced } = useReducedMotion();
 </script>
 
 <template>
-	<div class="border-y border-rule py-6 text-center">
+	<div class="border-y border-rule py-[26px] text-center">
 		<Transition :name="reduced ? '' : 'quote-fade'" mode="out-in">
 			<div :key="tick" class="font-display font-light italic text-[clamp(24px,4vw,34px)] leading-[1.3]">“{{ quote }}”</div>
 		</Transition>

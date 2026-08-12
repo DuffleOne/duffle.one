@@ -34,8 +34,10 @@ const employers = SITE.cv.experience.filter((e) => !e.volunteer);
 			<header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 meta-caps text-ink-faint tnum border-b border-rule pb-3.5">
 				<span>{{ SITE.name }}</span>
 				<span>London · {{ weatherLabel }}</span>
-				<span>{{ today }}</span>
-				<ThemeToggle/>
+				<span class="flex items-baseline gap-5">
+					<span>{{ today }}</span>
+					<ThemeToggle/>
+				</span>
 			</header>
 
 			<h1 class="m-0 mt-[34px] mb-[26px] text-center font-display font-light text-[clamp(56px,12.5vw,146px)] leading-[0.9] tracking-[-0.03em]">duffle<span class="text-accent">.</span>one</h1>
