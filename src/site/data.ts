@@ -100,12 +100,13 @@ export const SITE = {
 		},
 	] satisfies Project[],
 
-	// 37 quotes lifted verbatim from the old src/index.html rotation pool.
-	// useQuoteRotation walks a shuffled cycle of the whole list.
+	// The rotation pool: 37 lifted verbatim from the old src/index.html,
+	// plus later additions. useQuoteRotation walks a shuffled cycle.
 	quotePool: [
 		"At museums, she's allowed to touch the art.",
 		"Both sides of her pillow are cool.",
 		"Even her enemies list her as their emergency contact.",
+		"Her charisma registers on the Richter scale.",
 		"Her eye contact alone counts as a first date.",
 		"Her only regret is not knowing what regret feels like.",
 		"Her personality is so magnetic, she is unable to carry credit cards.",
