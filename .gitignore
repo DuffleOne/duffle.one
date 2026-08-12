@@ -18,3 +18,7 @@ src/public/img/new/
 # Camera originals dropped straight into img/. Only the derived webp
 # (e.g. hero.webp) gets committed and published.
 src/public/img/*.JPG
+
+# Camera originals under src/img — huge (up to 230MB), never for git;
+# GitHub rejects blobs over 100MB outright.
+src/img/
