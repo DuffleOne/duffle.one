@@ -110,6 +110,7 @@ export const SITE = {
 		"Her eye contact alone counts as a first date.",
 		"Her only regret is not knowing what regret feels like.",
 		"Her personality is so magnetic, she is unable to carry credit cards.",
+		"Her sneezes, bless you.",
 		"Her two cents is worth £37.50.",
 		"If life were to give her lemons, she'd make a spinach fettuccine with a shiitake mushroom glaze.",
 		"If opportunity knocks and she is not home, opportunity waits.",
