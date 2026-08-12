@@ -39,7 +39,7 @@ export const SITE = {
 	name: "Laura Miller",
 	domain: "duffle.one",
 	email: "laura@duffle.one",
-	tagline: "Engineer, photographer, occasional 3D printer",
+	tagline: "Engineer, photographer, 3D modeller",
 
 	// Landing-page About column. The second paragraph carries an inline
 	// link on the current employer, hence the split shape.
