@@ -31,6 +31,7 @@ export type Experience = {
 	// Volunteering rows stay on /cv but off the landing employer list.
 	volunteer?: boolean;
 };
+export type EditMark = { text: string; keep: boolean };
 export type Education = { school: string; degree: string; when: string; note: string };
 export type GuideSection = { h: string; body: string[] };
 export type GuideValue = { h: string; b: string };
@@ -60,6 +61,16 @@ export const SITE = {
 		caption: "Speaking after dinner",
 		date: "28.05.2026",
 	},
+
+	// The landing's third frame: what's kept and what's struck out, the
+	// way a photographer marks up a contact sheet in grease pencil.
+	edit: [
+		{ text: "photography", keep: true },
+		{ text: "ballet", keep: true },
+		{ text: "3D printing", keep: true },
+		{ text: "jellycats, all 55", keep: true },
+		{ text: "mornings", keep: false },
+	] satisfies EditMark[],
 
 	socials: [
 		{ id: "github", label: "GitHub", handle: "@DuffleOne", href: "https://github.com/DuffleOne" },
@@ -94,7 +105,7 @@ export const SITE = {
 		{
 			id: "jellycats", name: "Jellycats",
 			blurb: "A vanity gallery of all 55 I own.",
-			description: "55 photographed plushies across nine categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
+			description: "55 photographed plushies across eight categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
 			year: "2023", tag: "archive", href: "/jellycats.html",
 			tech: ["photo", "vanilla css", "vanity"],
 		},

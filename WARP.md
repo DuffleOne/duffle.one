@@ -5,13 +5,15 @@ Working notes for WARP (warp.dev) and other AI assistants in this repo.
 ## Project overview
 
 Personal site for Laura Miller (`duffle.one`). Single-page Vue 3 app with a
-broadsheet/print aesthetic — full-bleed paper, Alcyone display type over
-Lora body serif, gold accents, hairline rules. Light and dark follow the
-OS by default, with a visitor override (the small toggle in the dateline
-and mastheads) persisted in localStorage.
+print aesthetic — full-bleed paper, Alcyone display type over Lora body
+serif, gold accents, hairline rules. Light and dark follow the OS by
+default, with a visitor override (the small toggle in the leader and
+mastheads) persisted in localStorage.
 
-The visual design came from a Claude Design handoff ("Broadsheet", on the
-Classical design system), applied over the previous design-C site.
+The subpages are the original broadsheet (a Claude Design handoff on the
+Classical design system). The landing is a later pass that sets the same
+palette and type as a darkroom contact sheet: film leader, strips of
+numbered frames, edge codes, grease-pencil marks on the selects.
 
 ## Stack
 
@@ -57,13 +59,17 @@ src/
 		PaperSheet.vue        full-bleed page, content centred at 1180px
 		PageMasthead.vue      brand + section nav + theme toggle
 		PageTitle.vue         centred Alcyone title + optional standfirst
-		PlateFigure.vue       matted photograph with caption/meta row
-		QuoteBlock.vue        rotating quote between hairlines
 		ThemeToggle.vue       the light/dark/auto control
+	components/sheet/       the landing's contact-sheet kit
+		Perforations.vue      sprocket run for the leader/tail (decorative)
+		StripLabel.vue        strip letter, hairline, section heading
+		FrameCell.vue         one frame: rebate row (number/label/meta) + slot
+		EdgeCode.vue          one film-edge code: label over handle
 	screens/
-		Home.vue              landing broadsheet (dateline, wordmark, About |
-		                      plate | Elsewhere, Projects | Where I've worked,
-		                      quote, footer)
+		Home.vue              landing contact sheet: leader, frame 01 (the
+		                      enlargement), edge codes, the margin note,
+		                      about + the select + the edit, zone-scale
+		                      divider, projects, the roll of jobs, tail
 		CV.vue                role list with first-bullet standfirsts
 		CVRole.vue            /cv/:slug — one role in full, prev/next
 		Guide.vue             user guide: parted-column About, section rows
@@ -79,6 +85,9 @@ scripts/
 
 - Content edits go in `src/site/data.ts`. Voice is part of the design,
   don't paraphrase.
+- Landing frame numbers (01, 02, 06A…) are literals in `Home.vue`, in
+  sheet order. Move a strip and renumber by hand, the way a real sheet
+  gets renumbered when it's recut.
 - Colour tokens live in `src/input.css` as light-dark() pairs; the
   effective color-scheme comes from the OS or the data-theme attribute
   useTheme() writes.

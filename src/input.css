@@ -13,20 +13,29 @@
   variant used for links and kickers.
 */
 @theme {
-	--color-paper: light-dark(#f3f2f2, #1b1a19);
-	--color-mat: light-dark(#eae9e9, #2a2827);
+	--color-paper: light-dark(#f3f2f2, #131211);
+	--color-mat: light-dark(#eae9e9, #1c1a18);
 
-	--color-ink: light-dark(#201f1d, #eae9e9);
+	--color-ink: light-dark(#201f1d, #f0eeeb);
 	--color-ink-soft: light-dark(#444141, #c4c1c1);
-	--color-ink-mute: light-dark(#605d5d, #a8a4a4);
-	--color-ink-faint: light-dark(#7d7979, #918d8d);
+	--color-ink-mute: light-dark(#605d5d, #9a9490);
+	/* Both values sit at ~4.7:1 on mat — the landing sets whole label
+	   rows in ink-faint at 10px, so it has to clear AA, not just look
+	   like a whisper. The dark value is warmed towards the design's
+	   #5e5854, which itself only manages 2.5:1. */
+	--color-ink-faint: light-dark(#6b6666, #8a8480);
 
 	--color-accent: light-dark(#b68235, #e1ad66);
 	--color-accent-ink: light-dark(#7d5411, #e1ad66);
 	--color-accent-hover: light-dark(#a06f24, #facb8d);
 
-	--color-rule: light-dark(rgba(32, 31, 29, 0.16), rgba(234, 233, 233, 0.14));
-	--color-rule-dot: light-dark(rgba(32, 31, 29, 0.3), rgba(234, 233, 233, 0.26));
+	--color-rule: light-dark(rgba(32, 31, 29, 0.16), rgba(255, 255, 255, 0.08));
+	--color-rule-dot: light-dark(rgba(32, 31, 29, 0.3), rgba(255, 255, 255, 0.16));
+
+	/* Sprocket holes on the landing's film leader and tail. Fainter than
+	   rule — they're texture, not structure. The mid-strip run dims to
+	   80% of this, which lands on the design's second perf value. */
+	--color-perf: light-dark(rgba(32, 31, 29, 0.13), rgba(255, 255, 255, 0.05));
 
 	--font-display: "Alcyone", system-ui, sans-serif;
 	--font-body: "Lora", Georgia, serif;
@@ -115,6 +124,15 @@
 	text-transform: uppercase;
 }
 
+/* 10px film-edge caps: rebate numbers, strip labels, the leader and
+   tail rows. Tighter and wider-tracked than meta-caps, which stays the
+   broadsheet row the subpages use. */
+@utility edge-caps {
+	font-size: 10px;
+	letter-spacing: 0.28em;
+	text-transform: uppercase;
+}
+
 /* Justified body prose with hyphenation, per the design's About column. */
 @utility prose-just {
 	text-align: justify;
@@ -139,6 +157,21 @@ html.paper-root[data-theme="dark"] .plate-img {
 	html.paper-root:not([data-theme]) .plate-img {
 		filter: sepia(0.2) saturate(0.9) contrast(1.02) brightness(0.9);
 	}
+}
+
+/*
+  Warm glow off the top right, carried over from the previous design's
+  hero: the accent fading into paper at 13%. Sized in pixels rather
+  than percentages so it stays a glow over the leader and the
+  enlargement instead of stretching down the whole sheet.
+*/
+.sheet-glow {
+	background-image: radial-gradient(
+		864px 461px at 82% 23px,
+		light-dark(rgba(182, 130, 53, 0.11), rgba(225, 173, 102, 0.13)),
+		light-dark(rgba(182, 130, 53, 0), rgba(225, 173, 102, 0))
+	);
+	background-repeat: no-repeat;
 }
 
 /* tabular numbers for dates, years and dateline rows */
