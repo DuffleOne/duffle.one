@@ -68,7 +68,7 @@ export const SITE = {
 		{ text: "photography", keep: true },
 		{ text: "ballet", keep: true },
 		{ text: "3D printing", keep: true },
-		{ text: "jellycats, all 55", keep: true },
+		{ text: "jellycats, all 50", keep: true },
 		{ text: "mornings", keep: false },
 	] satisfies EditMark[],
 
@@ -104,8 +104,8 @@ export const SITE = {
 		},
 		{
 			id: "jellycats", name: "Jellycats",
-			blurb: "A vanity gallery of all 55 I own.",
-			description: "55 photographed plushies across eight categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
+			blurb: "A vanity gallery of all 50 I own.",
+			description: "50 plushies across eight categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
 			year: "2023", tag: "archive", href: "/jellycats.html",
 			tech: ["photo", "vanilla css", "vanity"],
 		},

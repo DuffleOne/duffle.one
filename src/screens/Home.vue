@@ -100,7 +100,7 @@ const readout = computed<ReadoutRow[]>(() => [
 	{ key: "loc", text: "London" },
 	{ key: "exp", text: "15 years" },
 	{ key: "now", text: SITE.about.current.company, href: SITE.about.current.href, external: true, accent: true },
-	{ key: "rolls", text: "55 jellycats", href: "/jellycats.html", external: true },
+	{ key: "rolls", text: "50 jellycats", href: "/jellycats.html", external: true },
 ]);
 </script>
 
