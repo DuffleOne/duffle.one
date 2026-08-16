@@ -13,6 +13,11 @@
 # Then add a matching entry per cat to the `collection` array in
 # src/jellycats.html (thumb: "<slug>_p.jpg", images: ["<slug>_p.jpg","<slug>_l.jpg"]).
 #
+# If the cat is already listed with `pending: true` (they're in the house but
+# hadn't been photographed), drop the pending flag and add thumb + images
+# instead — they'll move out of "waiting for their photo shoot" and into the
+# main grid on their own.
+#
 # Needs cwebp (brew install webp). ImageMagick is not installed on this machine.
 set -euo pipefail
 

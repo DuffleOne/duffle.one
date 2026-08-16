@@ -95,3 +95,10 @@ scripts/
   in `src/public/fonts/alcyone/`.
 - Full-size jellycat photos aren't in git; publish.sh syncs them from
   local, and the Drone pipeline excludes them from `--delete`.
+- `jellycats.html` is one self-contained file on purpose: its own palette,
+  its own fonts, no shared CSS. Everything on the page is derived from the
+  `collection` array at the bottom, so counts, chips, the chart and the
+  spotlight all follow the data — edit the array, not the markup. `pending:
+  true` means we own them but haven't photographed them yet; those get a
+  placeholder card instead of a photo. `jellycat:` is the product slug, and
+  the buy link only renders when it's set.

@@ -6,639 +6,1404 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="color-scheme" content="light">
 	<title>The Jellycat Collection</title>
+	<meta name="description" content="Every squishy friend in one very full bed.">
 
 	<link rel="icon" href="/jellycats-favicon.png" type="image/png" sizes="512x512">
 	<link rel="apple-touch-icon" href="/jellycats-favicon.png">
-	<link rel="preload" href="/fonts/alcyone/Alcyone-Regular.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="preload" href="/fonts/alcyone/Alcyone-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 	<style>
-		* {
+		/* Light-only page with its own palette. We deliberately don't link the
+		   shared input.css: its dark theme tokens flip --bg/--ink under
+		   prefers-color-scheme: dark, and Vite bundles that stylesheet after this
+		   inline block, so it would override the pins below and darken the page. */
+		:root {
+			--cream: #fff6f8;
+			--paper: #fce7ee;
+			--ink: #3a2630;
+			--ink-soft: #94787f;
+			--blush: #ff9eb5;
+			--line: #f4dee5;
+			--white: #fff;
+
+			--shadow-card: 0 6px 18px rgba(58, 43, 32, .07), 0 1px 3px rgba(58, 43, 32, .04);
+			--shadow-lift: 0 14px 32px rgba(58, 43, 32, .12), 0 2px 6px rgba(58, 43, 32, .05);
+			--page: 1296px;
+		}
+
+		*,
+		*::before,
+		*::after {
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
 		}
 
-		/* Light-only page with its own palette. We deliberately don't link the
-		   shared input.css: its dark theme tokens flip --bg/--ink under
-		   prefers-color-scheme: dark, and Vite bundles that stylesheet after this
-		   inline block, so it would override the pins below and darken the page. */
 		html {
-			background: #faf6f1;
-			color: #3d2c22;
+			background: var(--cream);
+			color: var(--ink);
+			scroll-behavior: smooth;
 		}
 
-		/* The site face, self-hosted; same files the SPA uses. Alcyone
-		   tops out at semibold, so nothing here asks for 700. */
-		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
-		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
-		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
-		@font-face { font-family: 'Alcyone'; src: url('/fonts/alcyone/Alcyone-RegularItalic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
-
 		body {
-			font-family: 'Alcyone', system-ui, sans-serif;
-			background: #faf6f1;
-			color: #3d2c22;
+			font-family: 'Nunito', system-ui, sans-serif;
+			background: var(--cream);
+			color: var(--ink);
 			-webkit-font-smoothing: antialiased;
+			overflow-x: hidden;
+		}
+
+		h1,
+		h2,
+		h3,
+		.display {
+			font-family: 'Fredoka', 'Nunito', sans-serif;
+			font-weight: 600;
+			letter-spacing: -.02em;
+		}
+
+		a {
+			color: inherit;
+		}
+
+		button {
+			font: inherit;
+			color: inherit;
+			border: 0;
+			background: none;
+			cursor: pointer;
+		}
+
+		.wrap {
+			width: 100%;
+			max-width: var(--page);
+			margin-inline: auto;
+			padding-inline: 24px;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			white-space: nowrap;
+		}
+
+		:where(a, button, input, [tabindex]):focus-visible {
+			outline: 3px solid var(--blush);
+			outline-offset: 3px;
+			border-radius: 6px;
+		}
+
+		/* ---- Top bar ---- */
+		.topbar {
+			padding-block: 22px;
+		}
+
+		.topbar .wrap {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			flex-wrap: wrap;
+		}
+
+		.back {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 16px;
+			border-radius: 999px;
+			background: var(--white);
+			border: 2px solid var(--line);
+			font-size: 14px;
+			font-weight: 700;
+			text-decoration: none;
+			box-shadow: var(--shadow-card);
+		}
+
+		.back:hover {
+			border-color: var(--blush);
+		}
+
+		.topbar nav {
+			margin-left: auto;
+			display: flex;
+			gap: 22px;
+			font-size: 14px;
+			font-weight: 700;
+			color: var(--ink-soft);
+		}
+
+		.topbar nav a {
+			text-decoration: none;
+		}
+
+		.topbar nav a:hover {
+			color: var(--ink);
 		}
 
 		/* ---- Hero ---- */
 		.hero {
 			position: relative;
-			width: 100%;
-			height: 55vh;
-			min-height: 340px;
-			overflow: hidden;
+			isolation: isolate;
+			padding-block: 24px 64px;
 		}
 
-		.hero img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			object-position: center 40%;
+		.hero .wrap {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			gap: 40px;
+			align-items: center;
 		}
 
-		.hero-overlay {
+		.glow {
 			position: absolute;
-			inset: 0;
-			background: linear-gradient(to top, rgba(58, 42, 28, .72) 0%, rgba(58, 42, 28, .15) 55%, transparent 100%);
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-end;
-			padding: 2.5rem;
+			border-radius: 50%;
+			filter: blur(10px);
+			z-index: -1;
+			pointer-events: none;
 		}
 
-		.hero-title {
-			font-size: clamp(2rem, 5vw, 3.5rem);
-			font-weight: 600;
-			color: #fff;
-			letter-spacing: -0.02em;
-			line-height: 1.15;
+		.glow-blush {
+			width: 900px;
+			height: 820px;
+			right: -180px;
+			top: -220px;
+			background: radial-gradient(closest-side, rgba(255, 169, 194, .4), rgba(255, 169, 194, 0));
 		}
 
-		.hero-subtitle {
-			font-size: clamp(0.95rem, 2vw, 1.15rem);
-			color: rgba(255, 255, 255, .78);
-			margin-top: 0.5rem;
-			font-weight: 400;
+		.glow-lilac {
+			width: 640px;
+			height: 560px;
+			left: -160px;
+			bottom: -200px;
+			background: radial-gradient(closest-side, rgba(217, 169, 232, .3), rgba(217, 169, 232, 0));
 		}
 
-		/* ---- Filter bar ---- */
-		.filter-bar {
-			position: sticky;
-			top: 0;
-			z-index: 40;
-			background: rgba(250, 246, 241, .88);
-			backdrop-filter: blur(12px);
-			-webkit-backdrop-filter: blur(12px);
-			border-bottom: 1px solid rgba(61, 44, 34, .08);
-			padding: 1rem 1.5rem;
-			display: flex;
-			gap: 0.5rem;
-			overflow-x: auto;
-			scrollbar-width: none;
-		}
-
-		.filter-bar::-webkit-scrollbar {
-			display: none;
-		}
-
-		.filter-btn {
-			flex-shrink: 0;
-			padding: 0.45rem 1.1rem;
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 7px 16px 7px 12px;
 			border-radius: 999px;
-			border: 1.5px solid rgba(61, 44, 34, .15);
-			background: transparent;
-			color: #6b5744;
-			font-family: inherit;
-			font-size: 0.85rem;
-			font-weight: 600;
-			cursor: pointer;
-			transition: all 0.2s ease;
+			background: var(--white);
+			border: 2px solid var(--line);
+			font-size: 13px;
+			font-weight: 700;
+			box-shadow: var(--shadow-card);
+		}
+
+		.hero h1 {
+			margin-top: 18px;
+			font-size: clamp(38px, 6vw, 62px);
+			line-height: 1.05;
+		}
+
+		.hero h1 .pink {
+			color: var(--berry, #ff6e85);
+			position: relative;
 			white-space: nowrap;
 		}
 
-		.filter-btn:hover {
-			border-color: #c4956a;
-			color: #3d2c22;
+		.squiggle {
+			display: block;
+			width: min(420px, 100%);
+			margin-top: -2px;
+			color: var(--blush);
 		}
 
-		.filter-btn.active {
-			background: #3d2c22;
-			color: #faf6f1;
-			border-color: #3d2c22;
+		.hero p.lede {
+			margin-top: 16px;
+			max-width: 46ch;
+			font-size: 17px;
+			line-height: 1.6;
+			color: var(--ink-soft);
 		}
 
-		/* ---- Gallery grid ---- */
-		.gallery {
-			max-width: 1400px;
-			margin: 0 auto;
-			padding: 2rem 1.5rem 4rem;
+		.stats {
+			margin-top: 24px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		.stat {
+			display: inline-flex;
+			align-items: baseline;
+			gap: 7px;
+			padding: 10px 18px;
+			border-radius: 999px;
+			color: var(--white);
+			font-weight: 700;
+			font-size: 14px;
+		}
+
+		.stat b {
+			font-family: 'Fredoka', sans-serif;
+			font-size: 17px;
+		}
+
+		/* ---- Polaroids ---- */
+		.polaroids {
+			position: relative;
+			min-height: 520px;
+		}
+
+		.polaroid {
+			position: absolute;
+			background: var(--white);
+			border-radius: 20px;
+			padding: 12px 12px 10px;
+			box-shadow: var(--shadow-lift);
+			width: 42%;
+			transition: transform .25s ease;
+		}
+
+		.polaroid img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 1;
+			object-fit: cover;
+			border-radius: 12px;
+			background: var(--paper);
+		}
+
+		.polaroid b {
+			display: block;
+			margin-top: 10px;
+			font-family: 'Fredoka', sans-serif;
+			font-size: 15px;
+		}
+
+		.polaroid span {
+			font-size: 12px;
+			color: var(--ink-soft);
+		}
+
+		.polaroid:hover {
+			transform: rotate(0deg) scale(1.02) !important;
+			z-index: 4;
+		}
+
+		.p1 {
+			left: 2%;
+			top: 56px;
+			transform: rotate(-5deg);
+			z-index: 2;
+		}
+
+		.p2 {
+			right: 2%;
+			top: 0;
+			transform: rotate(4deg);
+			z-index: 3;
+		}
+
+		.p3 {
+			left: 30%;
+			bottom: 0;
+			transform: rotate(-1deg);
+			z-index: 4;
+		}
+
+		.confetti {
+			position: absolute;
+			border-radius: 50%;
+			z-index: -1;
+		}
+
+		/* ---- Section furniture ---- */
+		.section {
+			padding-block: 56px;
+		}
+
+		.section-head {
+			display: flex;
+			align-items: flex-end;
+			justify-content: space-between;
+			gap: 20px;
+			flex-wrap: wrap;
+			margin-bottom: 24px;
+		}
+
+		.kicker {
+			font-size: 13px;
+			font-weight: 800;
+			letter-spacing: .12em;
+			text-transform: lowercase;
+			color: var(--ink-soft);
+		}
+
+		.section-head h2 {
+			font-size: clamp(26px, 3.4vw, 34px);
+			margin-top: 6px;
+		}
+
+		.head-note {
+			font-size: 14px;
+			color: var(--ink-soft);
+		}
+
+		/* ---- Category chips ---- */
+		.picker {
+			padding-block: 8px 0;
+		}
+
+		.picker-label {
+			text-align: center;
+			font-size: 13px;
+			font-weight: 800;
+			letter-spacing: .1em;
+			color: var(--ink-soft);
+			margin-bottom: 16px;
+		}
+
+		.chips {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 10px;
+		}
+
+		.chip {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 6px 18px 6px 6px;
+			border-radius: 999px;
+			background: var(--white);
+			border: 2px solid var(--line);
+			box-shadow: var(--shadow-card);
+			font-family: 'Fredoka', sans-serif;
+			font-size: 16px;
+			transition: transform .15s ease;
+		}
+
+		.chip:hover {
+			transform: translateY(-2px);
+		}
+
+		.chip img {
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			object-fit: cover;
+			background: var(--paper);
+		}
+
+		.chip .n {
+			padding: 3px 9px;
+			border-radius: 999px;
+			font-size: 13px;
+			font-weight: 700;
+		}
+
+		.chip.all {
+			background: var(--ink);
+			border-color: var(--ink);
+			color: var(--white);
+			padding-left: 18px;
+		}
+
+		.chip[aria-pressed="true"] {
+			border-color: currentColor;
+		}
+
+		/* ---- Tools ---- */
+		.tools {
+			margin-top: 22px;
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
+		.search {
+			flex: 1 1 320px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			height: 48px;
+			padding-inline: 18px;
+			border-radius: 999px;
+			background: var(--white);
+			border: 2px solid var(--line);
+			box-shadow: var(--shadow-card);
+		}
+
+		.search input {
+			flex: 1;
+			border: 0;
+			outline: 0;
+			background: none;
+			font: inherit;
+			font-size: 15px;
+			color: var(--ink);
+		}
+
+		.search input::placeholder {
+			color: var(--ink-soft);
+		}
+
+		.search kbd {
+			font-family: ui-monospace, monospace;
+			font-size: 12px;
+			color: #c6b2ba;
+		}
+
+		.sort {
+			display: flex;
+			gap: 0;
+			padding: 4px;
+			border-radius: 999px;
+			background: var(--white);
+			border: 2px solid var(--line);
+		}
+
+		.sort button {
+			padding: 8px 15px;
+			border-radius: 999px;
+			font-size: 14px;
+			font-weight: 600;
+			color: var(--ink-soft);
+		}
+
+		.sort button[aria-pressed="true"] {
+			background: var(--ink);
+			color: var(--white);
+			font-weight: 700;
+		}
+
+		.surprise {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			height: 48px;
+			padding-inline: 20px;
+			border-radius: 999px;
+			background: var(--blush);
+			color: var(--white);
+			font-family: 'Fredoka', sans-serif;
+			font-size: 15px;
+			font-weight: 600;
+		}
+
+		.surprise:hover {
+			filter: brightness(.96);
+		}
+
+		.tools-label {
+			font-size: 14px;
+			color: var(--ink-soft);
+		}
+
+		/* ---- Spotlight ---- */
+		.spotlight {
 			display: grid;
-			grid-template-columns: repeat(4, 1fr);
-			grid-auto-flow: dense;
-			gap: 1.5rem;
+			grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+			border-radius: 32px;
+			overflow: hidden;
+			background: var(--white);
+			border: 2px solid rgba(168, 123, 224, .2);
+			box-shadow: var(--shadow-lift);
 		}
 
-		/* ---- Card ---- */
+		.spotlight img {
+			width: 100%;
+			height: 100%;
+			min-height: 340px;
+			max-height: 440px;
+			object-fit: cover;
+			background: var(--paper);
+		}
+
+		.spotlight .body {
+			padding: 44px 48px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			gap: 14px;
+		}
+
+		.crown {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 5px 12px;
+			border-radius: 999px;
+			background: #f1e9fc;
+			color: #a87be0;
+			font-size: 10px;
+			font-weight: 800;
+			letter-spacing: .08em;
+		}
+
+		.spotlight h2 {
+			font-size: clamp(36px, 5vw, 52px);
+			line-height: 1.05;
+		}
+
+		.spotlight p {
+			font-size: 16px;
+			line-height: 1.65;
+			color: var(--ink-soft);
+		}
+
+		.meta-pills {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 6px;
+		}
+
+		.meta-pill {
+			display: inline-flex;
+			gap: 7px;
+			align-items: baseline;
+			padding: 8px 14px;
+			border-radius: 999px;
+			background: #faf3fd;
+			font-size: 12px;
+			color: var(--ink-soft);
+		}
+
+		.meta-pill b {
+			font-family: 'Fredoka', sans-serif;
+			font-size: 14px;
+			color: #a87be0;
+		}
+
+		/* ---- Grid + cards ---- */
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 20px;
+		}
+
 		.card {
-			background: #fff;
-			border-radius: 16px;
-			overflow: hidden;
-			box-shadow: 0 1px 3px rgba(61, 44, 34, .06), 0 6px 16px rgba(61, 44, 34, .04);
-			transition: transform 0.25s ease, box-shadow 0.25s ease;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			padding: 10px;
+			border-radius: 28px;
+			background: var(--white);
+			border: 2px solid var(--line);
+			box-shadow: var(--shadow-card);
 			cursor: pointer;
-			opacity: 0;
-			animation: cardIn 0.4s ease forwards;
+			text-align: left;
+			transition: transform .18s ease, box-shadow .18s ease;
+			animation: pop .32s ease backwards;
 		}
 
 		.card:hover {
 			transform: translateY(-4px);
-			box-shadow: 0 4px 12px rgba(61, 44, 34, .1), 0 16px 32px rgba(61, 44, 34, .08);
+			box-shadow: var(--shadow-lift);
 		}
 
 		.card.wide {
 			grid-column: span 2;
 		}
 
-		.card-img-wrap {
+		@keyframes pop {
+			from {
+				opacity: 0;
+				transform: translateY(10px) scale(.98);
+			}
+		}
+
+		.card-img {
 			position: relative;
-			width: 100%;
+			border-radius: 20px;
 			overflow: hidden;
-			background: #efe8df;
+			aspect-ratio: 29 / 25;
 		}
 
-		.card:not(.wide) .card-img-wrap {
-			aspect-ratio: 3 / 4;
+		.card.wide .card-img {
+			aspect-ratio: 62 / 29;
 		}
 
-		.card.wide .card-img-wrap {
-			aspect-ratio: 16 / 9;
-		}
-
-		.card-img-wrap img {
+		.card-img img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			transition: transform 0.4s ease;
+			display: block;
 		}
 
-		.card:hover .card-img-wrap img {
-			transform: scale(1.04);
+		.badge {
+			position: absolute;
+			left: 12px;
+			top: 12px;
+			padding: 5px 11px;
+			border-radius: 999px;
+			background: var(--white);
+			font-size: 10px;
+			font-weight: 800;
+			letter-spacing: .08em;
+			text-transform: uppercase;
+		}
+
+		.buy {
+			position: absolute;
+			right: 12px;
+			top: 12px;
+			width: 28px;
+			height: 28px;
+			display: grid;
+			place-items: center;
+			border-radius: 50%;
+			background: var(--white);
+			box-shadow: 0 2px 6px rgba(58, 43, 32, .12);
+		}
+
+		.buy:hover {
+			transform: scale(1.08);
+		}
+
+		.buy[aria-disabled="true"] {
+			opacity: .45;
+			cursor: default;
+		}
+
+		.crown-badge,
+		.star-badge {
+			position: absolute;
+			left: 12px;
+			bottom: 12px;
+			font-size: 20px;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .25));
 		}
 
 		.card-body {
-			padding: 1rem 1.15rem 1.15rem;
+			padding: 13px 8px 5px;
 		}
 
-		.card-category {
-			display: inline-block;
-			font-size: 0.7rem;
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 0.06em;
-			padding: 0.2rem 0.6rem;
-			border-radius: 999px;
-			margin-bottom: 0.45rem;
+		.name-row {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
 		}
 
 		.card-name {
-			font-size: 1.15rem;
+			font-family: 'Fredoka', sans-serif;
+			font-size: 19px;
 			font-weight: 600;
-			line-height: 1.3;
-			color: #3d2c22;
+			line-height: 1.2;
 		}
 
-		.card-type {
-			font-size: 0.82rem;
-			color: #a8937a;
-			font-weight: 400;
-			font-style: italic;
-			margin-top: 0.1rem;
-		}
-
-		.card-desc {
-			font-size: 0.88rem;
-			color: #8b7355;
-			margin-top: 0.3rem;
-			line-height: 1.45;
-		}
-
-		.card-desc:empty {
-			display: none;
-		}
-
-		.card.leader {
-			border: 2.5px solid #d4a24e;
-			box-shadow:
-				0 0 0 3px rgba(212, 162, 78, .15),
-				0 1px 3px rgba(61, 44, 34, .06),
-				0 6px 16px rgba(61, 44, 34, .04);
-		}
-
-		.card.leader:hover {
-			box-shadow:
-				0 0 0 3px rgba(212, 162, 78, .25),
-				0 4px 12px rgba(61, 44, 34, .1),
-				0 16px 32px rgba(61, 44, 34, .08);
-		}
-
-		.card-crown {
-			position: absolute;
-			top: 0.6rem;
-			left: 0.6rem;
-			width: 34px;
-			height: 34px;
-			background: linear-gradient(135deg, #f6d365, #d4a24e);
-			border-radius: 50%;
-			display: flex;
+		.count {
+			display: inline-flex;
 			align-items: center;
-			justify-content: center;
-			font-size: 1rem;
-			box-shadow: 0 2px 8px rgba(180, 130, 50, .35);
-			pointer-events: none;
-			z-index: 2;
-		}
-
-		.card-star {
-			position: absolute;
-			top: 0.6rem;
-			right: 0.6rem;
-			width: 32px;
-			height: 32px;
-			background: rgba(255, 255, 255, .88);
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 1rem;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
-			pointer-events: none;
-		}
-
-		.card-img-count {
-			position: absolute;
-			bottom: 0.6rem;
-			right: 0.6rem;
-			background: rgba(0, 0, 0, .55);
-			color: #fff;
-			font-size: 0.72rem;
-			font-weight: 600;
-			padding: 0.2rem 0.55rem;
+			gap: 5px;
+			padding: 3px 9px;
 			border-radius: 999px;
-			backdrop-filter: blur(4px);
+			font-size: 12px;
+			font-weight: 700;
+			white-space: nowrap;
 		}
 
-		/* ---- Category badge colours ---- */
-		.cat-bunnies {
-			background: #fce4ec;
-			color: #ad1457;
+		.card-sub {
+			margin-top: 2px;
+			font-size: 13px;
+			color: var(--ink-soft);
 		}
 
-		.cat-dragons {
-			background: #f3e5f5;
-			color: #7b1fa2;
+		.empty {
+			grid-column: 1 / -1;
+			padding: 48px 0;
+			text-align: center;
+			color: var(--ink-soft);
+			font-size: 16px;
 		}
 
-		.cat-birds {
-			background: #e3f2fd;
-			color: #1565c0;
+		/* ---- Pending ---- */
+		.pending-grid {
+			display: grid;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			gap: 20px;
 		}
 
-		.cat-dogs {
-			background: #fff3e0;
-			color: #e65100;
+		.pending .card-img {
+			display: grid;
+			place-content: center;
+			justify-items: center;
+			gap: 8px;
+			aspect-ratio: 1;
 		}
 
-		.cat-farm {
-			background: #e8f5e9;
-			color: #2e7d32;
+		.pending .card-img span {
+			font-size: 12px;
+			font-weight: 700;
 		}
 
-		.cat-sea-creatures {
-			background: #e0f2f1;
-			color: #00695c;
+		.pending .card-name {
+			font-size: 15px;
 		}
 
-		.cat-forest {
-			background: #f1f8e9;
-			color: #558b2f;
+		.soon {
+			padding: 3px 9px;
+			border-radius: 999px;
+			font-family: 'Fredoka', sans-serif;
+			font-size: 11px;
+			font-weight: 700;
 		}
 
-		.cat-other {
-			background: #efebe9;
-			color: #5d4037;
+		/* ---- Everyone band ---- */
+		.everyone {
+			border-radius: 32px;
+			overflow: hidden;
+			box-shadow: var(--shadow-lift);
 		}
 
-		/* ---- Lightbox ---- */
-		.lightbox {
-			position: fixed;
-			inset: 0;
-			z-index: 100;
-			background: rgba(20, 14, 10, .92);
-			backdrop-filter: blur(8px);
-			-webkit-backdrop-filter: blur(8px);
+		.everyone img {
+			display: block;
+			width: 100%;
+			height: 440px;
+			object-fit: cover;
+			object-position: center 45%;
+			background: var(--paper);
+		}
+
+		.everyone-cap {
 			display: flex;
 			align-items: center;
-			justify-content: center;
-			opacity: 0;
-			pointer-events: none;
-			transition: opacity 0.3s ease;
+			gap: 24px;
+			flex-wrap: wrap;
+			padding: 22px 30px;
+			background: var(--ink);
+			color: var(--white);
 		}
 
-		.lightbox.open {
-			opacity: 1;
-			pointer-events: all;
+		.everyone-cap h3 {
+			font-size: 24px;
 		}
 
-		.lightbox-inner {
-			position: relative;
-			max-width: 92vw;
-			max-height: 88vh;
+		.everyone-cap p {
+			font-size: 14px;
+			color: rgba(255, 255, 255, .7);
+			margin-top: 4px;
+		}
+
+		.everyone-pill {
+			margin-left: auto;
+			display: inline-flex;
+			align-items: baseline;
+			gap: 8px;
+			padding: 10px 18px;
+			border-radius: 999px;
+			background: var(--blush);
+			font-weight: 700;
+			font-size: 14px;
+		}
+
+		.everyone-pill b {
+			font-family: 'Fredoka', sans-serif;
+			font-size: 17px;
+		}
+
+		/* ---- Fluff facts ---- */
+		.facts {
+			background: linear-gradient(180deg, var(--cream), var(--paper));
+		}
+
+		.chart {
+			display: grid;
+			grid-template-columns: repeat(8, minmax(0, 1fr));
+			gap: 20px;
+			align-items: end;
+			min-height: 300px;
+		}
+
+		.bar-col {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			gap: 8px;
 		}
 
-		.lightbox-img {
-			max-width: 92vw;
-			max-height: 78vh;
-			object-fit: contain;
-			border-radius: 8px;
-			transition: opacity 0.25s ease;
+		.bar-col img {
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			object-fit: cover;
+			border: 2px solid var(--white);
+			box-shadow: var(--shadow-card);
+			background: var(--paper);
 		}
 
-		.lightbox-caption {
+		.bar-col .v {
+			font-family: 'Fredoka', sans-serif;
+			font-size: 19px;
+			font-weight: 600;
+		}
+
+		.bar {
+			width: 100%;
+			border-radius: 14px;
+			min-height: 8px;
+		}
+
+		.bar-col .l {
+			font-size: 12px;
+			color: var(--ink-soft);
+		}
+
+		/* ---- Footer ---- */
+		footer {
+			position: relative;
+			background: var(--ink);
+			color: var(--white);
+			border-radius: 40px 40px 0 0;
+			padding: 56px 0 44px;
 			text-align: center;
-			margin-top: 1rem;
-			color: rgba(255, 255, 255, .85);
+			margin-top: 40px;
 		}
 
-		.lightbox-name {
-			font-size: 1.2rem;
-			font-weight: 600;
-			color: #fff;
+		footer h2 {
+			font-size: clamp(30px, 5vw, 44px);
 		}
 
-		.lightbox-desc {
-			font-size: 0.9rem;
-			margin-top: 0.25rem;
-			color: rgba(255, 255, 255, .6);
+		footer .fornow {
+			color: var(--blush);
+			font-family: 'Fredoka', sans-serif;
+			font-size: 18px;
+			margin-top: 2px;
 		}
 
-		.lightbox-desc:empty {
-			display: none;
+		.thumb-strip {
+			display: flex;
+			justify-content: center;
+			gap: 6px;
+			flex-wrap: wrap;
+			margin: 28px 0 24px;
 		}
 
-		.lightbox-counter {
-			font-size: 0.75rem;
-			margin-top: 0.4rem;
-			color: rgba(255, 255, 255, .4);
-			font-weight: 600;
-		}
-
-		.lightbox-download {
-			display: inline-flex;
-			align-items: center;
-			gap: 0.4rem;
-			margin-top: 0.75rem;
-			padding: 0.5rem 1.1rem;
-			border-radius: 999px;
-			border: 1.5px solid rgba(255, 255, 255, .25);
-			background: rgba(255, 255, 255, .1);
-			color: #fff;
-			font-family: inherit;
-			font-size: 0.82rem;
-			font-weight: 600;
-			cursor: pointer;
-			text-decoration: none;
-			transition: all 0.2s ease;
-		}
-
-		.lightbox-download:hover {
-			background: rgba(255, 255, 255, .22);
-			border-color: rgba(255, 255, 255, .4);
-		}
-
-		.lightbox-download svg {
-			width: 16px;
-			height: 16px;
-		}
-
-		.lightbox-close {
-			position: fixed;
-			top: 1.2rem;
-			right: 1.2rem;
+		.thumb-strip img {
 			width: 44px;
 			height: 44px;
 			border-radius: 50%;
-			border: none;
-			background: rgba(255, 255, 255, .12);
-			color: #fff;
-			font-size: 1.4rem;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			transition: background 0.2s;
-			z-index: 110;
+			object-fit: cover;
+			border: 2px solid rgba(255, 255, 255, .25);
 		}
 
-		.lightbox-close:hover {
-			background: rgba(255, 255, 255, .25);
+		footer small {
+			display: block;
+			font-size: 13px;
+			color: rgba(255, 255, 255, .55);
 		}
 
-		.lightbox-nav {
+		footer small a {
+			color: rgba(255, 255, 255, .9);
+			font-weight: 700;
+		}
+
+		/* ---- Lightbox / detail ---- */
+		.lb {
 			position: fixed;
-			top: 50%;
-			transform: translateY(-50%);
-			width: 48px;
-			height: 48px;
-			border-radius: 50%;
-			border: none;
-			background: rgba(255, 255, 255, .1);
-			color: #fff;
-			font-size: 1.3rem;
-			cursor: pointer;
+			inset: 0;
+			z-index: 50;
+			display: none;
+			place-items: center;
+			padding: 24px;
+			background: rgba(58, 38, 48, .72);
+			backdrop-filter: blur(6px);
+		}
+
+		.lb.open {
+			display: grid;
+		}
+
+		.lb-panel {
+			display: grid;
+			grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+			width: min(1100px, 100%);
+			max-height: min(86vh, 760px);
+			border-radius: 32px;
+			overflow: hidden;
+			background: var(--white);
+			box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+		}
+
+		.lb-media {
+			padding: 14px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			min-height: 0;
+		}
+
+		.lb-media img.main {
+			flex: 1;
+			min-height: 0;
+			width: 100%;
+			object-fit: cover;
+			border-radius: 20px;
+			background: var(--paper);
+		}
+
+		.lb-strip {
 			display: flex;
 			align-items: center;
-			justify-content: center;
-			transition: background 0.2s;
-			z-index: 110;
+			gap: 10px;
 		}
 
-		.lightbox-nav:hover {
-			background: rgba(255, 255, 255, .22);
+		.lb-strip img {
+			width: 72px;
+			height: 56px;
+			object-fit: cover;
+			border-radius: 12px;
+			border: 3px solid var(--white);
+			cursor: pointer;
+			background: var(--paper);
 		}
 
-		.lightbox-prev {
-			left: 1rem;
+		.lb-strip img[aria-current="true"] {
+			border-color: currentColor;
 		}
 
-		.lightbox-next {
-			right: 1rem;
+		.lb-nav {
+			margin-left: auto;
+			display: flex;
+			gap: 8px;
 		}
 
-		/* ---- Animations ---- */
-		@keyframes cardIn {
-			from {
-				opacity: 0;
-				transform: translateY(16px);
-			}
+		.lb-nav button,
+		.lb-close {
+			width: 40px;
+			height: 40px;
+			display: grid;
+			place-items: center;
+			border-radius: 50%;
+			background: var(--white);
+			box-shadow: var(--shadow-card);
+		}
 
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
+		.lb-nav button:hover {
+			background: var(--paper);
+		}
+
+		.lb-info {
+			padding: 40px 44px;
+			overflow-y: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+		}
+
+		.lb-info h3 {
+			font-size: 44px;
+			line-height: 1.05;
+		}
+
+		.lb-species {
+			font-style: italic;
+			font-size: 19px;
+			color: var(--ink-soft);
+		}
+
+		.lb-desc {
+			font-size: 15.5px;
+			line-height: 1.65;
+			color: var(--ink-soft);
+		}
+
+		.facts-table {
+			margin-top: 4px;
+		}
+
+		.facts-table div {
+			display: flex;
+			justify-content: space-between;
+			gap: 12px;
+			padding: 10px 0;
+			border-top: 2px solid var(--line);
+			font-size: 14px;
+		}
+
+		.facts-table div:first-child {
+			border-top: 0;
+		}
+
+		.facts-table dt {
+			color: #c6b2ba;
+		}
+
+		.facts-table dd {
+			font-family: 'Fredoka', sans-serif;
+			font-weight: 500;
+		}
+
+		.official {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			flex-wrap: wrap;
+			padding: 14px 16px;
+			border-radius: 18px;
+			margin-top: auto;
+		}
+
+		.official .k {
+			font-size: 10px;
+			font-weight: 800;
+			letter-spacing: .08em;
+		}
+
+		.official .v {
+			font-family: 'Fredoka', sans-serif;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.official a {
+			margin-left: auto;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			height: 44px;
+			padding-inline: 18px;
+			border-radius: 999px;
+			color: var(--white);
+			font-family: 'Fredoka', sans-serif;
+			font-size: 14px;
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.lb-close {
+			position: absolute;
+			top: 24px;
+			right: 24px;
+			z-index: 2;
 		}
 
 		/* ---- Responsive ---- */
-		@media (max-width: 700px) {
-			.gallery {
-				grid-template-columns: repeat(2, 1fr);
-				gap: 1rem;
-				padding: 1rem;
+		@media (max-width: 1100px) {
+			.grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
 			}
 
-			.hero {
-				height: 40vh;
-				min-height: 240px;
+			.pending-grid {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
 			}
 
-			.hero-overlay {
-				padding: 1.5rem;
+			.spotlight {
+				grid-template-columns: 1fr;
 			}
 
-			.card-body {
-				padding: 0.75rem 0.85rem 0.85rem;
+			.spotlight img {
+				min-height: 300px;
 			}
 
-			.card-name {
-				font-size: 1rem;
+			.lb-panel {
+				grid-template-columns: 1fr;
+				max-height: 92vh;
 			}
 
-			.lightbox-nav {
-				width: 38px;
-				height: 38px;
-				font-size: 1.1rem;
+			.lb-info {
+				padding: 24px;
 			}
 
-			.lightbox-prev {
-				left: 0.5rem;
-			}
-
-			.lightbox-next {
-				right: 0.5rem;
+			.lb-info h3 {
+				font-size: 32px;
 			}
 		}
 
-		@media (max-width: 420px) {
-			.card.wide {
-				grid-column: span 1;
+		@media (max-width: 820px) {
+			.hero .wrap {
+				grid-template-columns: 1fr;
 			}
 
-			.card.wide .card-img-wrap {
-				aspect-ratio: 4 / 3;
+			.polaroids {
+				min-height: 360px;
+			}
+
+			.chart {
+				grid-template-columns: repeat(4, minmax(0, 1fr));
+				min-height: 0;
+			}
+		}
+
+		@media (max-width: 640px) {
+			.grid,
+			.pending-grid {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+
+			.card.wide {
+				grid-column: span 2;
+			}
+
+			.section {
+				padding-block: 40px;
+			}
+
+			.everyone img {
+				height: 260px;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			* {
+				animation: none !important;
+				transition: none !important;
+			}
+
+			html {
+				scroll-behavior: auto;
 			}
 		}
 	</style>
 </head>
 
 <body>
-	<div style="position:absolute;top:0;left:0;right:0;z-index:10;background:rgba(255,255,255,0.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:8px 16px;font-size:0.85rem;">
-		<a href="/" style="color:#3d2c22;text-decoration:none;opacity:0.7;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">&larr; back to duffle.one</a>
-	</div>
-	<!-- Hero -->
-	<div class="hero">
-		<img src="/img/jellycats/everyone-hero.webp" alt="The whole Jellycat family" loading="eager" decoding="async">
-		<div class="hero-overlay">
-			<h1 class="hero-title">The Jellycat Collection</h1>
-			<p class="hero-subtitle" id="hero-subtitle"></p>
+	<!-- ─── Top bar ─────────────────────────────────────── -->
+	<header class="topbar">
+		<div class="wrap">
+			<a class="back" href="/">← back to duffle.one</a>
+			<nav>
+				<a href="#gang">the gang</a>
+				<a href="#soon">on the way</a>
+				<a href="#facts">fluff facts</a>
+			</nav>
 		</div>
-	</div>
+	</header>
 
-	<!-- Filter bar -->
-	<nav class="filter-bar" id="filter-bar"></nav>
+	<!-- ─── Hero ────────────────────────────────────────── -->
+	<section class="hero">
+		<span class="glow glow-blush"></span>
+		<span class="glow glow-lilac"></span>
+		<div class="wrap">
+			<div>
+				<span class="eyebrow">⭐ the jellycat collection</span>
+				<h1>
+					<span id="hero-count">0</span> squishy<br>friends, one<br>
+					<span class="pink">very full bed.</span>
+				</h1>
+				<svg class="squiggle" viewBox="0 0 420 12" fill="none" aria-hidden="true">
+					<path d="M4 8C60 2 96 10 148 6s84-8 132-2 76 8 136 2" stroke="currentColor" stroke-width="6"
+						stroke-linecap="round" />
+				</svg>
+				<p class="lede">Every single one has a name, a species and strong opinions. Scroll down, say
+					hello, pick a favourite (impossible).</p>
+				<div class="stats" id="hero-stats"></div>
+			</div>
+			<div class="polaroids" id="polaroids"></div>
+		</div>
+	</section>
 
-	<!-- Gallery -->
-	<main class="gallery" id="gallery"></main>
-
-	<!-- Lightbox -->
-	<div class="lightbox" id="lightbox">
-		<button class="lightbox-close" id="lb-close" aria-label="Close">&times;</button>
-		<button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Previous">&#8249;</button>
-		<button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Next">&#8250;</button>
-		<div class="lightbox-inner">
-			<img class="lightbox-img" id="lb-img" src="" alt="">
-			<div class="lightbox-caption">
-				<div class="lightbox-name" id="lb-name"></div>
-				<div class="lightbox-desc" id="lb-desc"></div>
-				<div class="lightbox-counter" id="lb-counter"></div>
-				<a class="lightbox-download" id="lb-download" href="" download>
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+	<!-- ─── Picker + tools ──────────────────────────────── -->
+	<section class="picker">
+		<div class="wrap">
+			<p class="picker-label">who are you here for?</p>
+			<div class="chips" id="chips"></div>
+			<div class="tools">
+				<label class="search">
+					<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+						<circle cx="11" cy="11" r="7" />
+						<path d="m20 20-3.5-3.5" />
 					</svg>
-					Download full size
-				</a>
+					<span class="sr-only">Search the collection</span>
+					<input id="search" type="search" placeholder="find a friend by name, species or vibe"
+						autocomplete="off">
+					<kbd>/</kbd>
+				</label>
+				<span class="tools-label">sort by</span>
+				<div class="sort" id="sort" role="group" aria-label="Sort the collection">
+					<button data-sort="default" aria-pressed="true">newest in</button>
+					<button data-sort="name" aria-pressed="false">name</button>
+					<button data-sort="photos" aria-pressed="false">most photographed</button>
+				</div>
+				<button class="surprise" id="surprise">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+					</svg>
+					surprise me
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── Spotlight ───────────────────────────────────── -->
+	<section class="section" id="spotlight-section">
+		<div class="wrap">
+			<article class="spotlight" id="spotlight"></article>
+		</div>
+	</section>
+
+	<!-- ─── The gang ────────────────────────────────────── -->
+	<section class="section" id="gang">
+		<div class="wrap">
+			<div class="section-head">
+				<div>
+					<p class="kicker">the gang's all here</p>
+					<h2>Say hello, one by one</h2>
+				</div>
+				<p class="head-note" id="grid-count"></p>
+			</div>
+			<div class="grid" id="grid"></div>
+		</div>
+	</section>
+
+	<!-- ─── On the way ──────────────────────────────────── -->
+	<section class="section" id="soon">
+		<div class="wrap">
+			<div class="section-head">
+				<div>
+					<p class="kicker">already here, not yet photographed</p>
+					<h2>Waiting for their photo shoot</h2>
+				</div>
+				<p class="head-note" id="pending-count"></p>
+			</div>
+			<div class="pending-grid" id="pending"></div>
+		</div>
+	</section>
+
+	<!-- ─── Everyone ────────────────────────────────────── -->
+	<section class="section">
+		<div class="wrap">
+			<div class="everyone">
+				<img src="/img/jellycats/everyone-hero.webp" alt="The whole Jellycat family piled on the bed"
+					loading="lazy" decoding="async">
+				<div class="everyone-cap">
+					<div>
+						<h3>Everybody, all at once</h3>
+						<p>Taken the day the shelf finally gave up. Nobody has been counted twice, we checked.</p>
+					</div>
+					<span class="everyone-pill"><b id="everyone-count">0</b> friends</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── Fluff facts ─────────────────────────────────── -->
+	<section class="section facts" id="facts">
+		<div class="wrap">
+			<div class="section-head">
+				<div>
+					<p class="kicker">fluff facts</p>
+					<h2 id="facts-title">The bunnies are, frankly, winning</h2>
+				</div>
+				<p class="head-note" id="facts-note"></p>
+			</div>
+			<div class="chart" id="chart"></div>
+		</div>
+	</section>
+
+	<!-- ─── Footer ──────────────────────────────────────── -->
+	<footer>
+		<div class="wrap">
+			<h2>that's the lot.</h2>
+			<p class="fornow">(for now)</p>
+			<div class="thumb-strip" id="footer-strip"></div>
+			<small>made with far too much love at <a href="/">duffle.one</a> ♡</small>
+		</div>
+	</footer>
+
+	<!-- ─── Lightbox ────────────────────────────────────── -->
+	<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lb-name">
+		<button class="lb-close" id="lb-close" aria-label="Close">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+				stroke-linecap="round" aria-hidden="true">
+				<path d="M6 6l12 12M18 6 6 18" />
+			</svg>
+		</button>
+		<div class="lb-panel" id="lb-panel">
+			<div class="lb-media">
+				<img class="main" id="lb-img" alt="">
+				<div class="lb-strip">
+					<div id="lb-thumbs" style="display:flex;gap:10px"></div>
+					<div class="lb-nav">
+						<button id="lb-prev" aria-label="Previous photo">
+							<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+								stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path d="m15 5-7 7 7 7" />
+							</svg>
+						</button>
+						<button id="lb-next" aria-label="Next photo">
+							<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+								stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path d="m9 5 7 7-7 7" />
+							</svg>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="lb-info">
+				<span class="badge" id="lb-cat" style="position:static;align-self:flex-start"></span>
+				<h3 id="lb-name"></h3>
+				<p class="lb-species" id="lb-species"></p>
+				<p class="lb-desc" id="lb-desc"></p>
+				<dl class="facts-table" id="lb-facts"></dl>
+				<div class="official" id="lb-official"></div>
 			</div>
 		</div>
 	</div>
 
 	<script>
-		/*
-		 * ============================
-		 *  COLLECTION DATA
-		 * ============================
+		/* ═══════════════════════════════════════════════════════════
+		 *  The collection
 		 *
-		 *  Edit the entries below to update names, descriptions, and categories.
-		 *  - thumb:  filename used for the card thumbnail
-		 *  - images: all filenames for this entry (shown in lightbox)
-		 *  - wide:   if true, card spans two columns (good for group/landscape shots)
-		 */
+		 *  name         what we call them
+		 *  type         the official Jellycat product, if known
+		 *  description  a line about them, shown under the name on the card
+		 *  story        the longer version, for the spotlight and the lightbox
+		 *  category     Bunnies | Dragons | Birds | Dogs | Farm |
+		 *               Sea Creatures | Forest | Other
+		 *  thumb        card photo (jpg name; served as webp)
+		 *  images       every photo of them, first one leads
+		 *  jellycat     product page slug on jellycat.com
+		 *  wide         card spans two columns (landscape/group shots)
+		 *  leader       crown
+		 *  star         honorary member
+		 *  pending      here but not photographed yet — no images needed
+		 * ═══════════════════════════════════════════════════════════ */
 		const THUMB_BASE = "img/jellycats/thumbs/";
 		const FULL_BASE = "img/jellycats/";
 		const toWebp = (jpg) => jpg.replace(/\.jpg$/, ".webp");
+		const JELLYCAT = "https://jellycat.com/";
 
 		const collection = [
-			// ─── Bunnies ───────────────────────────────────────────
+			// ─── Bunnies ─────────────────────────────────────
 			{
 				name: "Black Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_black_p.jpg",
 				images: ["bunny_black_p.jpg", "bunny_black_l.jpg"],
 			},
 			{
 				name: "Grey Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_grey_p.jpg",
 				images: ["bunny_grey_p.jpg", "bunny_grey_l.jpg"],
 			},
 			{
 				name: "Lavender Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_lavendar_p.jpg",
 				images: ["bunny_lavendar_p.jpg", "bunny_lavendar_l.jpg"],
 			},
 			{
 				name: "Pink Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_pink_p.jpg",
 				images: ["bunny_pink_p.jpg", "bunny_pink_l.jpg", "bunny_pink_jump.jpg"],
 			},
 			{
-				name: "White Bunny",
-				description: "",
+				name: "Cream Bunny",
+				type: "Bashful Cream Bunny",
 				category: "Bunnies",
 				thumb: "bunny_white_p.jpg",
 				images: ["bunny_white_p.jpg", "bunny_white_l.jpg"],
+				jellycat: "bashful-cream-bunny",
 			},
 			{
 				name: "The Bunny Gang",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_five_l.jpg",
 				images: ["bunny_five_l.jpg", "bunny_five_xl.jpg", "bunny_five_bums_line.jpg", "bunny_five_bums_pyramid.jpg"],
@@ -647,31 +1412,29 @@
 			{
 				name: "Puddlesea",
 				type: "Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_puddlesea_p.jpg",
 				images: ["bunny_puddlesea_p.jpg", "bunny_puddlesea_l.jpg"],
 			},
 			{
 				name: "Thistlepop",
-				type: "Blossom Bunny",
-				description: "",
+				type: "Blossom Luxe Bunny",
 				category: "Bunnies",
 				thumb: "bunny_thistlepop_p.jpg",
 				images: ["bunny_thistlepop_p.jpg", "bunny_thistlepop_l.jpg"],
+				jellycat: "thistlepop-blossom-luxe-bunny-original",
 			},
 			{
 				name: "Blushkin",
-				type: "Blossom Bunny",
-				description: "",
+				type: "Blossom Luxe Bunny",
 				category: "Bunnies",
 				thumb: "bunny_blushkin_p.jpg",
 				images: ["bunny_blushkin_p.jpg", "bunny_blushkin_l.jpg"],
+				jellycat: "blushkin-blossom-luxe-bunny-original",
 			},
 			{
 				name: "Wheat",
 				type: "Flufflet Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_wheat_p.jpg",
 				images: ["bunny_wheat_p.jpg", "bunny_wheat_l.jpg"],
@@ -679,7 +1442,6 @@
 			{
 				name: "Oat",
 				type: "Flufflet Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_oat_p.jpg",
 				images: ["bunny_oat_p.jpg", "bunny_oat_l.jpg"],
@@ -687,7 +1449,6 @@
 			{
 				name: "Barley",
 				type: "Flufflet Bunny",
-				description: "",
 				category: "Bunnies",
 				thumb: "bunny_barley_p.jpg",
 				images: ["bunny_barley_p.jpg", "bunny_barley_l.jpg"],
@@ -701,12 +1462,34 @@
 				images: ["bunny_flufflets_l.jpg", "bunny_flufflets_p.jpg"],
 				wide: true,
 			},
+			{
+				name: "Blossom Blush Bunny",
+				description: "cherry",
+				category: "Bunnies",
+				jellycat: "blossom-blush-bunny-cherry",
+				pending: true,
+			},
+			{
+				name: "Blossom Cream Bunny",
+				description: "berry",
+				category: "Bunnies",
+				jellycat: "blossom-cream-bunny-berry",
+				pending: true,
+			},
+			{
+				name: "Bashful Beige Bunny",
+				description: "petal",
+				category: "Bunnies",
+				jellycat: "bashful-beige-bunny-petal",
+				pending: true,
+			},
 
-			// ─── Dragons ──────────────────────────────────────────
+			// ─── Dragons ─────────────────────────────────────
 			{
 				name: "Idir",
 				type: "Lavender Dragon",
 				description: "Leader of the group",
+				story: "Laura picked this one out and named her Idir, after Ida. She is the leader of the group and Laura's constant companion, and she's the one who settles disputes between the bunnies and the dragons.",
 				category: "Dragons",
 				thumb: "dragon_idir_p.jpg",
 				images: ["dragon_idir_p.jpg", "dragon_idir_l.jpg"],
@@ -715,7 +1498,6 @@
 			{
 				name: "Sky",
 				type: "Sky Dragon",
-				description: "",
 				category: "Dragons",
 				thumb: "dragon_sky_l.jpg",
 				images: ["dragon_sky_l.jpg", "dragon_sky_back_l.jpg"],
@@ -723,32 +1505,28 @@
 			{
 				name: "Sprinkles",
 				type: "Lazulia Dragon",
-				description: "",
 				category: "Dragons",
 				thumb: "dragon_sprinkles_p.jpg",
 				images: ["dragon_sprinkles_p.jpg", "dragon_sprinkles_l.jpg", "dragon_sprinkles_upright_p.jpg"],
 			},
 			{
 				name: "White Dragon",
-				description: "",
 				category: "Dragons",
 				thumb: "dragon_white_p.jpg",
 				images: ["dragon_white_p.jpg", "dragon_white_l.jpg", "dragon_white_upright_p.jpg", "dragon_white_upright_l.jpg"],
 			},
 			{
 				name: "The Dragon Squad",
-				description: "",
 				category: "Dragons",
 				thumb: "drgon_four_pano_l.jpg",
 				images: ["drgon_four_pano_l.jpg"],
 				wide: true,
 			},
 
-			// ─── Birds ────────────────────────────────────────────
+			// ─── Birds ───────────────────────────────────────
 			{
 				name: "Traf",
 				type: "London Pigeon",
-				description: "",
 				category: "Birds",
 				thumb: "bird_pigeon_lon_p.jpg",
 				images: ["bird_pigeon_lon_p.jpg", "bird_pigeon_lon_l.jpg"],
@@ -756,14 +1534,12 @@
 			{
 				name: "Bobby",
 				type: "NYC Pigeon",
-				description: "",
 				category: "Birds",
 				thumb: "bird_pigeon_ny_p.jpg",
 				images: ["bird_pigeon_ny_p.jpg", "bird_pigeon_ny_l.jpg"],
 			},
 			{
 				name: "Robin",
-				description: "",
 				category: "Birds",
 				thumb: "bird_robin_p.jpg",
 				images: ["bird_robin_p.jpg", "bird_robin_l.jpg"],
@@ -771,87 +1547,83 @@
 			{
 				name: "Quackers",
 				type: "Duck",
-				description: "",
 				category: "Birds",
 				thumb: "duck_p.jpg",
 				images: ["duck_p.jpg", "duck_l.jpg"],
 			},
 			{
 				name: "Penguin",
-				description: "",
 				category: "Birds",
 				thumb: "penguin_p.jpg",
 				images: ["penguin_p.jpg", "penguin_l.jpg"],
 			},
 			{
 				name: "Three Birds",
-				description: "",
 				category: "Birds",
 				thumb: "bird_three_l.jpg",
 				images: ["bird_three_l.jpg"],
 				wide: true,
 			},
+			{
+				name: "Keli Pelican",
+				description: "enormous beak, few opinions",
+				category: "Birds",
+				jellycat: "keli-pelican",
+				pending: true,
+			},
 
-			// ─── Dogs ─────────────────────────────────────────────
+			// ─── Dogs ────────────────────────────────────────
 			{
 				name: "Scotty",
-				description: "",
 				category: "Dogs",
 				thumb: "dog_scotty_p.jpg",
 				images: ["dog_scotty_p.jpg", "dog_scotty_l.jpg"],
 			},
 			{
 				name: "Small Dog",
-				description: "",
 				category: "Dogs",
 				thumb: "dog_small_p.jpg",
 				images: ["dog_small_p.jpg", "dog_small_l.jpg"],
 			},
 			{
 				name: "Two Dogs",
-				description: "",
 				category: "Dogs",
 				thumb: "dog_two_l.jpg",
 				images: ["dog_two_l.jpg", "dog_two_p.jpg"],
 				wide: true,
 			},
 
-			// ─── Farm ─────────────────────────────────────────────
+			// ─── Farm ────────────────────────────────────────
 			{
 				name: "Smudge",
 				type: "Cow",
-				description: "",
 				category: "Farm",
 				thumb: "farm_cow_p.jpg",
 				images: ["farm_cow_p.jpg", "farm_cow_l.jpg"],
 			},
 			{
 				name: "Horse",
-				description: "",
 				category: "Farm",
 				thumb: "farm_horse_p.jpg",
 				images: ["farm_horse_p.jpg", "farm_horse_l.jpg", "farm_horse_horizontal_l.jpg"],
 			},
 			{
 				name: "Pig",
-				description: "",
 				category: "Farm",
 				thumb: "farm_pig_p.jpg",
 				images: ["farm_pig_p.jpg", "farm_pig_l.jpg"],
 			},
 			{
 				name: "Farm Friends",
-				description: "",
 				category: "Farm",
 				thumb: "farm_three_l.jpg",
 				images: ["farm_three_l.jpg"],
 				wide: true,
 			},
 
-			// ─── Sea Creatures ────────────────────────────────────
+			// ─── Sea Creatures ───────────────────────────────
 			{
 				name: "Cherry Octopus",
-				description: "",
 				category: "Sea Creatures",
 				thumb: "octopus_cherry_p.jpg",
 				images: ["octopus_cherry_p.jpg", "octopus_cherry_l.jpg"],
@@ -872,7 +1644,6 @@
 			},
 			{
 				name: "Fish",
-				description: "",
 				category: "Sea Creatures",
 				thumb: "fish_p.jpg",
 				images: ["fish_p.jpg", "fish_l.jpg"],
@@ -880,64 +1651,64 @@
 			{
 				name: "Fancy Carp",
 				type: "Carp",
-				description: "",
 				category: "Sea Creatures",
 				thumb: "carp_p.jpg",
 				images: ["carp_p.jpg", "carp_l.jpg"],
+				jellycat: "fancy-carp",
 			},
 			{
 				name: "Three Octopi",
-				description: "",
 				category: "Sea Creatures",
 				thumb: "octopus_three_l.jpg",
 				images: ["octopus_three_l.jpg", "octopus_three_p.jpg"],
 				wide: true,
 			},
 
-			// ─── Forest ───────────────────────────────────────────
+			// ─── Forest ──────────────────────────────────────
 			{
 				name: "Margo",
 				type: "Mushroom",
-				description: "",
 				category: "Forest",
 				thumb: "forest_mushroom_p.jpg",
 				images: ["forest_mushroom_p.jpg", "forest_mushroom_l.jpg"],
 			},
 			{
 				name: "Warthog",
-				description: "",
 				category: "Forest",
 				thumb: "forest_warthog_p.jpg",
 				images: ["forest_warthog_p.jpg", "forest_warthog_l.jpg"],
 			},
 			{
 				name: "Forest Friends",
-				description: "",
 				category: "Forest",
 				thumb: "forest_two_p.jpg",
 				images: ["forest_two_p.jpg"],
 				wide: true,
 			},
+			{
+				name: "Trixiwoo Raccoon",
+				description: "woodland newcomer",
+				category: "Forest",
+				jellycat: "trixiwoo-raccoon",
+				pending: true,
+			},
 
-			// ─── Other ───────────────────────────────────────────
+			// ─── Other ───────────────────────────────────────
 			{
 				name: "Albee",
 				type: "Bee",
-				description: "",
 				category: "Other",
 				thumb: "bee_p.jpg",
 				images: ["bee_p.jpg", "bee_l.jpg"],
 			},
 			{
 				name: "Devil",
-				description: "",
 				category: "Other",
 				thumb: "devil_p.jpg",
 				images: ["devil_p.jpg", "devil_l.jpg"],
 			},
 			{
 				name: "Tiger",
-				description: "",
 				category: "Other",
 				thumb: "tiger_p.jpg",
 				images: ["tiger_p.jpg", "tiger_l.jpg"],
@@ -950,226 +1721,475 @@
 				images: ["kate.jpg", "kate_face.jpg", "kate_kiss.jpg", "kate_tongue.jpg"],
 				star: true,
 			},
+			{
+				name: "Bretti Yeti",
+				description: "abominable, allegedly",
+				category: "Other",
+				jellycat: "bretti-yeti",
+				pending: true,
+			},
 		];
 
-		/* ---- Helpers ---- */
-		const catSlug = (c) => "cat-" + c.toLowerCase().replace(/\s+/g, "-");
-		const categories = [...new Set(collection.map((e) => e.category))];
-
-		/* Build a flat image list for lightbox navigation */
-		const flatImages = [];
-		collection.forEach((entry) => {
-			entry.images.forEach((src) => {
-				flatImages.push({
-					thumb: THUMB_BASE + toWebp(src),
-					full: FULL_BASE + src,
-					name: entry.name,
-					description: entry.description,
-					category: entry.category,
-				});
-			});
-		});
-
-		/* ---- Subtitle ---- */
-		document.getElementById("hero-subtitle").textContent =
-			`${collection.length} friends across ${categories.length} categories`;
-
-		/* ---- Build filter bar ---- */
-		const filterBar = document.getElementById("filter-bar");
-		const makeBtn = (label, value) => {
-			const btn = document.createElement("button");
-			btn.className = "filter-btn" + (value === "all" ? " active" : "");
-			btn.textContent = label;
-			btn.dataset.filter = value;
-			btn.addEventListener("click", () => filterGallery(value, btn));
-			return btn;
+		/* ---- Category colours ---- */
+		const CATS = {
+			"Bunnies": { c: "#ff6e85", t: "#ffe8ec" },
+			"Sea Creatures": { c: "#3fb58c", t: "#e0f5ed" },
+			"Birds": { c: "#4fa7e0", t: "#e3f1fb" },
+			"Dragons": { c: "#a87be0", t: "#f1e9fc" },
+			"Farm": { c: "#d9a213", t: "#fdf3d8" },
+			"Other": { c: "#e05d9e", t: "#fce6f1" },
+			"Dogs": { c: "#f2822f", t: "#fdebdd" },
+			"Forest": { c: "#57a06b", t: "#e6f2e7" },
 		};
-		filterBar.appendChild(makeBtn("All", "all"));
-		categories.forEach((cat) => filterBar.appendChild(makeBtn(cat, cat)));
+		const catColour = (c) => (CATS[c] || { c: "#ff6e85", t: "#ffe8ec" });
 
-		let activeFilter = "all";
+		const el = (tag, cls, text) => {
+			const n = document.createElement(tag);
+			if (cls) n.className = cls;
+			if (text != null) n.textContent = text;
+			return n;
+		};
+		const thumbOf = (e) => THUMB_BASE + toWebp(e.thumb);
+		const byName = (n) => collection.find((e) => e.name === n);
 
-		function filterGallery(value, btn) {
-			activeFilter = value;
-			filterBar.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
-			btn.classList.add("active");
+		const shot = collection.filter((e) => !e.pending);
+		const pending = collection.filter((e) => e.pending);
+		const categories = [...new Set(collection.map((e) => e.category))];
+		const photoTotal = shot.reduce((n, e) => n + e.images.length, 0);
 
-			const cards = document.querySelectorAll(".card");
-			let delay = 0;
-			cards.forEach((card) => {
-				const match = value === "all" || card.dataset.category === value;
-				if (match) {
-					card.style.display = "";
-					card.style.animationDelay = delay + "ms";
-					card.style.animation = "none";
-					card.offsetHeight; // trigger reflow
-					card.style.animation = "";
-					delay += 40;
-				} else {
-					card.style.display = "none";
+		/* ---- Hero ---- */
+		document.getElementById("hero-count").textContent = collection.length;
+		document.getElementById("everyone-count").textContent = collection.length;
+		document.title = `The Jellycat Collection — ${collection.length} friends`;
+
+		[["friends", collection.length, "#ff6e85"],
+		["categories", categories.length, "#3fb58c"],
+		["photos", photoTotal, "#4fa7e0"]].forEach(([label, n, colour]) => {
+			const s = el("span", "stat");
+			s.style.background = colour;
+			s.appendChild(el("b", null, n));
+			s.appendChild(el("span", null, label));
+			document.getElementById("hero-stats").appendChild(s);
+		});
+
+		["Odelle", "Sprinkles", "Traf"].forEach((name, i) => {
+			const e = byName(name);
+			if (!e) return;
+			const card = el("button", "polaroid p" + (i + 1));
+			const img = el("img");
+			img.src = thumbOf(e);
+			img.alt = e.name;
+			img.loading = "eager";
+			card.appendChild(img);
+			card.appendChild(el("b", null, e.name));
+			card.appendChild(el("span", null, e.type || e.description || e.category.toLowerCase()));
+			card.addEventListener("click", () => openLightbox(e, 0));
+			document.getElementById("polaroids").appendChild(card);
+		});
+
+		[["6%", "18%", 18, "#ff6e85"], ["68%", "8%", 12, "#a87be0"], ["92%", "36%", 14, "#3fb58c"],
+		["12%", "78%", 16, "#ffd7e1"], ["80%", "88%", 11, "#4fa7e0"], ["40%", "4%", 10, "#f79fb8"]]
+			.forEach(([l, t, size, colour]) => {
+				const d = el("span", "confetti");
+				Object.assign(d.style, {
+					left: l, top: t, width: size + "px", height: size + "px", background: colour,
+				});
+				document.querySelector(".hero .wrap").appendChild(d);
+			});
+
+		/* ---- Chips ---- */
+		let activeCat = "all";
+		const chipsBox = document.getElementById("chips");
+
+		function buildChips() {
+			chipsBox.innerHTML = "";
+			const all = el("button", "chip all");
+			all.setAttribute("aria-pressed", String(activeCat === "all"));
+			all.appendChild(el("span", null, "everyone"));
+			const allN = el("span", "n", String(collection.length));
+			allN.style.cssText = "background:rgba(255,255,255,.18);color:#fff";
+			all.appendChild(allN);
+			all.addEventListener("click", () => { activeCat = "all"; buildChips(); render(); });
+			chipsBox.appendChild(all);
+
+			categories.forEach((cat) => {
+				const { c, t } = catColour(cat);
+				const first = collection.find((e) => e.category === cat && !e.pending);
+				const btn = el("button", "chip");
+				btn.style.color = c;
+				btn.style.borderColor = activeCat === cat ? c : "var(--line)";
+				btn.setAttribute("aria-pressed", String(activeCat === cat));
+				if (first) {
+					const img = el("img");
+					img.src = thumbOf(first);
+					img.alt = "";
+					img.loading = "lazy";
+					btn.appendChild(img);
 				}
+				const label = el("span", null, cat.toLowerCase());
+				label.style.color = "var(--ink)";
+				btn.appendChild(label);
+				const n = el("span", "n", String(collection.filter((e) => e.category === cat).length));
+				n.style.cssText = `background:${t};color:${c}`;
+				btn.appendChild(n);
+				btn.addEventListener("click", () => { activeCat = cat; buildChips(); render(); });
+				chipsBox.appendChild(btn);
 			});
 		}
 
-		/* ---- Build gallery ---- */
-		const gallery = document.getElementById("gallery");
+		/* ---- Search + sort ---- */
+		let query = "";
+		let sortMode = "default";
 
-		collection.sort((a, b) => {
-			if (a.category !== b.category) return 0;
-			return (b.wide ? 1 : 0) - (a.wide ? 1 : 0);
-		});
-
-		collection.forEach((entry, idx) => {
-			const card = document.createElement("div");
-			card.className = "card" + (entry.wide ? " wide" : "") + (entry.leader ? " leader" : "");
-			card.dataset.category = entry.category;
-			card.dataset.index = idx;
-			card.style.animationDelay = (idx * 40) + "ms";
-
-			const imgWrap = document.createElement("div");
-			imgWrap.className = "card-img-wrap";
-
-			const img = document.createElement("img");
-			img.src = THUMB_BASE + toWebp(entry.thumb);
-			img.alt = entry.name;
-			img.loading = "lazy";
-			img.decoding = "async";
-			imgWrap.appendChild(img);
-
-			if (entry.leader) {
-				const crown = document.createElement("span");
-				crown.className = "card-crown";
-				crown.textContent = "\u{1F451}";
-				imgWrap.appendChild(crown);
-			}
-
-			if (entry.star) {
-				const star = document.createElement("span");
-				star.className = "card-star";
-				star.textContent = "\u2B50";
-				imgWrap.appendChild(star);
-			}
-
-			if (entry.images.length > 1) {
-				const count = document.createElement("span");
-				count.className = "card-img-count";
-				count.textContent = entry.images.length + " photos";
-				imgWrap.appendChild(count);
-			}
-
-			const body = document.createElement("div");
-			body.className = "card-body";
-
-			const badge = document.createElement("span");
-			badge.className = "card-category " + catSlug(entry.category);
-			badge.textContent = entry.category;
-
-			const name = document.createElement("div");
-			name.className = "card-name";
-			name.textContent = entry.name;
-
-			const desc = document.createElement("div");
-			desc.className = "card-desc";
-			desc.textContent = entry.description;
-
-			body.appendChild(badge);
-			body.appendChild(name);
-
-			if (entry.type) {
-				const type = document.createElement("div");
-				type.className = "card-type";
-				type.textContent = entry.type;
-				body.appendChild(type);
-			}
-
-			body.appendChild(desc);
-
-			card.appendChild(imgWrap);
-			card.appendChild(body);
-			gallery.appendChild(card);
-
-			card.addEventListener("click", () => openLightbox(idx, 0));
-		});
-
-		/* ---- Lightbox ---- */
-		const lightbox = document.getElementById("lightbox");
-		const lbImg = document.getElementById("lb-img");
-		const lbName = document.getElementById("lb-name");
-		const lbDesc = document.getElementById("lb-desc");
-		const lbCounter = document.getElementById("lb-counter");
-		const lbDownload = document.getElementById("lb-download");
-
-		let currentEntry = 0;
-		let currentImageIdx = 0;
-
-		function openLightbox(entryIdx, imgIdx) {
-			currentEntry = entryIdx;
-			currentImageIdx = imgIdx || 0;
-			showLightboxImage();
-			lightbox.classList.add("open");
-			document.body.style.overflow = "hidden";
-		}
-
-		function closeLightbox() {
-			lightbox.classList.remove("open");
-			document.body.style.overflow = "";
-		}
-
-		function showLightboxImage() {
-			const entry = collection[currentEntry];
-			const jpgFile = entry.images[currentImageIdx];
-			lbImg.src = THUMB_BASE + toWebp(jpgFile);
-			lbImg.alt = entry.name;
-			lbName.textContent = entry.type ? `${entry.name} — ${entry.type}` : entry.name;
-			lbDesc.textContent = entry.description;
-			lbDownload.href = FULL_BASE + jpgFile;
-			lbDownload.download = jpgFile;
-
-			if (entry.images.length > 1) {
-				lbCounter.textContent = `${currentImageIdx + 1} / ${entry.images.length}`;
-			} else {
-				lbCounter.textContent = "";
-			}
-		}
-
-		function lightboxPrev() {
-			const entry = collection[currentEntry];
-			if (currentImageIdx > 0) {
-				currentImageIdx--;
-			} else {
-				currentEntry = (currentEntry - 1 + collection.length) % collection.length;
-				currentImageIdx = collection[currentEntry].images.length - 1;
-			}
-			showLightboxImage();
-		}
-
-		function lightboxNext() {
-			const entry = collection[currentEntry];
-			if (currentImageIdx < entry.images.length - 1) {
-				currentImageIdx++;
-			} else {
-				currentEntry = (currentEntry + 1) % collection.length;
-				currentImageIdx = 0;
-			}
-			showLightboxImage();
-		}
-
-		document.getElementById("lb-close").addEventListener("click", closeLightbox);
-		document.getElementById("lb-prev").addEventListener("click", lightboxPrev);
-		document.getElementById("lb-next").addEventListener("click", lightboxNext);
-
-		lightbox.addEventListener("click", (e) => {
-			if (e.target === lightbox || e.target.classList.contains("lightbox-inner")) {
-				closeLightbox();
-			}
+		document.getElementById("search").addEventListener("input", (e) => {
+			query = e.target.value.trim().toLowerCase();
+			render();
 		});
 
 		document.addEventListener("keydown", (e) => {
-			if (!lightbox.classList.contains("open")) return;
-			if (e.key === "Escape") closeLightbox();
-			if (e.key === "ArrowLeft") lightboxPrev();
-			if (e.key === "ArrowRight") lightboxNext();
+			if (e.key === "/" && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
+				e.preventDefault();
+				document.getElementById("search").focus();
+			}
 		});
+
+		document.getElementById("sort").addEventListener("click", (e) => {
+			const btn = e.target.closest("button");
+			if (!btn) return;
+			sortMode = btn.dataset.sort;
+			document.querySelectorAll("#sort button").forEach((b) =>
+				b.setAttribute("aria-pressed", String(b === btn)));
+			render();
+		});
+
+		document.getElementById("surprise").addEventListener("click", () => {
+			const pool = shot;
+			openLightbox(pool[Math.floor(Math.random() * pool.length)], 0);
+		});
+
+		/* ---- Card ---- */
+		function buildCard(entry, idx) {
+			const { c, t } = catColour(entry.category);
+			const card = el("button", "card" + (entry.wide ? " wide" : "") + (entry.pending ? " pending" : ""));
+			card.style.borderColor = c + "33";
+			card.style.animationDelay = Math.min(idx * 35, 600) + "ms";
+
+			const wrap = el("div", "card-img");
+			wrap.style.background = t;
+
+			if (entry.pending) {
+				const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+				svg.setAttribute("viewBox", "0 0 24 24");
+				svg.setAttribute("width", "30");
+				svg.setAttribute("height", "30");
+				svg.setAttribute("fill", "none");
+				svg.setAttribute("stroke", c + "66");
+				svg.setAttribute("stroke-width", "2");
+				svg.setAttribute("stroke-linecap", "round");
+				svg.innerHTML = '<path d="M2 2l20 20M7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h13M9.5 4h5l1.5 3h4a2 2 0 0 1 2 2v8"/><path d="M9.7 9.7a3.5 3.5 0 0 0 4.6 4.6"/>';
+				wrap.appendChild(svg);
+				const s = el("span", null, "no photo yet");
+				s.style.color = c + "aa";
+				wrap.appendChild(s);
+			} else {
+				const img = el("img");
+				img.src = thumbOf(entry);
+				img.alt = entry.name;
+				img.loading = "lazy";
+				img.decoding = "async";
+				wrap.appendChild(img);
+			}
+
+			const badge = el("span", "badge", entry.category);
+			badge.style.color = c;
+			wrap.appendChild(badge);
+
+			if (entry.jellycat) {
+				const a = el("a", "buy");
+				a.href = JELLYCAT + entry.jellycat + "/";
+				a.target = "_blank";
+				a.rel = "noopener";
+				a.title = "See " + entry.name + " on jellycat.com";
+				a.setAttribute("aria-label", "See " + entry.name + " on jellycat.com");
+				a.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`;
+				a.addEventListener("click", (ev) => ev.stopPropagation());
+				wrap.appendChild(a);
+			}
+
+			if (entry.leader) wrap.appendChild(el("span", "crown-badge", "\u{1F451}"));
+			if (entry.star) wrap.appendChild(el("span", "star-badge", "⭐"));
+
+			const body = el("div", "card-body");
+			const row = el("div", "name-row");
+			row.appendChild(el("div", "card-name", entry.name));
+
+			const pill = el("span", entry.pending ? "soon" : "count");
+			pill.style.cssText = `background:${t};color:${c}`;
+			if (entry.pending) {
+				pill.textContent = "soon";
+			} else {
+				pill.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 4h5l1.5 3h4a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h4z"/><circle cx="12" cy="13" r="3.4"/></svg>`;
+				pill.appendChild(document.createTextNode(String(entry.images.length)));
+			}
+			row.appendChild(pill);
+			body.appendChild(row);
+			body.appendChild(el("div", "card-sub", entry.description || entry.type || ""));
+
+			card.appendChild(wrap);
+			card.appendChild(body);
+
+			if (!entry.pending) card.addEventListener("click", () => openLightbox(entry, 0));
+			else if (entry.jellycat) card.addEventListener("click", () => window.open(JELLYCAT + entry.jellycat + "/", "_blank", "noopener"));
+
+			return card;
+		}
+
+		/* ---- Render ---- */
+		const grid = document.getElementById("grid");
+
+		function matches(e) {
+			if (activeCat !== "all" && e.category !== activeCat) return false;
+			if (!query) return true;
+			return [e.name, e.type, e.description, e.category].filter(Boolean)
+				.join(" ").toLowerCase().includes(query);
+		}
+
+		function render() {
+			const list = shot.filter(matches);
+			if (sortMode === "name") list.sort((a, b) => a.name.localeCompare(b.name));
+			if (sortMode === "photos") list.sort((a, b) => b.images.length - a.images.length);
+
+			grid.innerHTML = "";
+			if (!list.length) {
+				grid.appendChild(el("p", "empty", "Nobody by that name. Try “bunny”, “dragon” or just scroll."));
+			} else {
+				list.forEach((e, i) => grid.appendChild(buildCard(e, i)));
+			}
+
+			const note = document.getElementById("grid-count");
+			note.textContent = query || activeCat !== "all"
+				? `${list.length} of ${shot.length} photographed`
+				: `${shot.length} photographed`;
+		}
+
+		/* ---- Pending ---- */
+		const pendingBox = document.getElementById("pending");
+		pending.forEach((e, i) => pendingBox.appendChild(buildCard(e, i)));
+		document.getElementById("pending-count").textContent =
+			`${pending.length} of them, hiding from the camera`;
+		if (!pending.length) document.getElementById("soon").style.display = "none";
+
+		/* ---- Spotlight ---- */
+		(function spotlight() {
+			const e = collection.find((x) => x.leader) || collection[0];
+			const { c, t } = catColour(e.category);
+			const box = document.getElementById("spotlight");
+			box.style.borderColor = c + "33";
+
+			const img = el("img");
+			img.src = thumbOf(e);
+			img.alt = e.name;
+			img.loading = "lazy";
+			box.appendChild(img);
+
+			const body = el("div", "body");
+			const top = el("div");
+			top.style.cssText = "display:flex;gap:10px;align-items:center;flex-wrap:wrap";
+			const crown = el("span", "crown");
+			crown.style.cssText = `background:${t};color:${c}`;
+			crown.textContent = "\u{1F451} LEADER OF THE GROUP";
+			top.appendChild(crown);
+			if (e.type) {
+				const ty = el("span", null, e.type.toLowerCase());
+				ty.style.cssText = "font-size:13px;color:var(--ink-soft)";
+				top.appendChild(ty);
+			}
+			body.appendChild(top);
+			body.appendChild(el("h2", null, e.name));
+			if (e.story || e.description) body.appendChild(el("p", null, e.story || e.description));
+
+			const pills = el("div", "meta-pills");
+			[["photos", e.images.length], ["category", e.category.toLowerCase()], ["rank", "1 of " + collection.length]]
+				.forEach(([k, v]) => {
+					const p = el("span", "meta-pill");
+					p.appendChild(el("span", null, k));
+					const b = el("b", null, String(v));
+					b.style.color = c;
+					p.appendChild(b);
+					pills.appendChild(p);
+				});
+			body.appendChild(pills);
+			box.appendChild(body);
+		})();
+
+		/* ---- Fluff facts ---- */
+		(function facts() {
+			const counts = categories
+				.map((cat) => ({ cat, n: collection.filter((e) => e.category === cat).length }))
+				.sort((a, b) => b.n - a.n);
+			const max = counts[0].n;
+			const chart = document.getElementById("chart");
+
+			document.getElementById("facts-title").textContent =
+				`The ${counts[0].cat.toLowerCase()} are, frankly, winning`;
+			document.getElementById("facts-note").textContent =
+				`${counts[0].n} of them. Nobody planned this, it simply happened, one at a time.`;
+
+			counts.forEach(({ cat, n }) => {
+				const { c } = catColour(cat);
+				const col = el("div", "bar-col");
+				const first = collection.find((e) => e.category === cat && !e.pending);
+				if (first) {
+					const img = el("img");
+					img.src = thumbOf(first);
+					img.alt = "";
+					img.loading = "lazy";
+					col.appendChild(img);
+				}
+				const v = el("div", "v", String(n));
+				v.style.color = c;
+				col.appendChild(v);
+				const bar = el("div", "bar");
+				bar.style.background = c;
+				bar.style.height = Math.round((n / max) * 190) + "px";
+				col.appendChild(bar);
+				col.appendChild(el("div", "l", cat.toLowerCase()));
+				chart.appendChild(col);
+			});
+		})();
+
+		/* ---- Footer strip ---- */
+		(function strip() {
+			const box = document.getElementById("footer-strip");
+			shot.slice(0, 12).forEach((e) => {
+				const img = el("img");
+				img.src = thumbOf(e);
+				img.alt = e.name;
+				img.loading = "lazy";
+				box.appendChild(img);
+			});
+		})();
+
+		/* ---- Lightbox ---- */
+		const lb = document.getElementById("lb");
+		let current = null;
+		let photoIdx = 0;
+
+		function openLightbox(entry, idx) {
+			current = entry;
+			photoIdx = idx || 0;
+			paint();
+			lb.classList.add("open");
+			document.body.style.overflow = "hidden";
+			document.getElementById("lb-close").focus();
+		}
+
+		function closeLightbox() {
+			lb.classList.remove("open");
+			document.body.style.overflow = "";
+		}
+
+		function paint() {
+			const e = current;
+			const { c, t } = catColour(e.category);
+			const file = e.images[photoIdx];
+
+			const img = document.getElementById("lb-img");
+			img.src = THUMB_BASE + toWebp(file);
+			img.alt = e.name;
+
+			const media = document.querySelector(".lb-media");
+			media.style.background = t;
+
+			const cat = document.getElementById("lb-cat");
+			cat.textContent = e.category;
+			cat.style.cssText = `position:static;align-self:flex-start;background:${t};color:${c}`;
+
+			document.getElementById("lb-name").textContent = e.name;
+			document.getElementById("lb-species").textContent = e.type || e.description || "";
+			document.getElementById("lb-desc").textContent =
+				e.story || (e.type && e.description ? e.description : "");
+
+			const facts = document.getElementById("lb-facts");
+			facts.innerHTML = "";
+			[["category", e.category.toLowerCase()],
+			["photos", e.images.length],
+			e.type ? ["the official one", e.type.toLowerCase()] : null,
+			e.leader ? ["rank", "leader of the group"] : null,
+			e.star ? ["status", "honorary member"] : null]
+				.filter(Boolean).forEach(([k, v]) => {
+					const row = el("div");
+					row.appendChild(el("dt", null, k));
+					row.appendChild(el("dd", null, String(v)));
+					facts.appendChild(row);
+				});
+
+			const strip = document.getElementById("lb-thumbs");
+			strip.innerHTML = "";
+			e.images.forEach((file2, i) => {
+				const th = el("img");
+				th.src = THUMB_BASE + toWebp(file2);
+				th.alt = `${e.name} photo ${i + 1}`;
+				th.style.borderColor = i === photoIdx ? c : "#fff";
+				th.setAttribute("aria-current", String(i === photoIdx));
+				th.addEventListener("click", () => { photoIdx = i; paint(); });
+				strip.appendChild(th);
+			});
+			document.querySelector(".lb-strip").style.color = c;
+
+			const official = document.getElementById("lb-official");
+			official.innerHTML = "";
+			official.style.background = t;
+			const left = el("div");
+			const k = el("div", "k", e.jellycat ? "THE OFFICIAL ONE" : "NOT LINKED UP YET");
+			k.style.color = c;
+			left.appendChild(k);
+			left.appendChild(el("div", "v", e.type || e.name));
+			official.appendChild(left);
+			if (e.jellycat) {
+				const a = el("a", null, "see it on jellycat.com");
+				a.href = JELLYCAT + e.jellycat + "/";
+				a.target = "_blank";
+				a.rel = "noopener";
+				a.style.background = c;
+				official.appendChild(a);
+			}
+		}
+
+		function step(dir) {
+			const pool = shot;
+			if (dir < 0) {
+				if (photoIdx > 0) photoIdx--;
+				else {
+					const i = pool.indexOf(current);
+					current = pool[(i - 1 + pool.length) % pool.length];
+					photoIdx = current.images.length - 1;
+				}
+			} else {
+				if (photoIdx < current.images.length - 1) photoIdx++;
+				else {
+					const i = pool.indexOf(current);
+					current = pool[(i + 1) % pool.length];
+					photoIdx = 0;
+				}
+			}
+			paint();
+		}
+
+		document.getElementById("lb-close").addEventListener("click", closeLightbox);
+		document.getElementById("lb-prev").addEventListener("click", () => step(-1));
+		document.getElementById("lb-next").addEventListener("click", () => step(1));
+		lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+		document.addEventListener("keydown", (e) => {
+			if (!lb.classList.contains("open")) return;
+			if (e.key === "Escape") closeLightbox();
+			if (e.key === "ArrowLeft") step(-1);
+			if (e.key === "ArrowRight") step(1);
+		});
+
+		/* ---- Go ---- */
+		buildChips();
+		render();
 	</script>
 </body>
 
