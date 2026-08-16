@@ -45,6 +45,11 @@
 			background: var(--cream);
 			color: var(--ink);
 			scroll-behavior: smooth;
+			/* The hero glows are wider than a phone and bleed off both edges.
+			   body alone isn't enough — without this the page drags sideways.
+			   clip is preferred; hidden is the fallback for older Safari. */
+			overflow-x: hidden;
+			overflow-x: clip;
 		}
 
 		body {
@@ -658,6 +663,15 @@
 			box-shadow: 0 2px 6px rgba(58, 43, 32, .12);
 		}
 
+		/* 28px is a fiddly target on a phone, and it sits inside the card's own
+		   tap area — a near miss opens the lightbox instead. Stretch the hit
+		   area to 44px without changing how it looks. */
+		.buy::after {
+			content: "";
+			position: absolute;
+			inset: -8px;
+		}
+
 		.buy:hover {
 			transform: scale(1.08);
 		}
@@ -919,6 +933,10 @@
 		.lb-panel {
 			display: grid;
 			grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+			/* Without this the row grows to fit its content and overflows the
+			   max-height, and overflow:hidden silently eats the bottom of the
+			   details — including the jellycat.com button. */
+			grid-template-rows: minmax(0, 1fr);
 			width: min(1100px, 100%);
 			max-height: min(86vh, 760px);
 			border-radius: 32px;
@@ -933,6 +951,10 @@
 			flex-direction: column;
 			gap: 10px;
 			min-height: 0;
+			/* A grid item won't shrink below its content's min-content width, so
+			   four thumbnails plus the arrows used to push this wider than the
+			   panel and shove the arrows off-screen on a phone. */
+			min-width: 0;
 		}
 
 		.lb-media img.main {
@@ -948,11 +970,25 @@
 			display: flex;
 			align-items: center;
 			gap: 10px;
+			min-width: 0;
+		}
+
+		/* Too many photos to fit? Scroll the thumbnails, don't widen the panel.
+		   The arrows stay put on the right. */
+		#lb-thumbs {
+			min-width: 0;
+			overflow-x: auto;
+			scrollbar-width: none;
+		}
+
+		#lb-thumbs::-webkit-scrollbar {
+			display: none;
 		}
 
 		.lb-strip img {
 			width: 72px;
 			height: 56px;
+			flex: 0 0 auto;
 			object-fit: cover;
 			border-radius: 12px;
 			border: 3px solid var(--white);
@@ -968,6 +1004,7 @@
 			margin-left: auto;
 			display: flex;
 			gap: 8px;
+			flex: 0 0 auto;
 		}
 
 		.lb-nav button,
@@ -988,6 +1025,7 @@
 		.lb-info {
 			padding: 40px 44px;
 			overflow-y: auto;
+			min-height: 0;
 			display: flex;
 			flex-direction: column;
 			gap: 14px;
@@ -1101,10 +1139,19 @@
 			.lb-panel {
 				grid-template-columns: 1fr;
 				max-height: 92vh;
+				/* Stacked, the two rows size to their content and overflow the
+				   panel, which clips them — the facts and the jellycat.com
+				   button vanish. Cap the photo and let the details scroll. */
+				grid-template-rows: auto minmax(0, 1fr);
+			}
+
+			.lb-media {
+				max-height: 45vh;
 			}
 
 			.lb-info {
 				padding: 24px;
+				min-height: 0;
 			}
 
 			.lb-info h3 {
@@ -1115,6 +1162,14 @@
 		@media (max-width: 820px) {
 			.hero .wrap {
 				grid-template-columns: 1fr;
+			}
+
+			/* The confetti are placed as percentages of the two-column hero.
+			   Once it stacks there's no empty margin left, so they land on the
+			   headline — and the pink one is the same colour as "very full
+			   bed", which swallows the letter underneath it. */
+			.confetti {
+				display: none;
 			}
 
 			.polaroids {
@@ -1229,13 +1284,6 @@
 		</div>
 	</section>
 
-	<!-- ─── Spotlight ───────────────────────────────────── -->
-	<section class="section" id="spotlight-section">
-		<div class="wrap">
-			<article class="spotlight" id="spotlight"></article>
-		</div>
-	</section>
-
 	<!-- ─── The gang ────────────────────────────────────── -->
 	<section class="section" id="gang">
 		<div class="wrap">
@@ -1247,6 +1295,15 @@
 				<p class="head-note" id="grid-count"></p>
 			</div>
 			<div class="grid" id="grid"></div>
+		</div>
+	</section>
+
+	<!-- ─── Spotlight ───────────────────────────────────── -->
+	<!-- Sits below the grid on purpose: on a phone it's a tall panel, and
+	     people want the actual jellycats before the leader's biography. -->
+	<section class="section" id="spotlight-section">
+		<div class="wrap">
+			<article class="spotlight" id="spotlight"></article>
 		</div>
 	</section>
 
@@ -1372,27 +1429,35 @@
 			// ─── Bunnies ─────────────────────────────────────
 			{
 				name: "Black Bunny",
+				type: "Bashful Inky Bunny",
 				category: "Bunnies",
 				thumb: "bunny_black_p.jpg",
 				images: ["bunny_black_p.jpg", "bunny_black_l.jpg"],
+				jellycat: "bashful-inky-bunny",
 			},
 			{
 				name: "Grey Bunny",
+				type: "Bashful Cottontail Bunny",
 				category: "Bunnies",
 				thumb: "bunny_grey_p.jpg",
 				images: ["bunny_grey_p.jpg", "bunny_grey_l.jpg"],
+				jellycat: "bashful-cottontail-bunny",
 			},
 			{
 				name: "Lavender Bunny",
+				type: "Blossom Silver Bunny",
 				category: "Bunnies",
 				thumb: "bunny_lavendar_p.jpg",
 				images: ["bunny_lavendar_p.jpg", "bunny_lavendar_l.jpg"],
+				jellycat: "blossom-silver-bunny-bloom",
 			},
 			{
 				name: "Pink Bunny",
+				type: "Bashful Pink Bunny",
 				category: "Bunnies",
 				thumb: "bunny_pink_p.jpg",
 				images: ["bunny_pink_p.jpg", "bunny_pink_l.jpg", "bunny_pink_jump.jpg"],
+				jellycat: "bashful-pink-bunny",
 			},
 			{
 				name: "Cream Bunny",
@@ -1415,6 +1480,7 @@
 				category: "Bunnies",
 				thumb: "bunny_puddlesea_p.jpg",
 				images: ["bunny_puddlesea_p.jpg", "bunny_puddlesea_l.jpg"],
+				jellycat: "puddlesea-bunny-original",
 			},
 			{
 				name: "Thistlepop",
@@ -1438,6 +1504,7 @@
 				category: "Bunnies",
 				thumb: "bunny_wheat_p.jpg",
 				images: ["bunny_wheat_p.jpg", "bunny_wheat_l.jpg"],
+				jellycat: "wheat-flufflet-bunny-little",
 			},
 			{
 				name: "Oat",
@@ -1445,6 +1512,7 @@
 				category: "Bunnies",
 				thumb: "bunny_oat_p.jpg",
 				images: ["bunny_oat_p.jpg", "bunny_oat_l.jpg"],
+				jellycat: "oat-flufflet-bunny-little",
 			},
 			{
 				name: "Barley",
@@ -1452,6 +1520,8 @@
 				category: "Bunnies",
 				thumb: "bunny_barley_p.jpg",
 				images: ["bunny_barley_p.jpg", "bunny_barley_l.jpg"],
+				// Jellycat sell this trio as Wheat, Oat and Fawn — Barley is ours.
+				jellycat: "fawn-flufflet-bunny-little",
 			},
 			{
 				name: "The Flufflets",
@@ -1493,6 +1563,7 @@
 				category: "Dragons",
 				thumb: "dragon_idir_p.jpg",
 				images: ["dragon_idir_p.jpg", "dragon_idir_l.jpg"],
+				jellycat: "lavender-dragon",
 				leader: true,
 			},
 			{
@@ -1501,6 +1572,7 @@
 				category: "Dragons",
 				thumb: "dragon_sky_l.jpg",
 				images: ["dragon_sky_l.jpg", "dragon_sky_back_l.jpg"],
+				jellycat: "sky-dragon",
 			},
 			{
 				name: "Sprinkles",
@@ -1508,12 +1580,15 @@
 				category: "Dragons",
 				thumb: "dragon_sprinkles_p.jpg",
 				images: ["dragon_sprinkles_p.jpg", "dragon_sprinkles_l.jpg", "dragon_sprinkles_upright_p.jpg"],
+				jellycat: "lazulia-dragon",
 			},
 			{
 				name: "White Dragon",
+				type: "Snow Dragon",
 				category: "Dragons",
 				thumb: "dragon_white_p.jpg",
 				images: ["dragon_white_p.jpg", "dragon_white_l.jpg", "dragon_white_upright_p.jpg", "dragon_white_upright_l.jpg"],
+				jellycat: "snow-dragon",
 			},
 			{
 				name: "The Dragon Squad",
@@ -1537,12 +1612,14 @@
 				category: "Birds",
 				thumb: "bird_pigeon_ny_p.jpg",
 				images: ["bird_pigeon_ny_p.jpg", "bird_pigeon_ny_l.jpg"],
+				jellycat: "strutton-pigeon",
 			},
 			{
 				name: "Robin",
 				category: "Birds",
 				thumb: "bird_robin_p.jpg",
 				images: ["bird_robin_p.jpg", "bird_robin_l.jpg"],
+				jellycat: "plum-robin",
 			},
 			{
 				name: "Quackers",
@@ -1550,12 +1627,14 @@
 				category: "Birds",
 				thumb: "duck_p.jpg",
 				images: ["duck_p.jpg", "duck_l.jpg"],
+				jellycat: "tumblie-duck",
 			},
 			{
 				name: "Penguin",
 				category: "Birds",
 				thumb: "penguin_p.jpg",
 				images: ["penguin_p.jpg", "penguin_l.jpg"],
+				jellycat: "little-penguin",
 			},
 			{
 				name: "Three Birds",
@@ -1578,12 +1657,14 @@
 				category: "Dogs",
 				thumb: "dog_scotty_p.jpg",
 				images: ["dog_scotty_p.jpg", "dog_scotty_l.jpg"],
+				jellycat: "munro-scottie-dog",
 			},
 			{
 				name: "Small Dog",
 				category: "Dogs",
 				thumb: "dog_small_p.jpg",
 				images: ["dog_small_p.jpg", "dog_small_l.jpg"],
+				jellycat: "little-pup",
 			},
 			{
 				name: "Two Dogs",
@@ -1600,18 +1681,21 @@
 				category: "Farm",
 				thumb: "farm_cow_p.jpg",
 				images: ["farm_cow_p.jpg", "farm_cow_l.jpg"],
+				jellycat: "smudge-cow-original",
 			},
 			{
 				name: "Horse",
 				category: "Farm",
 				thumb: "farm_horse_p.jpg",
 				images: ["farm_horse_p.jpg", "farm_horse_l.jpg", "farm_horse_horizontal_l.jpg"],
+				jellycat: "canterneigh-pony",
 			},
 			{
 				name: "Pig",
 				category: "Farm",
 				thumb: "farm_pig_p.jpg",
 				images: ["farm_pig_p.jpg", "farm_pig_l.jpg"],
+				jellycat: "little-pig",
 			},
 			{
 				name: "Farm Friends",
@@ -1624,26 +1708,34 @@
 			// ─── Sea Creatures ───────────────────────────────
 			{
 				name: "Cherry Octopus",
+				type: "Cranberry Octopus",
 				category: "Sea Creatures",
 				thumb: "octopus_cherry_p.jpg",
 				images: ["octopus_cherry_p.jpg", "octopus_cherry_l.jpg"],
+				jellycat: "cranberry-octopus",
 			},
 			{
 				name: "Odel",
+				type: "Odell Octopus",
 				description: "The little one",
 				category: "Sea Creatures",
 				thumb: "octopus_odel_p.jpg",
 				images: ["octopus_odel_p.jpg", "octopos_odel_l.jpg"],
+				jellycat: "odell-octopus",
 			},
 			{
 				name: "Odelle",
+				type: "Odell Octopus",
 				description: "The big one",
 				category: "Sea Creatures",
 				thumb: "octopus_odelle_p.jpg",
 				images: ["octopus_odelle_p.jpg", "octopus_odelle_l.jpg", "octopus_odelle_2_p.jpg", "octopus_odelle_2_l.jpg"],
+				jellycat: "odell-octopus",
 			},
 			{
 				name: "Fish",
+				// Retired (SKU NEO3F), so there's no jellycat.com page to link to.
+				type: "Neo Fish",
 				category: "Sea Creatures",
 				thumb: "fish_p.jpg",
 				images: ["fish_p.jpg", "fish_l.jpg"],
@@ -1671,12 +1763,14 @@
 				category: "Forest",
 				thumb: "forest_mushroom_p.jpg",
 				images: ["forest_mushroom_p.jpg", "forest_mushroom_l.jpg"],
+				jellycat: "amuseables-mushroom",
 			},
 			{
 				name: "Warthog",
 				category: "Forest",
 				thumb: "forest_warthog_p.jpg",
 				images: ["forest_warthog_p.jpg", "forest_warthog_l.jpg"],
+				jellycat: "swinley-boar",
 			},
 			{
 				name: "Forest Friends",
@@ -1700,18 +1794,22 @@
 				category: "Other",
 				thumb: "bee_p.jpg",
 				images: ["bee_p.jpg", "bee_l.jpg"],
+				jellycat: "albee-bee",
 			},
 			{
 				name: "Devil",
 				category: "Other",
 				thumb: "devil_p.jpg",
 				images: ["devil_p.jpg", "devil_l.jpg"],
+				jellycat: "hugg-mcsnugg",
 			},
 			{
 				name: "Tiger",
+				type: "Sacha Snow Tiger",
 				category: "Other",
 				thumb: "tiger_p.jpg",
 				images: ["tiger_p.jpg", "tiger_l.jpg"],
+				jellycat: "sacha-snow-tiger",
 			},
 			{
 				name: "Kate",
