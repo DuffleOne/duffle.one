@@ -1,0 +1,51 @@
+---
+# Build and publish duffle.one.
+#
+# vue-tsc typechecks as part of `npm run build`, so a type error fails the
+# pipeline before anything is published. Output lands in build/ (vite's outDir
+# defaults to ../build relative to src/).
+#
+# Publishing uses the S3 plugin with per-repo AWS credential secrets, not the
+# host's ~/.aws: no host mount, no trusted repo. Two deliberate changes from
+# the old aws-cli sync:
+#   - No --delete. Superseded hashed bundles linger in the bucket rather than
+#     being pruned, and the S3-only jellycat jpgs no longer need defending
+#     from the delete. Prune by hand if the cruft ever bothers you.
+#   - No `aws s3 website` call. Static hosting is persistent bucket state,
+#     asserted by publish.sh, not something to re-apply per deploy.
+#
+# A push to master publishes. Deploy pipeline on any green build (a
+# "deployment" event) republishes that build's commit.
+
+when:
+  - event: [push, pull_request, manual, deployment]
+
+steps:
+  - name: build
+    image: node:20
+    environment:
+      CI: "true"
+    commands:
+      - npm ci
+      - npm run build
+
+  - name: publish
+    image: woodpeckerci/plugin-s3:1.5.4
+    when:
+      - branch: master
+        event: push
+      - event: deployment
+    settings:
+      bucket: duffle.one
+      region: eu-west-1
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      source: build/**/*
+      strip_prefix: build/
+      acl: public-read
+      # The entry pages must revalidate on every request so a deploy shows up
+      # straight away; the hashed bundles carry no cache header, as before.
+      cache_control:
+        '(^|/)(index|jellycats)\.html$': "no-cache, no-store, must-revalidate"
