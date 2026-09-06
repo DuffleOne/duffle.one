@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="color-scheme" content="dark">
+	<title>The Web</title>
+	<meta name="description" content="Private.">
+
+	<!-- Unlisted, not secret. Same treatment the old gaming page had: block
+	     every crawler that honours it, and never link here from the site.
+	     robots.txt disallows /poly.html as defence in depth.
+
+	     noai/noimageai are the opt-out pair the AI scrapers that bother to
+	     look actually read; tdm-reservation is the W3C Text and Data Mining
+	     Reservation Protocol, which is the formal version of the same "no".
+	     robots.txt names the individual bots, since none of this is binding
+	     on anything that doesn't feel like reading it. -->
+	<meta name="robots"
+		content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai, max-snippet:0, max-image-preview:none, max-video-preview:0">
+	<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+	<meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+	<meta name="ai" content="noai, noimageai">
+	<meta name="tdm-reservation" content="1">
+	<meta name="referrer" content="no-referrer">
+	<meta name="theme-color" content="#0a0a0f">
+
+	<link rel="icon" href="/favicon.png" type="image/png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap"
+		rel="stylesheet">
+
+	<style>
+		/* Standalone page with its own palette, like jellycats.html. Nothing
+		   here is shared with the SPA's input.css — no Tailwind, no Alcyone,
+		   no light theme. It's a web at night. */
+		:root {
+			--void: #0a0a0f;
+			--void-lift: #14131d;
+			--silk: #ece9f4;
+			--silk-dim: #8d8aa4;
+			--silk-faint: #56536e;
+
+			/* Node accents. Amber is me, rose is a committed tie, periwinkle
+			   is a casual one. Carried over from the colours on the sketch. */
+			--me: #f0a92c;
+			--committed: #ff5177;
+			--casual: #7aa6f0;
+			/* Deliberately the quietest of the three: barely there. */
+			--new: #9a94b8;
+
+			--strand: rgba(236, 233, 244, .16);
+			--edge: rgba(255, 255, 255, .07);
+			--panel: #14131d;
+
+			--chip-h: 34px;
+			--ease: cubic-bezier(.2, .8, .3, 1);
+		}
+
+		*,
+		*::before,
+		*::after {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			height: 100%;
+			overflow: hidden;
+			overscroll-behavior: none;
+		}
+
+		body {
+			background: var(--void);
+			color: var(--silk);
+			font-family: 'Space Grotesk', system-ui, sans-serif;
+			font-weight: 400;
+			-webkit-font-smoothing: antialiased;
+			/* The stage owns every gesture; let the browser keep none of them. */
+			touch-action: none;
+		}
+
+		/* A cold wash off the top and a warm one where I sit, so the sheet
+		   isn't a flat black rectangle behind the web. */
+		body::before {
+			content: "";
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 0;
+			background:
+				radial-gradient(900px 620px at 50% 46%, rgba(240, 169, 44, .09), transparent 70%),
+				radial-gradient(1100px 700px at 82% 4%, rgba(122, 166, 240, .07), transparent 70%),
+				radial-gradient(800px 600px at 8% 96%, rgba(255, 81, 119, .06), transparent 70%);
+		}
+
+		button {
+			font: inherit;
+			color: inherit;
+			border: 0;
+			background: none;
+			cursor: pointer;
+		}
+
+		a {
+			color: inherit;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			white-space: nowrap;
+		}
+
+		:where(a, button, [tabindex]):focus-visible {
+			outline: 2px solid var(--me);
+			outline-offset: 3px;
+		}
+
+		/* 10px letterspaced caps. The one type mannerism this page borrows
+		   from the main site, because it earns its place on every label. */
+		.caps {
+			font-size: 10px;
+			font-weight: 500;
+			letter-spacing: .22em;
+			text-transform: uppercase;
+			color: var(--silk-faint);
+		}
+
+		/* ---- Chrome ------------------------------------------------------ */
+		.masthead {
+			position: fixed;
+			z-index: 3;
+			top: 0;
+			left: 0;
+			right: 0;
+			display: flex;
+			align-items: baseline;
+			gap: 14px;
+			padding: 20px 24px;
+			padding-top: max(20px, env(safe-area-inset-top));
+			pointer-events: none;
+		}
+
+		.masthead h1 {
+			font-size: 15px;
+			font-weight: 500;
+			letter-spacing: -.01em;
+		}
+
+		.masthead .tally {
+			margin-left: auto;
+			font-variant-numeric: tabular-nums;
+		}
+
+		/* ---- Stage ------------------------------------------------------- */
+		.stage {
+			position: fixed;
+			inset: 0;
+			z-index: 1;
+			cursor: grab;
+		}
+
+		.stage.is-panning {
+			cursor: grabbing;
+		}
+
+		canvas {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+
+		.nodes {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+		}
+
+		/* One person. Positioned by transform every frame; nothing here
+		   animates on a timer, the sim does the moving. */
+		.node {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			height: var(--chip-h);
+			padding: 0 14px;
+			border-radius: 999px;
+			white-space: nowrap;
+			font-size: 13.5px;
+			font-weight: 500;
+			letter-spacing: -.005em;
+			color: var(--silk);
+			background: rgba(20, 19, 29, .82);
+			border: 1px solid var(--edge);
+			backdrop-filter: blur(6px);
+			pointer-events: auto;
+			cursor: grab;
+			touch-action: none;
+			will-change: transform;
+			/* --shock is written per frame by the tremor pass: 0 at rest, 1
+			   the instant the wobble reaches this node. */
+			--shock: 0;
+			--accent: var(--silk-faint);
+			box-shadow:
+				0 0 0 calc(var(--shock) * 5px) color-mix(in srgb, var(--accent) 14%, transparent),
+				0 6px 20px rgba(0, 0, 0, .5);
+			transition: color 160ms var(--ease), background-color 160ms var(--ease),
+				border-color 160ms var(--ease), opacity 200ms var(--ease);
+		}
+
+		.node:active {
+			cursor: grabbing;
+		}
+
+		/* The dot carries the accent; the pill stays quiet until you touch it. */
+		.node .dot {
+			width: 7px;
+			height: 7px;
+			flex: none;
+			border-radius: 50%;
+			background: var(--accent);
+			box-shadow: 0 0 calc(6px + var(--shock) * 10px) color-mix(in srgb, var(--accent) 70%, transparent);
+		}
+
+		.node.is-me {
+			--accent: var(--me);
+			font-weight: 700;
+			padding: 0 17px;
+			height: 40px;
+			font-size: 15px;
+			border-color: color-mix(in srgb, var(--me) 40%, transparent);
+			background: rgba(35, 26, 12, .86);
+		}
+
+		.node.tie-committed {
+			--accent: var(--committed);
+		}
+
+		.node.tie-casual {
+			--accent: var(--casual);
+		}
+
+		.node.tie-new {
+			--accent: var(--new);
+		}
+
+		.node:hover,
+		.node.is-active {
+			background: color-mix(in srgb, var(--accent) 16%, var(--void-lift));
+			border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+		}
+
+		/* Everything not touching the hovered person recedes. */
+		.nodes.is-focusing .node:not(.is-lit) {
+			opacity: .22;
+		}
+
+		/* ---- Legend and controls ----------------------------------------- */
+		.rail {
+			position: fixed;
+			z-index: 3;
+			left: 24px;
+			bottom: max(20px, env(safe-area-inset-bottom));
+			display: flex;
+			flex-direction: column;
+			gap: 9px;
+			pointer-events: none;
+		}
+
+		.key {
+			display: flex;
+			align-items: center;
+			gap: 9px;
+			font-size: 11.5px;
+			color: var(--silk-dim);
+		}
+
+		.key i {
+			display: block;
+			width: 26px;
+			height: 0;
+			flex: none;
+			border-top: 2px solid currentColor;
+		}
+
+		.key.committed {
+			color: var(--committed);
+		}
+
+		.key.casual i {
+			border-top-style: dashed;
+			border-top-width: 1.5px;
+		}
+
+		.key.casual {
+			color: var(--casual);
+		}
+
+		.key.new {
+			color: var(--new);
+		}
+
+		/* border-style: dashed can't set the dash length, and this key has to
+		   match the sparser dash the canvas draws. */
+		.key.new i {
+			border: 0;
+			height: 1px;
+			background: repeating-linear-gradient(to right, currentColor 0 2px, transparent 2px 9px);
+		}
+
+		.key span {
+			color: var(--silk-dim);
+		}
+
+		.hud {
+			position: fixed;
+			z-index: 3;
+			right: 24px;
+			bottom: max(20px, env(safe-area-inset-bottom));
+			display: flex;
+			gap: 8px;
+		}
+
+		.hud button {
+			height: 30px;
+			padding: 0 13px;
+			border-radius: 999px;
+			border: 1px solid var(--edge);
+			background: rgba(20, 19, 29, .8);
+			backdrop-filter: blur(6px);
+			font-size: 11px;
+			font-weight: 500;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			color: var(--silk-dim);
+			transition: color 140ms var(--ease), border-color 140ms var(--ease);
+		}
+
+		.hud button:hover {
+			color: var(--silk);
+			border-color: rgba(255, 255, 255, .2);
+		}
+
+		/* ---- Person panel ------------------------------------------------ */
+		.scrim {
+			position: fixed;
+			inset: 0;
+			z-index: 4;
+			background: rgba(6, 6, 10, .5);
+			backdrop-filter: blur(2px);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 220ms var(--ease);
+		}
+
+		.scrim.is-open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.panel {
+			position: fixed;
+			z-index: 5;
+			top: 0;
+			right: 0;
+			width: min(400px, 100vw);
+			height: 100%;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			padding: 30px 30px 40px;
+			padding-top: max(30px, env(safe-area-inset-top));
+			background: var(--panel);
+			border-left: 1px solid var(--edge);
+			box-shadow: -30px 0 70px rgba(0, 0, 0, .55);
+			transform: translateX(100%);
+			visibility: hidden;
+			transition: transform 320ms var(--ease), visibility 320ms;
+		}
+
+		.panel.is-open {
+			transform: none;
+			visibility: visible;
+		}
+
+		.panel .close {
+			position: absolute;
+			top: 22px;
+			right: 22px;
+			width: 30px;
+			height: 30px;
+			display: grid;
+			place-items: center;
+			border-radius: 50%;
+			font-size: 17px;
+			line-height: 1;
+			color: var(--silk-dim);
+			border: 1px solid var(--edge);
+		}
+
+		.panel .close:hover {
+			color: var(--silk);
+		}
+
+		.panel h2 {
+			margin: 16px 0 12px;
+			font-size: 34px;
+			font-weight: 500;
+			letter-spacing: -.03em;
+			line-height: 1.05;
+		}
+
+		.tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			margin-bottom: 26px;
+		}
+
+		.tag {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			height: 25px;
+			padding: 0 11px;
+			border-radius: 999px;
+			font-size: 11px;
+			font-weight: 500;
+			letter-spacing: .04em;
+			border: 1px solid color-mix(in srgb, var(--accent, var(--silk-faint)) 45%, transparent);
+			color: color-mix(in srgb, var(--accent, var(--silk-dim)) 82%, white);
+			background: color-mix(in srgb, var(--accent, var(--silk-faint)) 12%, transparent);
+		}
+
+		.field {
+			padding: 15px 0;
+			border-top: 1px solid var(--edge);
+		}
+
+		.field p {
+			margin-top: 7px;
+			font-size: 14px;
+			line-height: 1.62;
+			color: var(--silk);
+			text-wrap: pretty;
+		}
+
+		.field p.empty {
+			color: var(--silk-faint);
+			font-style: italic;
+		}
+
+		.field a.ig {
+			display: inline-block;
+			margin-top: 7px;
+			font-size: 14px;
+			color: var(--casual);
+			text-decoration: none;
+			border-bottom: 1px solid color-mix(in srgb, var(--casual) 40%, transparent);
+		}
+
+		.field a.ig:hover {
+			color: var(--silk);
+		}
+
+		.links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			margin-top: 10px;
+		}
+
+		.links button {
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			height: 29px;
+			padding: 0 12px;
+			border-radius: 999px;
+			font-size: 12.5px;
+			border: 1px solid var(--edge);
+			color: var(--silk-dim);
+			transition: color 140ms var(--ease), border-color 140ms var(--ease);
+		}
+
+		.links button:hover {
+			color: var(--silk);
+			border-color: rgba(255, 255, 255, .22);
+		}
+
+		.links button i {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: var(--accent, var(--silk-faint));
+		}
+
+		/* ---- Small screens ------------------------------------------------ */
+		@media (max-width: 640px) {
+			.masthead {
+				padding: 14px 16px;
+				padding-top: max(14px, env(safe-area-inset-top));
+				gap: 10px;
+			}
+
+			.masthead .tally {
+				display: none;
+			}
+
+			.rail {
+				left: 16px;
+				bottom: max(14px, env(safe-area-inset-bottom));
+			}
+
+			/* The legend needs the whole bottom edge, and the panel slides
+			   up over that corner anyway. */
+			.hud {
+				top: max(12px, env(safe-area-inset-top));
+				right: 12px;
+				bottom: auto;
+			}
+
+			.long {
+				display: none;
+			}
+
+			.node {
+				font-size: 12.5px;
+				--chip-h: 32px;
+			}
+
+			/* Panel comes up from the bottom instead of in from the side. */
+			.panel {
+				top: auto;
+				bottom: 0;
+				width: 100%;
+				height: min(78vh, 620px);
+				border-left: 0;
+				border-top: 1px solid var(--edge);
+				border-radius: 18px 18px 0 0;
+				transform: translateY(100%);
+				padding: 26px 22px 34px;
+			}
+
+			.panel h2 {
+				font-size: 28px;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+
+			.panel,
+			.scrim,
+			.node {
+				transition-duration: 1ms;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<header class="masthead">
+		<h1>The Web</h1>
+		<p class="caps">duffle.one &middot; private</p>
+		<p class="caps tally" id="tally"></p>
+	</header>
+
+	<main class="stage" id="stage">
+		<canvas id="canvas"></canvas>
+		<div class="nodes" id="nodes"></div>
+	</main>
+
+	<div class="rail">
+		<p class="key committed"><i></i><span>Committed</span></p>
+		<p class="key casual"><i></i><span>Casual, or undefined</span></p>
+		<p class="key new"><i></i><span>Just getting to know each other</span></p>
+		<p class="key"><span>&#128146; married<span class="long">, so living together</span> &nbsp;&middot;&nbsp; &#128141; engaged &nbsp;&middot;&nbsp; &#127968; lives together</span></p>
+		<p class="key"><span class="caps">Not for AI training or scraping</span></p>
+	</div>
+
+	<div class="hud">
+		<button type="button" id="btn-fit">Fit</button>
+		<button type="button" id="btn-reset">Reset</button>
+	</div>
+
+	<div class="scrim" id="scrim"></div>
+
+	<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-name" tabindex="-1">
+		<button type="button" class="close" id="panel-close" aria-label="Close">&times;</button>
+		<p class="caps" id="panel-kicker"></p>
+		<h2 id="panel-name"></h2>
+		<div class="tags" id="panel-tags"></div>
+		<div id="panel-body"></div>
+	</aside>
+
+	<script>
+		/* ═══════════════════════════════════════════════════════════
+		 *  The people
+		 *
+		 *  id            stable key, referenced by `links` below
+		 *  name          what shows on the chip
+		 *  me            true for exactly one person (that's me)
+		 *  relationship  what we are to each other. Left blank, the panel
+		 *                falls back to the tie on the link ("Committed" /
+		 *                "Casual") or "connected through X" for people I'm
+		 *                not directly linked to.
+		 *  met           how we met
+		 *  note          anything else worth saying
+		 *  instagram     handle, with or without the @. Omit for no link.
+		 *
+		 *  Everything on the page is derived from these two arrays — the
+		 *  tally, the legend counts, the panel, the layout. Edit the data,
+		 *  not the markup.
+		 * ═══════════════════════════════════════════════════════════ */
+		const people = [
+			{ id: "laura", name: "Laura", me: true, note: "" },
+
+			// ─── The two committed ties ──────────────────────
+			{ id: "kate", name: "Kate", relationship: "", met: "", instagram: "kurlyfluffymonster", note: "" },
+			{ id: "ida", name: "Ida", relationship: "", met: "At KV.", instagram: "latexhouseofhemlock", note: "" },
+
+			// ─── Kate's side ─────────────────────────────────
+			{ id: "archi", name: "Archi", relationship: "", met: "", instagram: "", note: "" },
+
+			// ─── Ida's side ──────────────────────────────────
+			{ id: "joshsr", name: "Josh Sr", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "terri", name: "Terri", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "chloe", name: "Chloe", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "jessie", name: "Jessie", relationship: "", met: "", instagram: "", note: "" },
+
+			// ─── Camilla and the Rory/Pixie house ────────────
+			{ id: "camilla", name: "Camilla", relationship: "", met: "At a private play event.", instagram: "perv.next.door", note: "" },
+			{ id: "gal", name: "Gal", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "rory", name: "Rory", relationship: "", met: "At Anatomie.", instagram: "roryropes", note: "" },
+			{ id: "pixie", name: "Pixie", relationship: "", met: "Rory introduced us.", instagram: "tinylittlepixie", note: "" },
+			{ id: "emma", name: "Emma", relationship: "", met: "Through Rory.", instagram: "todayifall", note: "" },
+			{ id: "luke", name: "Luke", relationship: "", met: "Through Pixie.", instagram: "lt.bound", note: "" },
+
+			// ─── Giulia's side ───────────────────────────────
+			{ id: "giulia", name: "Giulia", relationship: "", met: "At a private party.", instagram: "", note: "" },
+			{ id: "luigi", name: "Luigi", relationship: "", met: "", instagram: "", note: "" },
+
+			// ─── Straight to me, nobody else in common ───────
+			{ id: "orla", name: "Orla", relationship: "", met: "At The Play Munch.", instagram: "orlacarmel", note: "" },
+
+			// ─── Josh Jr and Jess ────────────────────────────
+			{ id: "joshjr", name: "Josh Jr", relationship: "", met: "At Naughties.", instagram: "", note: "" },
+			{ id: "jess", name: "Jess", relationship: "", met: "At Naughties.", instagram: "", note: "" },
+
+			// ─── Banu, Jack and Beth ─────────────────────────
+			{ id: "banu", name: "Banu", relationship: "", met: "At Anatomie, doing rope.", instagram: "godless_existence", note: "" },
+			{ id: "jack", name: "Jack", relationship: "", met: "Through Banu, and at Quiet Kink.", instagram: "men_in_jack_iii", note: "" },
+			{ id: "beth", name: "Beth", relationship: "", met: "", instagram: "", note: "" },
+		];
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  The links — read straight off the sketch
+		 *
+		 *  tie       "committed"  a formal, committed relationship. Solid.
+		 *            "casual"     a play partner, or a thing nobody has put
+		 *                         a name to yet. Dashed.
+		 *            "new"        still getting to know each other, nothing
+		 *                         has happened yet. Faint, sparse dash.
+		 *  married   💒 on both chips. Married implies living together, so
+		 *            these don't need `nesting` as well.
+		 *  engaged   💍 on both chips. Doesn't imply an address.
+		 *  nesting   🏠 on both chips. They live together, unmarried.
+		 *  label     optional. Overridden by married/engaged/nesting, which
+		 *            already describe the connection on its own chips.
+		 * ═══════════════════════════════════════════════════════════ */
+		const links = [
+			{ a: "laura", b: "kate", tie: "committed" },
+			{ a: "laura", b: "ida", tie: "committed" },
+			{ a: "kate", b: "archi", tie: "committed", married: true },
+
+			{ a: "ida", b: "joshsr", tie: "committed", nesting: true },
+			{ a: "joshsr", b: "terri", tie: "casual" },
+			{ a: "joshsr", b: "chloe", tie: "casual" },
+			{ a: "joshsr", b: "jessie", tie: "casual" },
+
+			{ a: "laura", b: "camilla", tie: "casual" },
+			{ a: "camilla", b: "gal", tie: "casual" },
+			{ a: "camilla", b: "rory", tie: "casual" },
+			{ a: "rory", b: "pixie", tie: "committed", nesting: true },
+			{ a: "rory", b: "emma", tie: "committed" },
+			{ a: "pixie", b: "emma", tie: "committed" },
+			{ a: "pixie", b: "luke", tie: "committed" },
+			{ a: "laura", b: "emma", tie: "casual" },
+			{ a: "laura", b: "luke", tie: "casual" },
+
+			{ a: "laura", b: "giulia", tie: "casual" },
+			{ a: "giulia", b: "luigi", tie: "committed", married: true },
+			{ a: "laura", b: "orla", tie: "casual" },
+
+			{ a: "laura", b: "joshjr", tie: "casual" },
+			{ a: "laura", b: "jess", tie: "casual" },
+			{ a: "joshjr", b: "jess", tie: "committed", nesting: true },
+
+			{ a: "laura", b: "banu", tie: "casual" },
+			{ a: "laura", b: "jack", tie: "casual" },
+			{ a: "laura", b: "beth", tie: "new" },
+			{ a: "banu", b: "jack", tie: "casual" },
+			{ a: "jack", b: "beth", tie: "committed", nesting: true },
+		];
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Graph
+		 * ═══════════════════════════════════════════════════════════ */
+		const TAU = Math.PI * 2;
+		const clamp = (v, lo, hi) => v < lo ? lo : v > hi ? hi : v;
+		const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+
+		const byId = new Map(people.map(p => [p.id, p]));
+		links.forEach(l => {
+			if (!byId.has(l.a) || !byId.has(l.b)) throw new Error(`link references an unknown person: ${l.a} → ${l.b}`);
+		});
+
+		// Adjacency, and the marks each person carries (💒 / 🏠 come off the
+		// link, not the person, so they can never disagree with each other).
+		const neighbours = new Map(people.map(p => [p.id, []]));
+		links.forEach(l => {
+			neighbours.get(l.a).push({ id: l.b, link: l });
+			neighbours.get(l.b).push({ id: l.a, link: l });
+		});
+		// Married, engaged or sharing an address: facts about the connection
+		// itself, so they ride the strand between two people rather than
+		// hanging off either name, exactly as they do on the sketch.
+		// Marriage already says they live together, so it doesn't say it twice.
+		const bondIcons = (link) => {
+			let s = "";
+			if (link.married) s += "\u{1F492}";
+			if (link.engaged) s += "\u{1F48D}";
+			if (link.nesting && !link.married) s += "\u{1F3E0}";
+			return s;
+		};
+
+		const bondWords = (link) => {
+			const w = [];
+			if (link.married) w.push("married");
+			if (link.engaged) w.push("engaged");
+			if (link.nesting && !link.married) w.push("lives together");
+			return w;
+		};
+
+		const ME = people.find(p => p.me).id;
+		// My own tie to each person, where there is one. Drives the chip colour.
+		const myTie = new Map();
+		neighbours.get(ME).forEach(({ id, link }) => myTie.set(id, link.tie));
+
+		// Hop count from me, used both for the opening layout and for the
+		// order the tremor reaches people in.
+		const depth = new Map([[ME, 0]]);
+		for (let queue = [ME]; queue.length;) {
+			const next = [];
+			queue.forEach(id => neighbours.get(id).forEach(({ id: to }) => {
+				if (!depth.has(to)) { depth.set(to, depth.get(id) + 1); next.push(to); }
+			}));
+			queue = next;
+		}
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Simulation
+		 *
+		 *  Plain O(n²) force layout. Twenty-odd nodes, so there's no case
+		 *  for a quadtree — the whole tick is under a tenth of a
+		 *  millisecond and the code stays readable.
+		 * ═══════════════════════════════════════════════════════════ */
+		// Everything a tie needs, in one place: how it's drawn, how long the
+		// spring wants to be, and what to call it in the panel.
+		const TIE = {
+			committed: { rgb: "255,81,119", dash: [], width: 1.7, alpha: 0.42, rest: 165, word: "Committed" },
+			casual: { rgb: "122,166,240", dash: [5, 6], width: 1.15, alpha: 0.24, rest: 250, word: "Casual" },
+			new: { rgb: "154,148,184", dash: [2, 9], width: 0.95, alpha: 0.15, rest: 300, word: "Just getting to know each other" },
+		};
+		const SPRING = 0.016;
+		const REPEL = 42000;
+		const GRAVITY = 0.0022;
+		const DAMPING = 0.86;
+
+		// sqrt of the viewport ratio, clamped so neither axis collapses.
+		// Written by resize(), read by tick().
+		let aspect = 1;
+
+		const nodes = people.map((p, i) => ({
+			person: p,
+			id: p.id,
+			x: 0, y: 0, vx: 0, vy: 0,
+			pinned: false,
+			// Each name bobbles on its own clock so the field never pulses in
+			// unison, which reads as a loading spinner rather than as silk.
+			phase: (i * 2.399963) % TAU,
+			bobSpeed: 0.00028 + (i % 7) * 0.00004,
+			w: 0, h: 34,
+			shockAt: -1e9,
+			el: null,
+		}));
+		const nodeById = new Map(nodes.map(n => [n.id, n]));
+		const edges = links.map(l => ({ ...l, na: nodeById.get(l.a), nb: nodeById.get(l.b) }));
+
+		// Opening arrangement: me at the origin, everyone else on a ring by
+		// hop count, spread by index. It's only a seed — the springs take
+		// over on the first tick — but a deterministic one means the graph
+		// settles the same way every load instead of a different tangle.
+		function seed() {
+			const perRing = new Map();
+			nodes.forEach(n => {
+				const d = depth.get(n.id) ?? 2;
+				perRing.set(d, (perRing.get(d) || 0) + 1);
+			});
+			const placed = new Map();
+			nodes.forEach(n => {
+				const d = depth.get(n.id) ?? 2;
+				const i = placed.get(d) || 0;
+				placed.set(d, i + 1);
+				if (d === 0) { n.x = 0; n.y = 0; }
+				else {
+					const a = (i / perRing.get(d)) * TAU - Math.PI / 2 + d * 0.7;
+					const r = 190 + (d - 1) * 215;
+					n.x = Math.cos(a) * r;
+					n.y = Math.sin(a) * r * 0.86;
+				}
+				n.vx = n.vy = 0;
+				n.pinned = false;
+			});
+		}
+
+		function tick() {
+			// Repulsion, every pair.
+			for (let i = 0; i < nodes.length; i++) {
+				const a = nodes[i];
+				for (let j = i + 1; j < nodes.length; j++) {
+					const b = nodes[j];
+					let dx = b.x - a.x, dy = b.y - a.y;
+					let d2 = dx * dx + dy * dy;
+					if (d2 < 1) { dx = (i - j) * 0.5 || 0.5; dy = 0.5; d2 = 1; }
+					const d = Math.sqrt(d2);
+					const f = REPEL / d2;
+					const fx = (dx / d) * f, fy = (dy / d) * f;
+					a.vx -= fx; a.vy -= fy;
+					b.vx += fx; b.vy += fy;
+
+					// Chips are pills, not circles, so separate them as boxes
+					// and push along whichever axis they overlap least on. A
+					// round collider leaves the wide names ("Josh Sr 🏠")
+					// touching while the short ones sit too far apart.
+					const gapX = (a.w + b.w) / 2 + 26;
+					const gapY = (a.h + b.h) / 2 + 20;
+					const ox = gapX - Math.abs(dx), oy = gapY - Math.abs(dy);
+					if (ox > 0 && oy > 0) {
+						if (ox / gapX < oy / gapY) {
+							const push = ox * 0.22 * (dx < 0 ? -1 : 1);
+							a.vx -= push; b.vx += push;
+						} else {
+							const push = oy * 0.22 * (dy < 0 ? -1 : 1);
+							a.vy -= push; b.vy += push;
+						}
+					}
+				}
+			}
+
+			// Springs.
+			edges.forEach(e => {
+				const dx = e.nb.x - e.na.x, dy = e.nb.y - e.na.y;
+				const d = Math.hypot(dx, dy) || 0.001;
+				const f = (d - TIE[e.tie].rest) * SPRING;
+				const fx = (dx / d) * f, fy = (dy / d) * f;
+				e.na.vx += fx; e.na.vy += fy;
+				e.nb.vx -= fx; e.nb.vy -= fy;
+			});
+
+			// Drift home, and integrate. The pull home is stronger across
+			// the viewport's short axis, so a phone gets a tall narrow web
+			// and a desktop a wide one. Without it the layout settles the
+			// same shape everywhere and hangs off the sides in portrait.
+			nodes.forEach(n => {
+				if (n.pinned) { n.vx = n.vy = 0; return; }
+				const pull = n.id === ME ? GRAVITY * 7 : GRAVITY;
+				n.vx -= n.x * pull / aspect;
+				n.vy -= n.y * pull * aspect;
+				n.vx *= DAMPING;
+				n.vy *= DAMPING;
+				n.x += clamp(n.vx, -40, 40);
+				n.y += clamp(n.vy, -40, 40);
+			});
+		}
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  View transform
+		 * ═══════════════════════════════════════════════════════════ */
+		const view = { x: 0, y: 0, k: 1 };
+		const toScreen = (n) => ({ x: n.x * view.k + view.x, y: n.y * view.k + view.y });
+
+		const stage = document.getElementById("stage");
+		const canvas = document.getElementById("canvas");
+		const ctx = canvas.getContext("2d");
+		const nodesEl = document.getElementById("nodes");
+		let W = 0, H = 0;
+
+		function resize() {
+			const dpr = Math.min(devicePixelRatio || 1, 2);
+			const r = stage.getBoundingClientRect();
+			W = r.width; H = r.height;
+			aspect = Math.sqrt(clamp(W / Math.max(H, 1), 0.34, 2.6));
+			canvas.width = Math.round(W * dpr);
+			canvas.height = Math.round(H * dpr);
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		}
+
+		// Chips are drawn at a fixed screen size, so on a phone they stop
+		// shrinking long before the layout does and hang off both edges. Let
+		// them come down with the zoom, to a floor where names stay readable.
+		const chipScale = (k) => clamp(k, 0.62, 1.04);
+
+		// Frame the whole graph with a margin. Ignores the bobble, which is a
+		// couple of pixels and would otherwise make "Fit" land differently
+		// each press.
+		function fit(animate = true) {
+			let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+			let hw = 0, hh = 0;
+			nodes.forEach(n => {
+				minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
+				minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
+				hw = Math.max(hw, (n.w || 90) / 2);
+				hh = Math.max(hh, n.h / 2);
+			});
+			const spanX = Math.max(maxX - minX, 1), spanY = Math.max(maxY - minY, 1);
+			const padX = 20, padY = W < 700 ? 64 : 56;
+
+			// Bounds are in world units but the chips aren't, so solve twice:
+			// the first pass guesses the chip scale, the second uses it to
+			// work out the zoom that leaves room for chips that size.
+			let k = view.k;
+			for (let pass = 0; pass < 2; pass++) {
+				const cs = chipScale(k);
+				const availW = Math.max(W - padX * 2 - hw * 2 * cs, 40);
+				const availH = Math.max(H - padY * 2 - hh * 2 * cs, 40);
+				k = clamp(Math.min(availW / spanX, availH / spanY), 0.3, 1.5);
+			}
+			const target = {
+				k,
+				x: W / 2 - ((minX + maxX) / 2) * k,
+				y: H / 2 - ((minY + maxY) / 2) * k,
+			};
+			if (!animate || reduced.matches) { Object.assign(view, target); return; }
+			glide(target);
+		}
+
+		let glideTo = null, glideT = 0;
+		const glide = (target) => { glideTo = target; glideT = 0; };
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Tremor — the whole point of drawing it as a web
+		 *
+		 *  Touch one person and the shake spreads outward a hop at a time,
+		 *  so you can see who's connected to whom without reading a single
+		 *  line. Also fired on hover, and when a panel opens.
+		 * ═══════════════════════════════════════════════════════════ */
+		const HOP_DELAY = 85;
+		const SHOCK_MS = 520;
+
+		function tremor(fromId) {
+			if (reduced.matches) return;
+			const now = performance.now();
+			const seen = new Map([[fromId, 0]]);
+			for (let queue = [fromId], hop = 0; queue.length && hop < 5; hop++) {
+				const next = [];
+				queue.forEach(id => neighbours.get(id).forEach(({ id: to }) => {
+					if (!seen.has(to)) { seen.set(to, hop + 1); next.push(to); }
+				}));
+				queue = next;
+			}
+			seen.forEach((hop, id) => {
+				const n = nodeById.get(id);
+				n.shockAt = now + hop * HOP_DELAY;
+				// A physical nudge as well as a visual one, so the springs
+				// carry some of the wobble themselves.
+				if (!n.pinned && hop > 0) {
+					const a = Math.random() * TAU;
+					const kick = 2.6 / hop;
+					n.vx += Math.cos(a) * kick;
+					n.vy += Math.sin(a) * kick;
+				}
+			});
+		}
+
+		const shockOf = (n, now) => {
+			const t = now - n.shockAt;
+			if (t < 0 || t > SHOCK_MS) return 0;
+			// Rise fast, fall slow, like something actually plucked.
+			return t < 90 ? t / 90 : 1 - (t - 90) / (SHOCK_MS - 90);
+		};
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Chips
+		 * ═══════════════════════════════════════════════════════════ */
+		let focused = null;   // hovered / dragged person, lights their strands
+		let active = null;    // whose panel is open
+
+		nodes.forEach(n => {
+			const el = document.createElement("button");
+			el.type = "button";
+			el.className = "node" + (n.person.me ? " is-me" : "") +
+				(myTie.has(n.id) ? " tie-" + myTie.get(n.id) : "");
+			el.innerHTML = `<span class="dot"></span><span class="nm"></span>`;
+			el.querySelector(".nm").textContent = n.person.name;
+			el.setAttribute("aria-label", `${n.person.name} — open details`);
+			nodesEl.appendChild(el);
+			n.el = el;
+			n.w = el.offsetWidth;
+			n.h = el.offsetHeight;
+		});
+
+		function paintChips(now) {
+			const t = now;
+			nodes.forEach(n => {
+				const p = toScreen(n);
+				let bx = 0, by = 0, rot = 0;
+				if (!reduced.matches && !n.dragging) {
+					// The bobble. Two frequencies so it wanders rather than
+					// tracing a circle. Deliberately small — enough that the
+					// web reads as alive, not so much that names are a chore
+					// to read. Anything above about 2px starts to jiggle.
+					bx = Math.sin(t * n.bobSpeed + n.phase) * 1.7;
+					by = Math.cos(t * n.bobSpeed * 1.31 + n.phase * 1.7) * 1.3;
+					rot = Math.sin(t * n.bobSpeed * 0.8 + n.phase) * 0.16;
+				}
+				const s = shockOf(n, now);
+				const scale = (1 + s * 0.045) * chipScale(view.k);
+				n.bx = bx; n.by = by;
+				n.el.style.transform =
+					`translate(-50%,-50%) translate3d(${(p.x + bx).toFixed(2)}px,${(p.y + by).toFixed(2)}px,0)` +
+					` rotate(${rot.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+				n.el.style.setProperty("--shock", s.toFixed(3));
+			});
+		}
+
+		// Screen position including the bobble, so the strands stay welded to
+		// the chips instead of the chips floating off their own threads.
+		const anchor = (n) => {
+			const p = toScreen(n);
+			return { x: p.x + (n.bx || 0), y: p.y + (n.by || 0) };
+		};
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Canvas
+		 * ═══════════════════════════════════════════════════════════ */
+
+		// A decorative orb web behind everything: radials out from the origin
+		// and rings that sag between them, jittered once so it looks spun
+		// rather than plotted. Nothing here carries data.
+		const WEB_R = 18, WEB_RINGS = 8;
+		const webJitter = Array.from({ length: WEB_RINGS }, (_, r) =>
+			Array.from({ length: WEB_R }, (_, i) => 0.86 + ((Math.sin(r * 12.9898 + i * 78.233) * 43758.5453) % 1 + 1) % 1 * 0.28)
+		);
+
+		function drawOrbWeb(now) {
+			const cx = view.x, cy = view.y;
+			const breathe = reduced.matches ? 1 : 1 + Math.sin(now * 0.00035) * 0.014;
+			const spin = reduced.matches ? 0 : now * 0.000012;
+			const outer = 1450 * view.k * breathe;
+			ctx.save();
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = "rgba(236,233,244,.055)";
+
+			for (let i = 0; i < WEB_R; i++) {
+				const a = (i / WEB_R) * TAU + spin;
+				ctx.beginPath();
+				ctx.moveTo(cx, cy);
+				ctx.lineTo(cx + Math.cos(a) * outer, cy + Math.sin(a) * outer);
+				ctx.stroke();
+			}
+
+			for (let r = 0; r < WEB_RINGS; r++) {
+				const base = (140 + r * 175) * view.k * breathe;
+				if (base > outer) break;
+				ctx.globalAlpha = 0.85 - r * 0.07;
+				ctx.beginPath();
+				for (let i = 0; i <= WEB_R; i++) {
+					const i0 = i % WEB_R, i1 = (i + 1) % WEB_R;
+					const a0 = (i0 / WEB_R) * TAU + spin, a1 = ((i0 + 1) / WEB_R) * TAU + spin;
+					const r0 = base * webJitter[r][i0], r1 = base * webJitter[r][i1];
+					const x0 = cx + Math.cos(a0) * r0, y0 = cy + Math.sin(a0) * r0;
+					const x1 = cx + Math.cos(a1) * r1, y1 = cy + Math.sin(a1) * r1;
+					if (i === 0) ctx.moveTo(x0, y0);
+					// Control point pulled toward the middle: silk sags inward
+					// between anchors, it doesn't run in straight chords.
+					const am = (a0 + a1) / 2, rm = ((r0 + r1) / 2) * 0.93;
+					ctx.quadraticCurveTo(cx + Math.cos(am) * rm, cy + Math.sin(am) * rm, x1, y1);
+					if (i >= WEB_R) break;
+				}
+				ctx.stroke();
+			}
+			ctx.restore();
+		}
+
+		function strandPath(e) {
+			const a = anchor(e.na), b = anchor(e.nb);
+			const dist = Math.hypot(b.x - a.x, b.y - a.y);
+			// Sag, so a strand hangs instead of ruling a straight line.
+			const sag = Math.min(dist * 0.075, 34);
+			return { a, b, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 + sag, dist };
+		}
+
+		function drawStrands(now) {
+			const lit = focused ? new Set(neighbours.get(focused).map(x => x.id).concat(focused)) : null;
+
+			edges.forEach(e => {
+				const { a, b, cx, cy, dist } = strandPath(e);
+				const isLit = lit && (lit.has(e.a) && lit.has(e.b)) &&
+					(e.a === focused || e.b === focused);
+				const shock = Math.max(shockOf(e.na, now), shockOf(e.nb, now));
+				const style = TIE[e.tie];
+				const rgb = style.rgb;
+
+				let alpha = style.alpha;
+				if (lit) alpha = isLit ? 0.95 : 0.07;
+				alpha = Math.min(1, alpha + shock * 0.35);
+
+				ctx.save();
+				ctx.lineCap = "round";
+				ctx.lineWidth = style.width + (isLit ? 0.8 : 0) + shock * 0.9;
+				ctx.strokeStyle = `rgba(${rgb},${alpha.toFixed(3)})`;
+				ctx.setLineDash(style.dash);
+				if (isLit || shock > 0.05) {
+					ctx.shadowColor = `rgba(${rgb},${(0.5 * Math.max(isLit ? 1 : 0, shock)).toFixed(3)})`;
+					ctx.shadowBlur = 12;
+				}
+				ctx.beginPath();
+				ctx.moveTo(a.x, a.y);
+				ctx.quadraticCurveTo(cx, cy, b.x, b.y);
+				ctx.stroke();
+				ctx.restore();
+
+				// A bead of light running the strand, but only on the ones
+				// you're looking at. Everywhere at once would be a fairground.
+				if (isLit && !reduced.matches) {
+					const from = e.a === focused ? 0 : 1;
+					let p = ((now % 1400) / 1400);
+					p = from === 0 ? p : 1 - p;
+					const q = 1 - p;
+					const x = q * q * a.x + 2 * q * p * cx + p * p * b.x;
+					const y = q * q * a.y + 2 * q * p * cy + p * p * b.y;
+					ctx.save();
+					ctx.fillStyle = `rgba(${rgb},.95)`;
+					ctx.shadowColor = `rgba(${rgb},.9)`;
+					ctx.shadowBlur = 14;
+					ctx.beginPath();
+					ctx.arc(x, y, 2.6, 0, TAU);
+					ctx.fill();
+					ctx.restore();
+				}
+
+				// The bond itself: a plate on the strand at its midpoint. The
+				// marriage belongs to the relationship, not to either person.
+				const icons = bondIcons(e);
+				if (icons) {
+					const mx = 0.25 * a.x + 0.5 * cx + 0.25 * b.x;
+					const my = 0.25 * a.y + 0.5 * cy + 0.25 * b.y;
+					const size = Math.max(10, Math.round(13 * chipScale(view.k)));
+					ctx.save();
+					ctx.setLineDash([]);
+					ctx.shadowBlur = 0;
+					ctx.globalAlpha = lit ? (isLit ? 1 : 0.1) : 0.92;
+					ctx.font = `${size}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+					ctx.textAlign = "center";
+					ctx.textBaseline = "middle";
+					const pw = ctx.measureText(icons).width + 11, ph = size + 9;
+					// Plate in the page colour, so the strand doesn't run
+					// straight through the icon.
+					ctx.beginPath();
+					ctx.roundRect(mx - pw / 2, my - ph / 2, pw, ph, ph / 2);
+					ctx.fillStyle = "#14131d";
+					ctx.fill();
+					ctx.lineWidth = 1;
+					ctx.strokeStyle = `rgba(${rgb},${isLit ? .8 : .45})`;
+					ctx.stroke();
+					ctx.fillText(icons, mx, my + 0.5);
+					ctx.restore();
+				}
+
+				// Dew on the long committed strands, purely because a web
+				// should have some.
+				if (!lit && e.tie === "committed" && dist > 120) {
+					ctx.save();
+					ctx.fillStyle = `rgba(${rgb},.4)`;
+					[0.34, 0.66].forEach(p => {
+						const q = 1 - p;
+						ctx.beginPath();
+						ctx.arc(q * q * a.x + 2 * q * p * cx + p * p * b.x,
+							q * q * a.y + 2 * q * p * cy + p * p * b.y, 1.5, 0, TAU);
+						ctx.fill();
+					});
+					ctx.restore();
+				}
+			});
+		}
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Frame
+		 * ═══════════════════════════════════════════════════════════ */
+		let settle = 0;
+
+		function frame(now) {
+			// Run the sim hot for the first second so it snaps into shape,
+			// then keep ticking gently so drags and tremors still resolve.
+			const steps = settle < 60 ? 3 : 1;
+			for (let i = 0; i < steps; i++) tick();
+			settle++;
+
+			if (glideTo) {
+				glideT = Math.min(1, glideT + 0.09);
+				const e = 1 - Math.pow(1 - glideT, 3);
+				view.k += (glideTo.k - view.k) * e * 0.5;
+				view.x += (glideTo.x - view.x) * e * 0.5;
+				view.y += (glideTo.y - view.y) * e * 0.5;
+				if (glideT >= 1) { Object.assign(view, glideTo); glideTo = null; }
+			}
+
+			ctx.clearRect(0, 0, W, H);
+			drawOrbWeb(now);
+			drawStrands(now);
+			paintChips(now);
+			requestAnimationFrame(frame);
+		}
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Pointer: drag a person, pan the field, pinch or wheel to zoom
+		 * ═══════════════════════════════════════════════════════════ */
+		const pointers = new Map();
+		let dragNode = null, dragMoved = 0, dragFrom = null, panning = null, pinch = null;
+
+		function setFocus(id) {
+			if (focused === id) return;
+			focused = id;
+			nodesEl.classList.toggle("is-focusing", !!id);
+			if (!id) { nodes.forEach(n => n.el.classList.remove("is-lit")); return; }
+			const lit = new Set(neighbours.get(id).map(x => x.id));
+			lit.add(id);
+			nodes.forEach(n => n.el.classList.toggle("is-lit", lit.has(n.id)));
+		}
+
+		nodes.forEach(n => {
+			n.el.addEventListener("pointerenter", () => { if (!dragNode) { setFocus(n.id); tremor(n.id); } });
+			n.el.addEventListener("pointerleave", () => { if (!dragNode && !active) setFocus(null); });
+
+			n.el.addEventListener("pointerdown", (ev) => {
+				ev.stopPropagation();
+				// Throws NotFoundError if the pointer has already gone; that
+				// must not take the rest of the handler down with it.
+				try { n.el.setPointerCapture(ev.pointerId); } catch { }
+				dragNode = n;
+				dragMoved = 0;
+				dragFrom = { x: ev.clientX, y: ev.clientY };
+				n.dragging = true;
+				n.pinned = true;
+				setFocus(n.id);
+				tremor(n.id);
+			});
+
+			n.el.addEventListener("pointermove", (ev) => {
+				if (dragNode !== n) return;
+				// Measured from the touch-down point, not off movementX/Y:
+				// Safari doesn't fill those in for touch pointers, so they
+				// come back undefined, one Math.abs turns the running total
+				// into NaN, and `NaN < slop` is false — which silently ate
+				// every tap on a phone while working fine with a mouse.
+				dragMoved = Math.max(dragMoved,
+					Math.hypot(ev.clientX - dragFrom.x, ev.clientY - dragFrom.y));
+				const r = stage.getBoundingClientRect();
+				n.x = (ev.clientX - r.left - view.x) / view.k;
+				n.y = (ev.clientY - r.top - view.y) / view.k;
+				n.vx = n.vy = 0;
+			});
+
+			const release = (ev) => {
+				if (dragNode !== n) return;
+				dragNode = null;
+				n.dragging = false;
+				// A short drag is a tap. Anything longer parks them where you
+				// left them until Reset. A finger is never as still as a
+				// mouse, so it gets more room to wobble.
+				const slop = ev.pointerType === "mouse" ? 4 : 12;
+				if (dragMoved < slop) { n.pinned = false; openPanel(n.id); }
+				if (ev.pointerType !== "mouse") setFocus(active || null);
+			};
+			n.el.addEventListener("pointerup", release);
+			n.el.addEventListener("pointercancel", release);
+
+			n.el.addEventListener("keydown", (ev) => {
+				if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openPanel(n.id); }
+			});
+			n.el.addEventListener("focus", () => setFocus(n.id));
+		});
+
+		stage.addEventListener("pointerdown", (ev) => {
+			pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+			if (pointers.size === 2) {
+				const [p, q] = [...pointers.values()];
+				pinch = { d: Math.hypot(p.x - q.x, p.y - q.y), k: view.k };
+				panning = null;
+				return;
+			}
+			panning = { x: ev.clientX, y: ev.clientY, vx: view.x, vy: view.y };
+			stage.classList.add("is-panning");
+			stage.setPointerCapture(ev.pointerId);
+			if (!active) setFocus(null);
+		});
+
+		stage.addEventListener("pointermove", (ev) => {
+			if (!pointers.has(ev.pointerId)) return;
+			pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+
+			if (pinch && pointers.size === 2) {
+				const [p, q] = [...pointers.values()];
+				const d = Math.hypot(p.x - q.x, p.y - q.y);
+				const r = stage.getBoundingClientRect();
+				zoomAbout((p.x + q.x) / 2 - r.left, (p.y + q.y) / 2 - r.top,
+					clamp(pinch.k * (d / pinch.d), 0.25, 2.6) / view.k);
+				return;
+			}
+			if (!panning) return;
+			view.x = panning.vx + (ev.clientX - panning.x);
+			view.y = panning.vy + (ev.clientY - panning.y);
+			glideTo = null;
+		});
+
+		const endPointer = (ev) => {
+			pointers.delete(ev.pointerId);
+			if (pointers.size < 2) pinch = null;
+			if (pointers.size === 0) { panning = null; stage.classList.remove("is-panning"); }
+		};
+		stage.addEventListener("pointerup", endPointer);
+		stage.addEventListener("pointercancel", endPointer);
+
+		function zoomAbout(px, py, factor) {
+			const k = clamp(view.k * factor, 0.25, 2.6);
+			const f = k / view.k;
+			view.x = px - (px - view.x) * f;
+			view.y = py - (py - view.y) * f;
+			view.k = k;
+			glideTo = null;
+		}
+
+		stage.addEventListener("wheel", (ev) => {
+			ev.preventDefault();
+			const r = stage.getBoundingClientRect();
+			zoomAbout(ev.clientX - r.left, ev.clientY - r.top, Math.exp(-ev.deltaY * 0.0016));
+		}, { passive: false });
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Panel
+		 * ═══════════════════════════════════════════════════════════ */
+		const panel = document.getElementById("panel");
+		const scrim = document.getElementById("scrim");
+		const elKicker = document.getElementById("panel-kicker");
+		const elName = document.getElementById("panel-name");
+		const elTags = document.getElementById("panel-tags");
+		const elBody = document.getElementById("panel-body");
+		let returnFocusTo = null;
+		let openedAt = 0;
+
+		const igUrl = (h) => "https://instagram.com/" + h.trim().replace(/^@/, "").replace(/\/+$/, "");
+
+		// What to call this person's place in the web when the data doesn't
+		// say. Direct ties get their tie word; everyone else is described by
+		// whoever brought them in.
+		function standing(p) {
+			if (p.me) return "This is me.";
+			if (p.relationship) return p.relationship;
+			if (myTie.has(p.id)) return TIE[myTie.get(p.id)].word;
+			const via = neighbours.get(p.id)
+				.map(x => byId.get(x.id))
+				.filter(x => myTie.has(x.id) || x.me);
+			return via.length ? "Connected through " + via.map(x => x.name).join(" and ") : "In the wider web";
+		}
+
+		function field(label, value, empty) {
+			const wrap = document.createElement("div");
+			wrap.className = "field";
+			const l = document.createElement("p");
+			l.className = "caps";
+			l.textContent = label;
+			const v = document.createElement("p");
+			if (value) v.textContent = value;
+			else { v.className = "empty"; v.textContent = empty; }
+			wrap.append(l, v);
+			return wrap;
+		}
+
+		// Nudge the field so the person you just opened isn't sitting behind
+		// the panel. Only moves if it has to.
+		function keepVisible(n) {
+			const p = toScreen(n);
+			const m = 70;
+			let dx = 0, dy = 0;
+			if (W > 640) {
+				const right = W - Math.min(400, W);
+				if (p.x > right - m) dx = (right - m) - p.x;
+				else if (p.x < m) dx = m - p.x;
+			} else {
+				const bottom = H - Math.min(H * 0.78, 620);
+				if (p.y > bottom - m) dy = (bottom - m) - p.y;
+				else if (p.y < m + 40) dy = (m + 40) - p.y;
+			}
+			if (dx || dy) glide({ k: view.k, x: view.x + dx, y: view.y + dy });
+		}
+
+		function openPanel(id) {
+			const n = nodeById.get(id);
+			const p = n.person;
+			active = id;
+			returnFocusTo = n.el;
+			setFocus(id);
+			tremor(id);
+			keepVisible(n);
+
+			const accent = p.me ? "var(--me)" : myTie.has(id) ? `var(--${myTie.get(id)})` : "var(--silk-faint)";
+			panel.style.setProperty("--accent", accent);
+
+			elKicker.textContent = p.me ? "Centre of the web" : standing(p);
+			elName.textContent = p.name;
+
+			// Tags: the marks they carry, as words rather than emoji.
+			elTags.replaceChildren();
+			const tags = [];
+			if (myTie.has(id)) tags.push(TIE[myTie.get(id)].word);
+			neighbours.get(id).forEach(({ id: to, link }) => {
+				const who = byId.get(to).name;
+				if (link.married) tags.push(`\u{1F492} Married to ${who}`);
+				if (link.engaged) tags.push(`\u{1F48D} Engaged to ${who}`);
+				if (link.nesting && !link.married) tags.push(`\u{1F3E0} Lives with ${who}`);
+			});
+			tags.forEach(t => {
+				const s = document.createElement("span");
+				s.className = "tag";
+				s.textContent = t;
+				elTags.appendChild(s);
+			});
+
+			elBody.replaceChildren();
+			if (!p.me) {
+				elBody.append(
+					field("What we are", p.relationship, "Not written up yet."),
+					field("How we met", p.met, "Not written up yet."),
+				);
+			}
+			if (p.note) elBody.append(field("Notes", p.note));
+
+			// Instagram.
+			const ig = document.createElement("div");
+			ig.className = "field";
+			const igl = document.createElement("p");
+			igl.className = "caps";
+			igl.textContent = "Instagram";
+			ig.append(igl);
+			if (p.instagram) {
+				const a = document.createElement("a");
+				a.className = "ig";
+				a.href = igUrl(p.instagram);
+				a.target = "_blank";
+				a.rel = "noopener noreferrer nofollow";
+				a.textContent = "@" + p.instagram.trim().replace(/^@/, "");
+				ig.append(a);
+			} else {
+				const v = document.createElement("p");
+				v.className = "empty";
+				v.textContent = "Not on file.";
+				ig.append(v);
+			}
+			elBody.append(ig);
+
+			// Their own threads, clickable.
+			const conn = document.createElement("div");
+			conn.className = "field";
+			const cl = document.createElement("p");
+			cl.className = "caps";
+			cl.textContent = `Connected to — ${neighbours.get(id).length}`;
+			const row = document.createElement("div");
+			row.className = "links";
+			const ORDER = { committed: 0, casual: 1, new: 2 };
+			neighbours.get(id)
+				.slice()
+				.sort((x, y) => ORDER[x.link.tie] - ORDER[y.link.tie])
+				.forEach(({ id: to, link }) => {
+					const other = byId.get(to);
+					const b = document.createElement("button");
+					b.type = "button";
+					b.style.setProperty("--accent", `var(--${link.tie})`);
+					b.innerHTML = `<i></i><span></span>`;
+					// Married / engaged / same address wins, then anything
+					// written by hand, then the tie itself. Never a bare name.
+					const bond = bondWords(link);
+					const said = bond.length ? bond.join(", ")
+						: link.label ? link.label
+							: TIE[link.tie].word.toLowerCase();
+					b.querySelector("span").textContent = `${other.name} · ${said}`;
+					b.addEventListener("click", () => openPanel(to));
+					row.appendChild(b);
+				});
+			conn.append(cl, row);
+			elBody.append(conn);
+
+			panel.classList.add("is-open");
+			scrim.classList.add("is-open");
+			openedAt = performance.now();
+			panel.focus();
+		}
+
+		function closePanel() {
+			active = null;
+			panel.classList.remove("is-open");
+			scrim.classList.remove("is-open");
+			setFocus(null);
+			if (returnFocusTo) { returnFocusTo.focus(); returnFocusTo = null; }
+		}
+
+		document.getElementById("panel-close").addEventListener("click", closePanel);
+		scrim.addEventListener("click", () => {
+			// Touch fires a compatibility click straight after the pointerup
+			// that opened the panel, and by then the scrim is under the
+			// finger. Ignore anything that arrives on its heels.
+			if (performance.now() - openedAt < 400) return;
+			closePanel();
+		});
+		addEventListener("keydown", (ev) => {
+			if (ev.key === "Escape" && active) closePanel();
+		});
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Boot
+		 * ═══════════════════════════════════════════════════════════ */
+		document.getElementById("tally").textContent =
+			`${people.length} people · ${links.length} links`;
+
+		document.getElementById("btn-fit").addEventListener("click", () => fit());
+		document.getElementById("btn-reset").addEventListener("click", () => {
+			seed();
+			settle = 0;
+			nodes.forEach(n => { n.pinned = false; });
+			// Let the springs pull it back into shape before framing it.
+			setTimeout(() => fit(), 260);
+			tremor(ME);
+		});
+
+		let refit = null;
+		addEventListener("resize", () => {
+			resize();
+			settle = 0;              // run hot so it re-shapes to the new aspect
+			fit(false);
+			clearTimeout(refit);
+			refit = setTimeout(() => fit(), 450);
+		});
+
+		resize();
+		seed();
+		for (let i = 0; i < 220; i++) tick();   // settle off-screen, no flail on load
+		settle = 999;
+		fit(false);
+		requestAnimationFrame((t) => { tremor(ME); frame(t); });
+	</script>
+</body>
+
+</html>
