@@ -1603,7 +1603,7 @@
 			const via = neighbours.get(p.id)
 				.map(x => byId.get(x.id))
 				.filter(x => myTie.has(x.id) || x.me);
-			return via.length ? "Connected through " + via.map(x => x.name).join(" and ") : "In the wider web";
+			return via.length ? "Through " + via.map(x => x.name).join(" and ") : "In the wider web";
 		}
 
 		function field(label, value, empty) {
