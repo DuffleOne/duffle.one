@@ -738,7 +738,7 @@
 			{ id: "ida", name: "Ida", mark: "norse", relationship: "", since: "", met: "At a club night.", note: "" },
 
 			// ─── Kate's side ─────────────────────────────────
-			{ id: "archi", name: "Archi", relationship: "", met: "", note: "" },
+			{ id: "archi", name: "Archi", mark: "filipino", relationship: "", met: "", note: "" },
 
 			// ─── Ida's side ──────────────────────────────────
 			{ id: "joshsr", name: "Josh Sr", relationship: "", met: "", note: "" },
@@ -1639,8 +1639,36 @@
 		 *  Set `mark` on a person and they get one of these instead of a
 		 *  generated web. Same box, same stroke, so the set still hangs
 		 *  together; the shape is the only thing that changes.
+		 *
+		 *  Never the flag. A flag is a sticker, and it says the country
+		 *  rather than the person. These are drawn from what a place made:
+		 *  its heraldry, its geometry, the things it hangs up. Anything new
+		 *  in here follows that.
 		 * ─────────────────────────────────────────────────────────── */
 		const MOTIF = {
+			// A parol: the star lantern people hang up at Christmas, frame
+			// and ribbons and all. Filipino, and a warmer thing to be given
+			// than a flag.
+			filipino: () => {
+				const cx = 23, cy = 19, R = 16, r = 6.6, turn = -Math.PI / 2;
+				const at = (a, rad) =>
+					`${(cx + Math.cos(a) * rad).toFixed(1)} ${(cy + Math.sin(a) * rad).toFixed(1)}`;
+
+				// Outline plus the pentagon inside it, and nothing from the
+				// middle out: spokes to the points turn a lantern into a
+				// pentagram, which is a different shop entirely.
+				let d = star(cx, cy, 5, R, r), pent = "";
+				for (let i = 0; i < 5; i++) {
+					pent += `${i ? "L" : "M"}${at(turn + Math.PI / 5 + (i / 5) * TAU, r)}`;
+				}
+				d += pent + "Z";
+
+				// Two ribbons off each of the low points.
+				d += `M13.6 32C12.6 34.8 12.4 38 13.2 41M13.6 32C14.8 34.6 15.4 37.6 15 40.6`;
+				d += `M32.4 32C33.4 34.8 33.6 38 32.8 41M32.4 32C31.2 34.6 30.6 37.6 31 40.6`;
+				return `<path d="${d}"/>`;
+			},
+
 			// Ægishjálmur, the helm of awe: eight staves, barbed the whole
 			// way out and forked at the tip. Norse, and the one mark on here
 			// meant to read as a warning rather than an ornament.
@@ -1680,10 +1708,18 @@
 			// The union flag as line work: a saltire with the cross riding
 			// over it as a band, which is what stops it reading as another
 			// eight-spoke web.
-			british: () =>
-				`<rect x="3" y="11" width="40" height="24" rx="1.5"/>` +
-				`<path d="M3 11L43 35M43 11L3 35` +
-				`M19.5 11V35M26.5 11V35M3 19.5H43M3 26.5H43"/>`,
+			// A portcullis, the way Westminster draws one: barred, spiked
+			// along the bottom and hung on two chains.
+			british: () => {
+				let d = "";
+				[12, 19.3, 26.6, 34].forEach(x => {
+					d += `M${x} 12V32M${x - 2.4} 32L${x} 37.5L${x + 2.4} 32`;
+				});
+				[12, 18.7, 25.4, 32].forEach(y => { d += `M12 ${y}H34`; });
+				d += `M12 12C8.4 13.6 6.9 17 7.4 20.8M34 12C37.6 13.6 39.1 17 38.6 20.8`;
+				return `<path d="${d}"/>` +
+					`<circle cx="7.4" cy="22.3" r="1.5"/><circle cx="38.6" cy="22.3" r="1.5"/>`;
+			},
 
 			// Circular Gallifreyan by way of an orrery: a rim of hours, two
 			// hands stopped at no particular one, and rings that break where
@@ -1719,12 +1755,19 @@
 				`<path d="M16.5 29.2C19.8 32 22 36 22.6 40.4M15.8 35.6C19.6 33 25.2 32 29.8 33.6"/>` +
 				`<path d="M15.6 30.4C10.5 29 8 24.5 10.5 20.5C12 18.2 14.6 18.6 15 20.6"/>`,
 
-			// Ay-yıldız, the crescent and star. Turkish. The crescent is the
-			// left of one circle with a second bitten out of it, so the two
-			// arcs have to meet where those circles cross.
-			turkish: () =>
-				`<path d="M27.4 12.6A14 14 0 1 0 27.4 33.4A11.7 11.7 0 1 1 27.4 12.6Z"/>` +
-				`<path d="${star(31.5, 23, 5, 7, 2.9)}"/>`,
+			// Selçuk yıldızı: two squares laid over one another into an
+			// eight point star, with the octagon they make picked out
+			// inside it. Turkish, and centuries older than any flag.
+			turkish: () => {
+				const square = (t) => {
+					let d = "";
+					for (let i = 0; i < 4; i++) d += `${i ? "L" : "M"}${pol(t + i * Math.PI / 2, 18)}`;
+					return d + "Z";
+				};
+				let oct = "";
+				for (let i = 0; i < 8; i++) oct += `${i ? "L" : "M"}${pol(-Math.PI / 2 + i * TAU / 8, 8.6)}`;
+				return `<path d="${square(-Math.PI / 2) + square(-Math.PI / 4) + oct}Z"/>` + ring(3.2);
+			},
 		};
 
 		// xorshift32 seeded off an FNV-1a hash of the id.
