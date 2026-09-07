@@ -43,8 +43,8 @@
 			--silk-dim: #8d8aa4;
 			--silk-faint: #56536e;
 
-			/* Node accents. Amber is me, rose is a committed tie, periwinkle
-			   is a casual one. Carried over from the colours on the sketch. */
+			/* Node accents. Amber is me, rose is a romantic tie, periwinkle
+			   is any other thread. Carried over from the sketch. */
 			--me: #f0a92c;
 			--committed: #ff5177;
 			--casual: #7aa6f0;
@@ -679,8 +679,8 @@
 	</main>
 
 	<div class="rail">
-		<p class="key committed"><i></i><span>Committed</span></p>
-		<p class="key casual"><i></i><span>Casual, or undefined</span></p>
+		<p class="key committed"><i></i><span>Romantic</span></p>
+		<p class="key casual"><i></i><span>Connected</span></p>
 		<p class="key comet"><i></i><span>Comet</span></p>
 		<p class="key new"><i></i><span>Just getting to know each other</span></p>
 		<p class="key"><span>&#128146; married<span class="long">, so living together</span> &nbsp;&middot;&nbsp; &#128141; engaged &nbsp;&middot;&nbsp; &#127968; lives together</span></p>
@@ -710,8 +710,8 @@
 		 *  name          what shows on the chip
 		 *  me            true for exactly one person (that's me)
 		 *  relationship  what we are to each other. Left blank, the panel
-		 *                falls back to the tie on the link ("Committed" /
-		 *                "Casual") or "connected through X" for people I'm
+		 *                falls back to the tie on the link ("Romantic" /
+		 *                "Connected") or "connected through X" for people I'm
 		 *                not directly linked to.
 		 *  met           how we met
 		 *  note          anything else worth saying
@@ -724,7 +724,7 @@
 		const people = [
 			{ id: "laura", name: "Laura", me: true, note: "" },
 
-			// ─── The two committed ties ──────────────────────
+			// ─── The two romantic ties ───────────────────────
 			{ id: "kate", name: "Kate", relationship: "", met: "", instagram: "kurlyfluffymonster", note: "" },
 			{ id: "ida", name: "Ida", relationship: "", met: "At KV.", instagram: "latexhouseofhemlock", note: "" },
 
@@ -772,9 +772,13 @@
 		/* ═══════════════════════════════════════════════════════════
 		 *  The links — read straight off the sketch
 		 *
-		 *  tie       "committed"  a formal, committed relationship. Solid.
-		 *            "casual"     a play partner, or a thing nobody has put
-		 *                         a name to yet. Dashed.
+		 *  tie       "committed"  romantic. Solid, and shown as "Romantic":
+		 *                         the key kept its old name, since every
+		 *                         thread on here is a commitment of some
+		 *                         kind and the word had stopped meaning much.
+		 *            "casual"     any other thread. A play partner, or a
+		 *                         thing nobody has put a name to. Dashed,
+		 *                         and shown as "Connected".
 		 *            "comet"      a comet. Long stroke with a spark for a
 		 *                         tail, in the one cold colour on the page.
 		 *            "new"        still getting to know each other, nothing
@@ -823,7 +827,7 @@
 			// ─── Beth's side ─────────────────────────────────
 			{ a: "miranda", b: "zach", tie: "committed", married: true },
 			{ a: "zach", b: "fae", tie: "committed", label: "partners" },
-			{ a: "zach", b: "beth", tie: "committed", label: "dating" },
+			{ a: "zach", b: "beth", tie: "casual", label: "dating" },
 			{ a: "beth", b: "ben", tie: "casual", label: "FWB" },
 			{ a: "ben", b: "leena", tie: "committed", label: "partners" },
 			{ a: "jack", b: "leena", tie: "committed", label: "partners" },
@@ -895,8 +899,8 @@
 		// Everything a tie needs, in one place: how it's drawn, how long the
 		// spring wants to be, and what to call it in the panel.
 		const TIE = {
-			committed: { rgb: "255,81,119", dash: [], width: 1.7, alpha: 0.42, rest: 165, word: "Committed" },
-			casual: { rgb: "122,166,240", dash: [5, 6], width: 1.15, alpha: 0.24, rest: 250, word: "Casual" },
+			committed: { rgb: "255,81,119", dash: [], width: 1.7, alpha: 0.42, rest: 165, word: "Romantic" },
+			casual: { rgb: "122,166,240", dash: [5, 6], width: 1.15, alpha: 0.24, rest: 250, word: "Connected" },
 			comet: { rgb: "87,217,196", dash: [14, 4, 3, 4], width: 1.35, alpha: 0.32, rest: 275, word: "Comet" },
 			new: { rgb: "154,148,184", dash: [2, 9], width: 0.95, alpha: 0.15, rest: 300, word: "Just getting to know each other" },
 		};
@@ -1409,7 +1413,7 @@
 					ctx.restore();
 				}
 
-				// Dew on the long committed strands, purely because a web
+				// Dew on the long romantic strands, purely because a web
 				// should have some.
 				if (!lit && e.tie === "committed" && dist > 120) {
 					ctx.save();
