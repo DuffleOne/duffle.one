@@ -665,6 +665,7 @@
 			// ─── Camilla and the Rory/Pixie house ────────────
 			{ id: "camilla", name: "Camilla", relationship: "", met: "At a private play event.", instagram: "perv.next.door", note: "" },
 			{ id: "gal", name: "Gal", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "harrison", name: "Harrison", relationship: "", met: "", instagram: "", note: "" },
 			{ id: "rory", name: "Rory", relationship: "", met: "At Anatomie.", instagram: "roryropes", note: "" },
 			{ id: "pixie", name: "Pixie", relationship: "", met: "Rory introduced us.", instagram: "tinylittlepixie", note: "" },
 			{ id: "emma", name: "Emma", relationship: "", met: "Through Rory.", instagram: "todayifall", note: "" },
@@ -674,8 +675,6 @@
 			{ id: "giulia", name: "Giulia", relationship: "", met: "At a private party.", instagram: "", note: "" },
 			{ id: "luigi", name: "Luigi", relationship: "", met: "", instagram: "", note: "" },
 
-			// ─── Straight to me, nobody else in common ───────
-			{ id: "orla", name: "Orla", relationship: "", met: "At The Play Munch.", instagram: "orlacarmel", note: "" },
 
 			// ─── Josh Jr and Jess ────────────────────────────
 			{ id: "joshjr", name: "Josh Jr", relationship: "", met: "At Naughties.", instagram: "", note: "" },
@@ -685,6 +684,14 @@
 			{ id: "banu", name: "Banu", relationship: "", met: "At Anatomie, doing rope.", instagram: "godless_existence", note: "" },
 			{ id: "jack", name: "Jack", relationship: "", met: "Through Banu, and at Quiet Kink.", instagram: "men_in_jack_iii", note: "" },
 			{ id: "beth", name: "Beth", relationship: "", met: "", instagram: "", note: "" },
+
+			// ─── Beth's side, off her own whiteboard ─────────
+			{ id: "zach", name: "Zach", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "miranda", name: "Miranda", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "fae", name: "Fae", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "ben", name: "Ben", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "leena", name: "Leena", relationship: "", met: "", instagram: "", note: "" },
+			{ id: "hugo", name: "Hugo", relationship: "", met: "", instagram: "", note: "" },
 		];
 
 		/* ═══════════════════════════════════════════════════════════
@@ -716,6 +723,7 @@
 
 			{ a: "laura", b: "camilla", tie: "casual" },
 			{ a: "camilla", b: "gal", tie: "casual" },
+			{ a: "camilla", b: "harrison", tie: "committed", married: true },
 			{ a: "camilla", b: "rory", tie: "casual" },
 			{ a: "rory", b: "pixie", tie: "committed", nesting: true },
 			{ a: "rory", b: "emma", tie: "committed" },
@@ -726,7 +734,6 @@
 
 			{ a: "laura", b: "giulia", tie: "casual" },
 			{ a: "giulia", b: "luigi", tie: "committed", married: true },
-			{ a: "laura", b: "orla", tie: "casual" },
 
 			{ a: "laura", b: "joshjr", tie: "casual" },
 			{ a: "laura", b: "jess", tie: "casual" },
@@ -737,6 +744,15 @@
 			{ a: "laura", b: "beth", tie: "new" },
 			{ a: "banu", b: "jack", tie: "casual" },
 			{ a: "jack", b: "beth", tie: "committed", nesting: true },
+
+			// ─── Beth's side ─────────────────────────────────
+			{ a: "miranda", b: "zach", tie: "committed", married: true },
+			{ a: "zach", b: "fae", tie: "committed", label: "partners" },
+			{ a: "zach", b: "beth", tie: "committed", label: "dating" },
+			{ a: "beth", b: "ben", tie: "casual", label: "FWB" },
+			{ a: "ben", b: "leena", tie: "committed", label: "partners" },
+			{ a: "jack", b: "leena", tie: "committed", label: "partners" },
+			{ a: "leena", b: "hugo", tie: "committed", married: true },
 		];
 
 		/* ═══════════════════════════════════════════════════════════
