@@ -14,6 +14,13 @@
 #   - No `aws s3 website` call. Static hosting is persistent bucket state,
 #     asserted by publish.sh, not something to re-apply per deploy.
 #
+# The plugin HEADs every object first and, with overwrite unset, skips the
+# ones that already exist — so between 2026-08-30 and 2026-09-07 only brand
+# new files ever reached the bucket and every edit to an existing page sat in
+# git looking deployed. Nothing broke visibly, because dropping --delete left
+# the stale objects happily serving. `overwrite: true` below is what makes a
+# deploy a deploy; don't drop it.
+#
 # A push to master publishes. Deploy pipeline on any green build (a
 # "deployment" event) republishes that build's commit.
 
@@ -45,6 +52,10 @@ steps:
       source: build/**/*
       strip_prefix: build/
       acl: public-read
+      # Replace what's already in the bucket. The plugin compares existence,
+      # not content, so this re-uploads every file each deploy — a few hundred
+      # KB of static site, which is cheaper than a silently stale page.
+      overwrite: true
       # The entry pages must revalidate on every request so a deploy shows up
       # straight away; the hashed bundles carry no cache header, as before.
       cache_control:

@@ -48,8 +48,11 @@
 			--me: #f0a92c;
 			--committed: #ff5177;
 			--casual: #7aa6f0;
-			/* Deliberately the quietest of the three: barely there. */
+			/* Deliberately the quietest of the set: barely there. */
 			--new: #9a94b8;
+			/* The only cold bright in the palette, so a comet reads as
+			   something passing through rather than sitting still. */
+			--comet: #57d9c4;
 
 			--strand: rgba(236, 233, 244, .16);
 			--edge: rgba(255, 255, 255, .07);
@@ -257,6 +260,10 @@
 			--accent: var(--new);
 		}
 
+		.node.tie-comet {
+			--accent: var(--comet);
+		}
+
 		.node:hover,
 		.node.is-active {
 			background: color-mix(in srgb, var(--accent) 16%, var(--void-lift));
@@ -307,6 +314,20 @@
 
 		.key.casual {
 			color: var(--casual);
+		}
+
+		.key.comet {
+			color: var(--comet);
+		}
+
+		/* Long stroke, then the spark of a tail — same shape the canvas
+		   draws, since border-style can't do a four-part dash. */
+		.key.comet i {
+			border: 0;
+			height: 2px;
+			background: repeating-linear-gradient(to right,
+					currentColor 0 14px, transparent 14px 18px,
+					currentColor 18px 21px, transparent 21px 26px);
 		}
 
 		.key.new {
@@ -585,6 +606,7 @@
 	<div class="rail">
 		<p class="key committed"><i></i><span>Committed</span></p>
 		<p class="key casual"><i></i><span>Casual, or undefined</span></p>
+		<p class="key comet"><i></i><span>Comet</span></p>
 		<p class="key new"><i></i><span>Just getting to know each other</span></p>
 		<p class="key"><span>&#128146; married<span class="long">, so living together</span> &nbsp;&middot;&nbsp; &#128141; engaged &nbsp;&middot;&nbsp; &#127968; lives together</span></p>
 		<p class="key"><span class="caps">Not for AI training or scraping</span></p>
@@ -671,6 +693,8 @@
 		 *  tie       "committed"  a formal, committed relationship. Solid.
 		 *            "casual"     a play partner, or a thing nobody has put
 		 *                         a name to yet. Dashed.
+		 *            "comet"      a comet. Long stroke with a spark for a
+		 *                         tail, in the one cold colour on the page.
 		 *            "new"        still getting to know each other, nothing
 		 *                         has happened yet. Faint, sparse dash.
 		 *  married   💒 on both chips. Married implies living together, so
@@ -697,7 +721,7 @@
 			{ a: "rory", b: "emma", tie: "committed" },
 			{ a: "pixie", b: "emma", tie: "committed" },
 			{ a: "pixie", b: "luke", tie: "committed" },
-			{ a: "laura", b: "emma", tie: "casual" },
+			{ a: "laura", b: "emma", tie: "comet" },
 			{ a: "laura", b: "luke", tie: "casual" },
 
 			{ a: "laura", b: "giulia", tie: "casual" },
@@ -782,6 +806,7 @@
 		const TIE = {
 			committed: { rgb: "255,81,119", dash: [], width: 1.7, alpha: 0.42, rest: 165, word: "Committed" },
 			casual: { rgb: "122,166,240", dash: [5, 6], width: 1.15, alpha: 0.24, rest: 250, word: "Casual" },
+			comet: { rgb: "87,217,196", dash: [14, 4, 3, 4], width: 1.35, alpha: 0.32, rest: 275, word: "Comet" },
 			new: { rgb: "154,148,184", dash: [2, 9], width: 0.95, alpha: 0.15, rest: 300, word: "Just getting to know each other" },
 		};
 		const SPRING = 0.016;
@@ -1489,7 +1514,7 @@
 			cl.textContent = `Connected to — ${neighbours.get(id).length}`;
 			const row = document.createElement("div");
 			row.className = "links";
-			const ORDER = { committed: 0, casual: 1, new: 2 };
+			const ORDER = { committed: 0, casual: 1, comet: 2, new: 3 };
 			neighbours.get(id)
 				.slice()
 				.sort((x, y) => ORDER[x.link.tie] - ORDER[y.link.tie])
