@@ -766,7 +766,7 @@
 
 			// ─── Banu, Jack and Beth ─────────────────────────
 			{ id: "banu", name: "Banu", mark: "turkish", relationship: "", since: "", met: "At a rope night.", note: "" },
-			{ id: "jack", name: "Jack", mark: "british", relationship: "", since: "", met: "Through Banu.", note: "" },
+			{ id: "jack", name: "Jack", mark: "clown", relationship: "", since: "", met: "Through Banu.", note: "" },
 			{ id: "beth", name: "Beth", mark: "knitting", relationship: "", since: "", met: "", note: "" },
 
 			// ─── Beth's side, off her own whiteboard ─────────
@@ -1708,6 +1708,23 @@
 			// The union flag as line work: a saltire with the cross riding
 			// over it as a band, which is what stops it reading as another
 			// eight-spoke web.
+			// A fool's cap: three points, three bells, a brim, and harlequin
+			// lozenges over the crown.
+			clown: () => {
+				const bell = (x, y) => `<circle cx="${x}" cy="${y}" r="2.4"/>`;
+				return `<path d="M11 24A12 12 0 0 1 35 24` +
+					// Harlequin zigzag over the crown.
+					`M11.5 21.5L17 15.5L23 21.5L29 15.5L34.5 21.5` +
+					// Three points: one flopping over, two hanging past the
+					// brim. Tuck them up against the crown and the whole
+					// thing turns into a bandstand.
+					`M23.5 12C23 7.5 25 4.5 28.8 4.4` +
+					`M11 26C6 27.5 3.5 32 4.6 36.8` +
+					`M35 26C40 27.5 42.5 32 41.4 36.8` +
+					`M10 24H36M10 24V28M36 24V28M10 28H36"/>` +
+					bell(30.8, 4.6) + bell(5.1, 39.2) + bell(40.9, 39.2);
+			},
+
 			// A portcullis, the way Westminster draws one: barred, spiked
 			// along the bottom and hung on two chains.
 			british: () => {
