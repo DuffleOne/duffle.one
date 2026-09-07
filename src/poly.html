@@ -492,18 +492,47 @@
 			color: var(--silk);
 		}
 
-		/* Everyone's own scrap of web, in whatever colour their thread is. */
+		/* Everyone's own scrap of web, in whatever colour their thread is.
+		   Big, because it's the only picture of anyone this page carries. */
 		.panel .sigil {
-			width: 46px;
-			height: 46px;
-			margin-bottom: 16px;
+			position: relative;
+			width: 92px;
+			height: 92px;
+			margin: 4px 0 20px;
 			color: var(--accent);
 		}
 
+		/* A breath of the accent behind it, so it sits on the sheet instead
+		   of floating on it. */
+		.panel .sigil::before {
+			content: "";
+			position: absolute;
+			inset: -30%;
+			border-radius: 50%;
+			background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 20%, transparent), transparent);
+		}
+
 		.panel .sigil svg {
+			position: relative;
 			display: block;
 			width: 100%;
 			height: 100%;
+			overflow: visible;
+		}
+
+		/* Spun on once, when the panel opens. openPanel stamps pathLength=1
+		   on every stroke, so a single keyframe covers the lot however long
+		   the actual outlines are. */
+		.panel .sigil :is(path, circle, rect) {
+			stroke-dasharray: 1;
+			stroke-dashoffset: 1;
+			animation: spin-on 900ms var(--ease) forwards;
+		}
+
+		@keyframes spin-on {
+			to {
+				stroke-dashoffset: 0;
+			}
 		}
 
 		.panel h2 {
@@ -645,6 +674,12 @@
 			.panel h2 {
 				font-size: 28px;
 			}
+
+			.panel .sigil {
+				width: 74px;
+				height: 74px;
+				margin-bottom: 16px;
+			}
 		}
 
 		@media (prefers-reduced-motion: reduce) {
@@ -654,6 +689,11 @@
 			.node,
 			.reach .thumb {
 				transition-duration: 1ms;
+			}
+
+			.panel .sigil :is(path, circle, rect) {
+				animation: none;
+				stroke-dashoffset: 0;
 			}
 		}
 	</style>
@@ -1918,6 +1958,10 @@
 			panel.style.setProperty("--accent", accent);
 
 			elSigil.innerHTML = sigil(id);
+			// Normalised so the draw-on keyframe doesn't need to know how
+			// long any given outline is.
+			elSigil.querySelectorAll("path, circle, rect")
+				.forEach(el => el.setAttribute("pathLength", "1"));
 			elKicker.textContent = p.me ? "Centre of the web" : standing(p);
 			elName.textContent = p.name;
 
