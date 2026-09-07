@@ -163,6 +163,58 @@
 			font-variant-numeric: tabular-nums;
 		}
 
+		/* ---- Reach switch ------------------------------------------------ */
+		/* Three settings on one track. A lozenge slides between them so it
+		   reads as one switch rather than three buttons sat together. */
+		.reach {
+			position: relative;
+			align-self: center;
+			display: flex;
+			height: 30px;
+			padding: 3px;
+			border-radius: 999px;
+			border: 1px solid var(--edge);
+			background: rgba(20, 19, 29, .8);
+			backdrop-filter: blur(6px);
+			pointer-events: auto;
+		}
+
+		/* Size and position come off the live button, written by slideThumb.
+		   The three labels aren't the same width, so a fixed third of the
+		   track sits off them. */
+		.reach .thumb {
+			position: absolute;
+			z-index: 0;
+			top: 3px;
+			bottom: 3px;
+			left: 0;
+			width: 0;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, .07);
+			transition: transform 260ms var(--ease), width 260ms var(--ease);
+		}
+
+		.reach button {
+			position: relative;
+			z-index: 1;
+			padding: 0 12px;
+			font-size: 11px;
+			font-weight: 500;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			white-space: nowrap;
+			color: var(--silk-faint);
+			transition: color 140ms var(--ease);
+		}
+
+		.reach button:hover {
+			color: var(--silk-dim);
+		}
+
+		.reach button[aria-checked="true"] {
+			color: var(--silk);
+		}
+
 		/* ---- Stage ------------------------------------------------------- */
 		.stage {
 			position: fixed;
@@ -226,6 +278,11 @@
 
 		.node:active {
 			cursor: grabbing;
+		}
+
+		/* Out of reach: off the field, and out of the tab order with it. */
+		.node[hidden] {
+			display: none;
 		}
 
 		/* The dot carries the accent; the pill stays quiet until you touch it. */
@@ -540,6 +597,15 @@
 				display: none;
 			}
 
+			/* The switch has a better claim on the room than the byline. */
+			.masthead .sub {
+				display: none;
+			}
+
+			.reach button {
+				padding: 0 9px;
+			}
+
 			.rail {
 				left: 16px;
 				bottom: max(14px, env(safe-area-inset-bottom));
@@ -584,7 +650,8 @@
 
 			.panel,
 			.scrim,
-			.node {
+			.node,
+			.reach .thumb {
 				transition-duration: 1ms;
 			}
 		}
@@ -594,7 +661,15 @@
 <body>
 	<header class="masthead">
 		<h1>The Web</h1>
-		<p class="caps">duffle.one &middot; private</p>
+		<p class="caps sub">duffle.one &middot; private</p>
+
+		<div class="reach" id="reach" role="radiogroup" aria-label="How much of the web to show">
+			<span class="thumb" aria-hidden="true"></span>
+			<button type="button" role="radio">Mine</button>
+			<button type="button" role="radio">+1</button>
+			<button type="button" role="radio">All</button>
+		</div>
+
 		<p class="caps tally" id="tally"></p>
 	</header>
 
@@ -850,6 +925,10 @@
 		const nodeById = new Map(nodes.map(n => [n.id, n]));
 		const edges = links.map(l => ({ ...l, na: nodeById.get(l.a), nb: nodeById.get(l.b) }));
 
+		// What the reach switch is currently letting through. Everything that
+		// simulates, draws or frames walks these rather than the full lists.
+		let live = nodes, liveEdges = edges;
+
 		// Opening arrangement: me at the origin, everyone else on a ring by
 		// hop count, spread by index. It's only a seed — the springs take
 		// over on the first tick — but a deterministic one means the graph
@@ -879,10 +958,10 @@
 
 		function tick() {
 			// Repulsion, every pair.
-			for (let i = 0; i < nodes.length; i++) {
-				const a = nodes[i];
-				for (let j = i + 1; j < nodes.length; j++) {
-					const b = nodes[j];
+			for (let i = 0; i < live.length; i++) {
+				const a = live[i];
+				for (let j = i + 1; j < live.length; j++) {
+					const b = live[j];
 					let dx = b.x - a.x, dy = b.y - a.y;
 					let d2 = dx * dx + dy * dy;
 					if (d2 < 1) { dx = (i - j) * 0.5 || 0.5; dy = 0.5; d2 = 1; }
@@ -912,7 +991,7 @@
 			}
 
 			// Springs.
-			edges.forEach(e => {
+			liveEdges.forEach(e => {
 				const dx = e.nb.x - e.na.x, dy = e.nb.y - e.na.y;
 				const d = Math.hypot(dx, dy) || 0.001;
 				const f = (d - TIE[e.tie].rest) * SPRING;
@@ -925,7 +1004,7 @@
 			// the viewport's short axis, so a phone gets a tall narrow web
 			// and a desktop a wide one. Without it the layout settles the
 			// same shape everywhere and hangs off the sides in portrait.
-			nodes.forEach(n => {
+			live.forEach(n => {
 				if (n.pinned) { n.vx = n.vy = 0; return; }
 				const pull = n.id === ME ? GRAVITY * 7 : GRAVITY;
 				n.vx -= n.x * pull / aspect;
@@ -970,7 +1049,7 @@
 		function fit(animate = true) {
 			let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 			let hw = 0, hh = 0;
-			nodes.forEach(n => {
+			live.forEach(n => {
 				minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
 				minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
 				hw = Math.max(hw, (n.w || 90) / 2);
@@ -1018,7 +1097,9 @@
 			for (let queue = [fromId], hop = 0; queue.length && hop < 5; hop++) {
 				const next = [];
 				queue.forEach(id => neighbours.get(id).forEach(({ id: to }) => {
-					if (!seen.has(to)) { seen.set(to, hop + 1); next.push(to); }
+					if (seen.has(to) || !nodeById.get(to).shown) return;
+					seen.set(to, hop + 1);
+					next.push(to);
 				}));
 				queue = next;
 			}
@@ -1065,7 +1146,7 @@
 
 		function paintChips(now) {
 			const t = now;
-			nodes.forEach(n => {
+			live.forEach(n => {
 				const p = toScreen(n);
 				let bx = 0, by = 0, rot = 0;
 				if (!reduced.matches && !n.dragging) {
@@ -1093,6 +1174,103 @@
 			const p = toScreen(n);
 			return { x: p.x + (n.bx || 0), y: p.y + (n.by || 0) };
 		};
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Reach — how much of the web is on show
+		 *
+		 *  Three settings on one switch, all read off `depth`, the hop count
+		 *  from me. "Mine" is the people I'm actually connected to; "+1"
+		 *  adds theirs, which is where most of the sketch lives; "All" drops
+		 *  the limit. Anyone the web can't reach from me only turns up on
+		 *  All, which is also the only place they'd make sense.
+		 * ═══════════════════════════════════════════════════════════ */
+		const REACH = [1, 2, Infinity];
+		let reachIdx = 1;
+		let reframeAt = [];
+
+		const hops = (id) => depth.get(id) ?? Infinity;
+
+		const reachEl = document.getElementById("reach");
+		const reachBtns = [...reachEl.querySelectorAll("button")];
+		const thumbEl = reachEl.querySelector(".thumb");
+		const tallyEl = document.getElementById("tally");
+
+		// Park the lozenge on whichever label is live. Measured rather than
+		// assumed: the labels are different widths, and the webfont lands
+		// after first paint and moves them again.
+		function slideThumb() {
+			const b = reachBtns[reachIdx].getBoundingClientRect();
+			const r = reachEl.getBoundingClientRect();
+			thumbEl.style.width = `${b.width.toFixed(2)}px`;
+			thumbEl.style.transform = `translateX(${(b.left - r.left).toFixed(2)}px)`;
+		}
+		if (document.fonts) document.fonts.ready.then(slideThumb);
+
+		function applyReach(i, animate = true) {
+			reachIdx = clamp(i, 0, REACH.length - 1);
+			const limit = REACH[reachIdx];
+			const before = new Set(live.map(n => n.id));
+
+			nodes.forEach(n => { n.shown = hops(n.id) <= limit; });
+
+			// Someone arriving sprouts out of whoever brought them in, rather
+			// than flying across the field from wherever the opening ring
+			// parked them. Nearest first, so a hop-three arrival can sprout
+			// off the hop-two one that has just landed.
+			const placed = new Set(before);
+			nodes.filter(n => n.shown && !before.has(n.id))
+				.sort((x, y) => hops(x.id) - hops(y.id))
+				.forEach(n => {
+					const from = neighbours.get(n.id)
+						.map(x => nodeById.get(x.id))
+						.find(x => placed.has(x.id));
+					placed.add(n.id);
+					if (!from) return;
+					const a = Math.random() * TAU;
+					n.x = from.x + Math.cos(a) * 70;
+					n.y = from.y + Math.sin(a) * 70;
+					n.vx = n.vy = 0;
+					n.pinned = false;
+				});
+
+			nodes.forEach(n => { n.el.hidden = !n.shown; });
+			live = nodes.filter(n => n.shown);
+			liveEdges = edges.filter(e => e.na.shown && e.nb.shown);
+
+			reachBtns.forEach((b, j) => {
+				b.setAttribute("aria-checked", String(j === reachIdx));
+				b.tabIndex = j === reachIdx ? 0 : -1;
+			});
+			slideThumb();
+			tallyEl.textContent = `${live.length} people · ${liveEdges.length} links`;
+
+			// Whoever we were looking at may have just left.
+			if (active && !nodeById.get(active).shown) closePanel();
+			if (focused && !nodeById.get(focused).shown) setFocus(null);
+
+			if (!animate) return;
+			// Run hot, then frame it twice: once while the springs are still
+			// opening up or closing ranks, once they've stopped. A single
+			// pass lands mid-spread and leaves half the web off the edge.
+			// Counted in frames rather than milliseconds, because the sim
+			// moves per frame. On a throttled tab a timer fires long before
+			// anything has actually moved.
+			settle = 0;
+			reframeAt = [20, 80];
+			tremor(ME);
+		}
+
+		reachBtns.forEach((b, j) => b.addEventListener("click", () => applyReach(j)));
+
+		// Arrow keys walk the switch, as a radio group should.
+		reachEl.addEventListener("keydown", (ev) => {
+			const step = ev.key === "ArrowRight" || ev.key === "ArrowDown" ? 1
+				: ev.key === "ArrowLeft" || ev.key === "ArrowUp" ? -1 : 0;
+			if (!step) return;
+			ev.preventDefault();
+			applyReach((reachIdx + step + REACH.length) % REACH.length);
+			reachBtns[reachIdx].focus();
+		});
 
 		/* ═══════════════════════════════════════════════════════════
 		 *  Canvas
@@ -1157,7 +1335,7 @@
 		function drawStrands(now) {
 			const lit = focused ? new Set(neighbours.get(focused).map(x => x.id).concat(focused)) : null;
 
-			edges.forEach(e => {
+			liveEdges.forEach(e => {
 				const { a, b, cx, cy, dist } = strandPath(e);
 				const isLit = lit && (lit.has(e.a) && lit.has(e.b)) &&
 					(e.a === focused || e.b === focused);
@@ -1259,6 +1437,7 @@
 			const steps = settle < 60 ? 3 : 1;
 			for (let i = 0; i < steps; i++) tick();
 			settle++;
+			if (reframeAt.length && settle >= reframeAt[0]) { reframeAt.shift(); fit(); }
 
 			if (glideTo) {
 				glideT = Math.min(1, glideT + 0.09);
@@ -1478,6 +1657,7 @@
 			const tags = [];
 			if (myTie.has(id)) tags.push(TIE[myTie.get(id)].word);
 			neighbours.get(id).forEach(({ id: to, link }) => {
+				if (!nodeById.get(to).shown) return;
 				const who = byId.get(to).name;
 				if (link.married) tags.push(`\u{1F492} Married to ${who}`);
 				if (link.engaged) tags.push(`\u{1F48D} Engaged to ${who}`);
@@ -1527,12 +1707,14 @@
 			conn.className = "field";
 			const cl = document.createElement("p");
 			cl.className = "caps";
-			cl.textContent = `Connected to — ${neighbours.get(id).length}`;
+			// Only the threads currently on the field. The panel shouldn't
+			// offer a way through to someone the switch has put away.
+			const threads = neighbours.get(id).filter(x => nodeById.get(x.id).shown);
+			cl.textContent = `Connected to — ${threads.length}`;
 			const row = document.createElement("div");
 			row.className = "links";
 			const ORDER = { committed: 0, casual: 1, comet: 2, new: 3 };
-			neighbours.get(id)
-				.slice()
+			threads
 				.sort((x, y) => ORDER[x.link.tie] - ORDER[y.link.tie])
 				.forEach(({ id: to, link }) => {
 					const other = byId.get(to);
@@ -1582,9 +1764,6 @@
 		/* ═══════════════════════════════════════════════════════════
 		 *  Boot
 		 * ═══════════════════════════════════════════════════════════ */
-		document.getElementById("tally").textContent =
-			`${people.length} people · ${links.length} links`;
-
 		document.getElementById("btn-fit").addEventListener("click", () => fit());
 		document.getElementById("btn-reset").addEventListener("click", () => {
 			seed();
@@ -1598,6 +1777,7 @@
 		let refit = null;
 		addEventListener("resize", () => {
 			resize();
+			slideThumb();
 			settle = 0;              // run hot so it re-shapes to the new aspect
 			fit(false);
 			clearTimeout(refit);
@@ -1606,6 +1786,7 @@
 
 		resize();
 		seed();
+		applyReach(reachIdx, false);
 		for (let i = 0; i < 220; i++) tick();   // settle off-screen, no flail on load
 		settle = 999;
 		fit(false);
