@@ -514,12 +514,15 @@
 			box-shadow: -30px 0 70px rgba(0, 0, 0, .55);
 			transform: translateX(100%);
 			visibility: hidden;
-			transition: transform 320ms var(--ease), visibility 320ms;
+			/* Same as the finder: it's a dialog that takes focus the moment
+			   it opens, so visibility has to be true straight away. */
+			transition: transform 320ms var(--ease), visibility 0s linear 320ms;
 		}
 
 		.panel.is-open {
 			transform: none;
 			visibility: visible;
+			transition: transform 320ms var(--ease), visibility 0s;
 		}
 
 		/* Lucide-shaped, drawn in this file rather than fetched: the page is
@@ -867,13 +870,21 @@
 			box-shadow: 0 22px 54px rgba(0, 0, 0, .58);
 			opacity: 0;
 			visibility: hidden;
-			transition: opacity 160ms var(--ease), transform 160ms var(--ease), visibility 160ms;
+			/* visibility runs on its own clock instead of fading with the
+			   rest: straight to visible on the way in, and only after the
+			   fade on the way out. Transitioned like the others it stays
+			   hidden for the frame the box opens on, and focus() won't land
+			   on something that isn't there yet, so / opened the finder and
+			   left you typing into the page. */
+			transition: opacity 160ms var(--ease), transform 160ms var(--ease),
+				visibility 0s linear 160ms;
 		}
 
 		.finder.is-open {
 			opacity: 1;
 			visibility: visible;
 			transform: translate(-50%, 0);
+			transition: opacity 160ms var(--ease), transform 160ms var(--ease), visibility 0s;
 		}
 
 		.finder input {
@@ -1094,10 +1105,16 @@
 		@media (prefers-reduced-motion: reduce) {
 
 			.panel,
+			.finder,
+			.tip,
 			.scrim,
 			.node,
 			.reach .thumb {
 				transition-duration: 1ms;
+				/* Kills the delay that holds visibility on through the fade
+				   as well, or the panel would sit there after the slide it
+				   no longer does. */
+				transition-delay: 0s;
 			}
 
 			.panel .sigil :is(path, circle, rect) {
