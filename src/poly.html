@@ -163,6 +163,44 @@
 			font-variant-numeric: tabular-nums;
 		}
 
+		/* ---- Whose web --------------------------------------------------- */
+		/* Only on show once the middle has been handed to someone else, and
+		   it stays put on a phone unlike the byline: it's the way back. */
+		.centred {
+			display: none;
+			align-items: center;
+			align-self: center;
+			gap: 8px;
+			height: 26px;
+			padding: 0 6px 0 11px;
+			border-radius: 999px;
+			border: 1px solid color-mix(in srgb, var(--me) 34%, transparent);
+			background: rgba(35, 26, 12, .74);
+			font-size: 12.5px;
+			color: var(--me);
+			pointer-events: auto;
+		}
+
+		.is-recentred .centred {
+			display: inline-flex;
+		}
+
+		.centred .caps {
+			color: inherit;
+			opacity: .62;
+		}
+
+		.centred .x {
+			display: grid;
+			place-items: center;
+			width: 18px;
+			height: 18px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, .1);
+			font-size: 13px;
+			line-height: 1;
+		}
+
 		/* ---- Reach switch ------------------------------------------------ */
 		/* Three settings on one track. A lozenge slides between them so it
 		   reads as one switch rather than three buttons sat together. */
@@ -295,7 +333,8 @@
 			box-shadow: 0 0 calc(6px + var(--shock) * 10px) color-mix(in srgb, var(--accent) 70%, transparent);
 		}
 
-		.node.is-me {
+		/* Whoever the web is arranged around, which is normally me. */
+		.node.is-centre {
 			--accent: var(--me);
 			font-weight: 700;
 			padding: 0 17px;
@@ -430,6 +469,17 @@
 		.hud button:hover {
 			color: var(--silk);
 			border-color: rgba(255, 255, 255, .2);
+		}
+
+		/* Find, while the names are blurred off the page. */
+		.hud button[disabled] {
+			opacity: .38;
+			cursor: default;
+		}
+
+		.hud button[disabled]:hover {
+			color: var(--silk-dim);
+			border-color: var(--edge);
 		}
 
 		/* ---- Person panel ------------------------------------------------ */
@@ -653,6 +703,62 @@
 			color: var(--silk-faint);
 		}
 
+		/* The chain back to the middle, for anyone who isn't on the end of
+		   one of my own threads. Reads as a route, not a sentence. */
+		.panel .route {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			gap: 4px 8px;
+			width: 100%;
+			padding-top: 22px;
+			border-top: 1px solid var(--edge);
+		}
+
+		.panel .route > * {
+			font-size: 13px;
+			color: var(--silk-dim);
+			transition: color 140ms var(--ease);
+		}
+
+		.panel .route button:hover {
+			color: var(--silk);
+		}
+
+		.panel .route > :last-child {
+			color: var(--accent);
+		}
+
+		.panel .route s {
+			color: var(--silk-faint);
+			text-decoration: none;
+		}
+
+		/* Hands the middle of the web to whoever's open. */
+		.panel .side {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			width: 100%;
+			height: 44px;
+			border-radius: 999px;
+			border: 1px solid var(--edge);
+			font-size: 13px;
+			color: var(--silk-dim);
+			transition: color 140ms var(--ease), border-color 140ms var(--ease);
+		}
+
+		.panel .side:hover {
+			color: var(--silk);
+			border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+		}
+
+		.panel .side .ico {
+			color: var(--accent);
+		}
+
 		.panel .notes {
 			display: flex;
 			flex-direction: column;
@@ -743,10 +849,146 @@
 			color: var(--silk-faint);
 		}
 
+		/* ---- Finder ------------------------------------------------------ */
+		/* Nearly thirty names on a field that moves is already too many to
+		   hunt for by eye. Over the panel, because it can be opened while
+		   one is up. */
+		.finder {
+			position: fixed;
+			z-index: 6;
+			top: max(66px, calc(env(safe-area-inset-top) + 62px));
+			left: 50%;
+			width: min(380px, calc(100vw - 32px));
+			transform: translate(-50%, -8px);
+			border-radius: 16px;
+			border: 1px solid var(--edge);
+			background: rgba(20, 19, 29, .95);
+			backdrop-filter: blur(10px);
+			box-shadow: 0 22px 54px rgba(0, 0, 0, .58);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 160ms var(--ease), transform 160ms var(--ease), visibility 160ms;
+		}
+
+		.finder.is-open {
+			opacity: 1;
+			visibility: visible;
+			transform: translate(-50%, 0);
+		}
+
+		.finder input {
+			display: block;
+			width: 100%;
+			height: 46px;
+			padding: 0 16px;
+			border: 0;
+			border-radius: 16px 16px 0 0;
+			background: none;
+			font: inherit;
+			font-size: 15px;
+			color: var(--silk);
+			outline: 0;
+		}
+
+		.finder input::placeholder {
+			color: var(--silk-faint);
+		}
+
+		.finder .hits {
+			max-height: min(46vh, 320px);
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			border-top: 1px solid var(--edge);
+		}
+
+		.finder .hits:empty {
+			display: none;
+		}
+
+		.finder .hit {
+			display: flex;
+			align-items: center;
+			gap: 11px;
+			width: 100%;
+			height: 42px;
+			padding: 0 16px;
+			text-align: left;
+			font-size: 14px;
+		}
+
+		.finder .hit .dot {
+			width: 7px;
+			height: 7px;
+			flex: none;
+			border-radius: 50%;
+			background: var(--accent);
+			box-shadow: 0 0 7px color-mix(in srgb, var(--accent) 70%, transparent);
+		}
+
+		.finder .hit .where {
+			margin-left: auto;
+			font-size: 11.5px;
+			color: var(--silk-faint);
+		}
+
+		.finder .hit.is-on,
+		.finder .hit:hover {
+			background: rgba(255, 255, 255, .06);
+		}
+
+		/* ---- Strand tip --------------------------------------------------- */
+		/* The strands are the only thing on the field carrying data you
+		   can't touch. Point at one and it says who it joins. */
+		.tip {
+			position: fixed;
+			z-index: 3;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 4px;
+			max-width: 260px;
+			padding: 8px 13px;
+			border-radius: 12px;
+			border: 1px solid var(--edge);
+			background: rgba(20, 19, 29, .93);
+			backdrop-filter: blur(6px);
+			box-shadow: 0 12px 28px rgba(0, 0, 0, .5);
+			text-align: center;
+			pointer-events: none;
+			opacity: 0;
+			transform: translate(-50%, -100%);
+			transition: opacity 130ms var(--ease);
+		}
+
+		.tip.is-on {
+			opacity: 1;
+		}
+
+		.tip .pair {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13.5px;
+			font-weight: 500;
+		}
+
+		.tip .pair i {
+			display: block;
+			width: 15px;
+			height: 0;
+			flex: none;
+			border-top: 1.5px solid var(--accent);
+		}
+
+		.tip .what {
+			color: var(--accent);
+		}
+
 		/* The names come off, and nothing else moves: the shape of the web
 		   still reads, which is the whole point of being able to show it to
 		   someone without showing them everyone. */
-		.is-blurred :is(.node .nm, .panel h2, .links button .nm, .field p) {
+		.is-blurred :is(.node .nm, .panel h2, .links button .nm, .field p,
+			.panel .route .nm, .panel .side .nm, .finder .hit .nm, .tip .nm, .centred .nm) {
 			filter: blur(5px);
 		}
 
@@ -765,6 +1007,20 @@
 			/* The switch has a better claim on the room than the byline. */
 			.masthead .sub {
 				display: none;
+			}
+
+			/* Three buttons, a switch and a title don't fit across a phone.
+			   The title is the one that can go: it's still in the tab. */
+			.masthead h1 {
+				display: none;
+			}
+
+			/* Which leaves nowhere for the pill either, so it gets its own
+			   line under the switch rather than squeezing it. */
+			.centred {
+				position: fixed;
+				top: max(60px, calc(env(safe-area-inset-top) + 54px));
+				left: 16px;
 			}
 
 			.reach button {
@@ -791,6 +1047,12 @@
 			.node {
 				font-size: 12.5px;
 				--chip-h: 32px;
+			}
+
+			/* Clear of the masthead, the buttons and the pill, which all
+			   share the top edge on a phone. */
+			.finder {
+				top: max(98px, calc(env(safe-area-inset-top) + 90px));
 			}
 
 			/* Panel comes up from the bottom instead of in from the side. */
@@ -851,6 +1113,12 @@
 		<h1>The Web</h1>
 		<p class="caps sub">duffle.one &middot; private</p>
 
+		<button type="button" class="centred" id="centred">
+			<span class="caps">From</span>
+			<b class="nm"></b>
+			<span class="x" aria-hidden="true">&times;</span>
+		</button>
+
 		<div class="reach" id="reach" role="radiogroup" aria-label="How much of the web to show">
 			<span class="thumb" aria-hidden="true"></span>
 			<button type="button" role="radio">Mine</button>
@@ -876,11 +1144,20 @@
 	</div>
 
 	<div class="hud">
+		<button type="button" id="btn-find">Find</button>
 		<button type="button" id="btn-fit">Fit</button>
 		<button type="button" id="btn-reset">Reset</button>
 	</div>
 
+	<div class="tip" id="tip" aria-hidden="true"></div>
+
 	<div class="scrim" id="scrim"></div>
+
+	<div class="finder" id="finder" role="dialog" aria-label="Find someone">
+		<input id="finder-q" type="text" placeholder="Find someone" autocomplete="off" autocapitalize="off"
+			spellcheck="false" enterkeyhint="go">
+		<div class="hits" id="finder-hits" role="listbox" aria-label="Matches"></div>
+	</div>
 
 	<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-name" tabindex="-1">
 		<div class="bar">
@@ -1085,19 +1362,47 @@
 		};
 
 		const ME = people.find(p => p.me).id;
-		// My own tie to each person, where there is one. Drives the chip colour.
-		const myTie = new Map();
-		neighbours.get(ME).forEach(({ id, link }) => myTie.set(id, link.tie));
 
-		// Hop count from me, used both for the opening layout and for the
-		// order the tremor reaches people in.
-		const depth = new Map([[ME, 0]]);
-		for (let queue = [ME]; queue.length;) {
-			const next = [];
-			queue.forEach(id => neighbours.get(id).forEach(({ id: to }) => {
-				if (!depth.has(to)) { depth.set(to, depth.get(id) + 1); next.push(to); }
-			}));
-			queue = next;
+		// Who the web is currently arranged around. Normally me; the panel
+		// can hand the middle to anyone, which is the only way to see what
+		// the thing looks like standing somewhere else.
+		let centre = ME;
+
+		// The tie from the centre out to each person, where there is one.
+		// Drives the chip colour, so the accents re-sort when the middle
+		// moves: stood on Beth's side, my own name is one of the faint ones.
+		let centreTie = new Map();
+
+		// Hop count from the centre, and who each person was first reached
+		// through. depth drives the opening layout, the reach switch and the
+		// order the tremor arrives in; via is the chain a route walks back up.
+		let depth = new Map(), via = new Map();
+
+		function measureFrom(id) {
+			centreTie = new Map(neighbours.get(id).map(({ id: to, link }) => [to, link.tie]));
+			depth = new Map([[id, 0]]);
+			via = new Map();
+			for (let queue = [id]; queue.length;) {
+				const next = [];
+				queue.forEach(from => neighbours.get(from).forEach(({ id: to }) => {
+					if (depth.has(to)) return;
+					depth.set(to, depth.get(from) + 1);
+					via.set(to, from);
+					next.push(to);
+				}));
+				queue = next;
+			}
+		}
+		measureFrom(centre);
+
+		// The chain from the centre out to someone, both ends included.
+		// Empty for the centre itself, and for anyone the web can't reach
+		// from where it's currently standing.
+		function routeTo(id) {
+			if (id === centre || !depth.has(id)) return [];
+			const chain = [id];
+			while (chain[0] !== centre) chain.unshift(via.get(chain[0]));
+			return chain;
 		}
 
 		/* ═══════════════════════════════════════════════════════════
@@ -1115,6 +1420,7 @@
 			comet: { rgb: "87,217,196", dash: [14, 4, 3, 4], width: 1.35, alpha: 0.32, rest: 275, word: "Comet" },
 			new: { rgb: "154,148,184", dash: [2, 9], width: 0.95, alpha: 0.15, rest: 300, word: "Just getting to know each other" },
 		};
+		const TIE_NAMES = Object.keys(TIE);
 		const SPRING = 0.016;
 		const REPEL = 42000;
 		const GRAVITY = 0.0022;
@@ -1221,7 +1527,7 @@
 			// same shape everywhere and hangs off the sides in portrait.
 			live.forEach(n => {
 				if (n.pinned) { n.vx = n.vy = 0; return; }
-				const pull = n.id === ME ? GRAVITY * 7 : GRAVITY;
+				const pull = n.id === centre ? GRAVITY * 7 : GRAVITY;
 				n.vx -= n.x * pull / aspect;
 				n.vy -= n.y * pull * aspect;
 				n.vx *= DAMPING;
@@ -1342,21 +1648,33 @@
 		/* ═══════════════════════════════════════════════════════════
 		 *  Chips
 		 * ═══════════════════════════════════════════════════════════ */
-		let focused = null;   // hovered / dragged person, lights their strands
-		let active = null;    // whose panel is open
+		let focused = null;    // hovered / dragged person, lights their strands
+		let active = null;     // whose panel is open
+		let hoverEdge = null;  // the strand under the pointer
+		let routeIds = [];     // the chain from the centre to whoever's open
+		let routeHops = new Map();  // that chain's strands, and their order
+
+		// Colour and size come off where the person sits relative to the
+		// centre, and the centre moves, so this gets run again every time it
+		// does. The chip changes width with it, which the collider cares
+		// about, hence the re-measure.
+		function tieClasses(n) {
+			n.el.classList.toggle("is-centre", n.id === centre);
+			TIE_NAMES.forEach(t => n.el.classList.toggle("tie-" + t, centreTie.get(n.id) === t));
+			n.w = n.el.offsetWidth;
+			n.h = n.el.offsetHeight;
+		}
 
 		nodes.forEach(n => {
 			const el = document.createElement("button");
 			el.type = "button";
-			el.className = "node" + (n.person.me ? " is-me" : "") +
-				(myTie.has(n.id) ? " tie-" + myTie.get(n.id) : "");
+			el.className = "node";
 			el.innerHTML = `<span class="dot"></span><span class="nm"></span>`;
 			el.querySelector(".nm").textContent = n.person.name;
 			el.setAttribute("aria-label", `${n.person.name} — open details`);
 			nodesEl.appendChild(el);
 			n.el = el;
-			n.w = el.offsetWidth;
-			n.h = el.offsetHeight;
+			tieClasses(n);
 		});
 
 		function paintChips(now) {
@@ -1462,6 +1780,10 @@
 			// Whoever we were looking at may have just left.
 			if (active && !nodeById.get(active).shown) closePanel();
 			if (focused && !nodeById.get(focused).shown) setFocus(null);
+			if (hoverEdge && !(hoverEdge.na.shown && hoverEdge.nb.shown)) showTip(null);
+			// The chain to whoever's still open runs over strands that have
+			// just come or gone with everyone else.
+			if (active) setRoute(routeTo(active));
 
 			if (!animate) return;
 			// Run hot, then frame it twice: once while the springs are still
@@ -1472,7 +1794,8 @@
 			// anything has actually moved.
 			settle = 0;
 			reframeAt = [20, 80];
-			tremor(ME);
+			saveLayout();
+			tremor(centre);
 		}
 
 		reachBtns.forEach((b, j) => b.addEventListener("click", () => applyReach(j)));
@@ -1486,6 +1809,36 @@
 			applyReach((reachIdx + step + REACH.length) % REACH.length);
 			reachBtns[reachIdx].focus();
 		});
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Standing somewhere else
+		 *
+		 *  Hand the middle of the web to anyone and everything measured
+		 *  from me gets measured from them instead: the hop counts, what
+		 *  the reach switch lets through, the chip colours, the pull toward
+		 *  the centre. What's written up doesn't move, because those are my
+		 *  notes either way round.
+		 * ═══════════════════════════════════════════════════════════ */
+		const centredEl = document.getElementById("centred");
+
+		function recentre(id) {
+			if (id === centre || !nodeById.has(id)) return;
+			centre = id;
+			measureFrom(centre);
+			nodes.forEach(tieClasses);
+
+			document.body.classList.toggle("is-recentred", centre !== ME);
+			centredEl.querySelector(".nm").textContent = byId.get(centre).name;
+			centredEl.setAttribute("aria-label",
+				`Standing with ${byId.get(centre).name}. Back to my own web`);
+
+			// Every hop count the switch works off has just changed.
+			applyReach(reachIdx);
+			// And so has everything the open panel was saying about distance.
+			if (active) openPanel(active);
+		}
+
+		centredEl.addEventListener("click", () => recentre(ME));
 
 		/* ═══════════════════════════════════════════════════════════
 		 *  Canvas
@@ -1548,18 +1901,22 @@
 		}
 
 		function drawStrands(now) {
-			const lit = focused ? new Set(neighbours.get(focused).map(x => x.id).concat(focused)) : null;
+			const near = focused ? new Set(neighbours.get(focused).map(x => x.id).concat(focused)) : null;
+			// Three things can pick strands out, and any one of them puts
+			// the rest of the field in the background.
+			const dimming = !!(near || hoverEdge || routeHops.size);
 
 			liveEdges.forEach(e => {
 				const { a, b, cx, cy, dist } = strandPath(e);
-				const isLit = lit && (lit.has(e.a) && lit.has(e.b)) &&
-					(e.a === focused || e.b === focused);
+				const hop = routeHops.get(e);
+				const isLit = hop !== undefined || e === hoverEdge ||
+					!!(near && (e.a === focused || e.b === focused));
 				const shock = Math.max(shockOf(e.na, now), shockOf(e.nb, now));
 				const style = TIE[e.tie];
 				const rgb = style.rgb;
 
 				let alpha = style.alpha;
-				if (lit) alpha = isLit ? 0.95 : 0.07;
+				if (dimming) alpha = isLit ? 0.95 : 0.07;
 				alpha = Math.min(1, alpha + shock * 0.35);
 
 				ctx.save();
@@ -1579,13 +1936,24 @@
 
 				// A bead of light running the strand, but only on the ones
 				// you're looking at. Everywhere at once would be a fairground.
+				//
+				// On a traced route it's one bead walking the whole chain a
+				// strand at a time, rather than one per strand: that way the
+				// route reads as a direction and not as fairy lights.
+				let bead = null;
 				if (isLit && !reduced.matches) {
-					const from = e.a === focused ? 0 : 1;
-					let p = ((now % 1400) / 1400);
-					p = from === 0 ? p : 1 - p;
-					const q = 1 - p;
-					const x = q * q * a.x + 2 * q * p * cx + p * p * b.x;
-					const y = q * q * a.y + 2 * q * p * cy + p * p * b.y;
+					if (hop !== undefined) {
+						const t = ((now % (routeHops.size * 780)) / 780) - hop;
+						if (t >= 0 && t <= 1) bead = e.a === routeIds[hop] ? t : 1 - t;
+					} else {
+						const t = (now % 1400) / 1400;
+						bead = e.b === focused ? 1 - t : t;
+					}
+				}
+				if (bead !== null) {
+					const q = 1 - bead;
+					const x = q * q * a.x + 2 * q * bead * cx + bead * bead * b.x;
+					const y = q * q * a.y + 2 * q * bead * cy + bead * bead * b.y;
 					ctx.save();
 					ctx.fillStyle = `rgba(${rgb},.95)`;
 					ctx.shadowColor = `rgba(${rgb},.9)`;
@@ -1606,7 +1974,7 @@
 					ctx.save();
 					ctx.setLineDash([]);
 					ctx.shadowBlur = 0;
-					ctx.globalAlpha = lit ? (isLit ? 1 : 0.1) : 0.92;
+					ctx.globalAlpha = dimming ? (isLit ? 1 : 0.1) : 0.92;
 					ctx.font = `${size}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
 					ctx.textAlign = "center";
 					ctx.textBaseline = "middle";
@@ -1626,7 +1994,7 @@
 
 				// Dew on the long romantic strands, purely because a web
 				// should have some.
-				if (!lit && e.tie === "romantic" && dist > 120) {
+				if (!dimming && e.tie === "romantic" && dist > 120) {
 					ctx.save();
 					ctx.fillStyle = `rgba(${rgb},.4)`;
 					[0.34, 0.66].forEach(p => {
@@ -1675,20 +2043,59 @@
 		 * ═══════════════════════════════════════════════════════════ */
 		const pointers = new Map();
 		let dragNode = null, dragMoved = 0, dragFrom = null, panning = null, pinch = null;
+		let tapFrom = null;
+
+		// Everything the field is lighting at this moment: whoever's under
+		// the pointer, the strand under the pointer, and the chain back to
+		// the middle. Worked out in one place so the three can't disagree
+		// about who's meant to be receding.
+		function paintLit() {
+			const on = focused || hoverEdge || routeIds.length;
+			nodesEl.classList.toggle("is-focusing", !!on);
+			if (!on) { nodes.forEach(n => n.el.classList.remove("is-lit")); return; }
+			const lit = new Set(routeIds);
+			if (focused) {
+				lit.add(focused);
+				neighbours.get(focused).forEach(x => lit.add(x.id));
+			}
+			if (hoverEdge) { lit.add(hoverEdge.a); lit.add(hoverEdge.b); }
+			nodes.forEach(n => n.el.classList.toggle("is-lit", lit.has(n.id)));
+		}
 
 		function setFocus(id) {
 			if (focused === id) return;
 			focused = id;
-			nodesEl.classList.toggle("is-focusing", !!id);
-			if (!id) { nodes.forEach(n => n.el.classList.remove("is-lit")); return; }
-			const lit = new Set(neighbours.get(id).map(x => x.id));
-			lit.add(id);
-			nodes.forEach(n => n.el.classList.toggle("is-lit", lit.has(n.id)));
+			paintLit();
+		}
+
+		// The strands along a chain, each tagged with how far along it sits,
+		// so the bead knows both which way to run and when its turn is.
+		function setRoute(chain) {
+			routeIds = chain;
+			routeHops = new Map();
+			for (let i = 0; i + 1 < chain.length; i++) {
+				const e = liveEdges.find(x =>
+					(x.a === chain[i] && x.b === chain[i + 1]) ||
+					(x.b === chain[i] && x.a === chain[i + 1]));
+				if (e) routeHops.set(e, i);
+			}
+			paintLit();
 		}
 
 		nodes.forEach(n => {
-			n.el.addEventListener("pointerenter", () => { if (!dragNode) { setFocus(n.id); tremor(n.id); } });
-			n.el.addEventListener("pointerleave", () => { if (!dragNode && !active) setFocus(null); });
+			n.el.addEventListener("pointerenter", () => {
+				if (dragNode) return;
+				showTip(null);
+				setFocus(n.id);
+				tremor(n.id);
+			});
+			// Back to whoever's open, rather than to nothing: the route the
+			// panel is showing shouldn't vanish because the pointer wandered.
+			n.el.addEventListener("pointerleave", () => { if (!dragNode) setFocus(active || null); });
+
+			// Hands them the middle of the web. The panel says so in words;
+			// this is the shortcut for anyone who's already worked it out.
+			n.el.addEventListener("dblclick", (ev) => { ev.preventDefault(); recentre(n.id); });
 
 			n.el.addEventListener("pointerdown", (ev) => {
 				ev.stopPropagation();
@@ -1728,6 +2135,7 @@
 				// mouse, so it gets more room to wobble.
 				const slop = ev.pointerType === "mouse" ? 4 : 12;
 				if (dragMoved < slop) { n.pinned = false; openPanel(n.id); }
+				saveLayout();
 				if (ev.pointerType !== "mouse") setFocus(active || null);
 			};
 			n.el.addEventListener("pointerup", release);
@@ -1740,6 +2148,9 @@
 		});
 
 		stage.addEventListener("pointerdown", (ev) => {
+			closeFinder();
+			showTip(null);
+			tapFrom = { id: ev.pointerId, x: ev.clientX, y: ev.clientY };
 			pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
 			if (pointers.size === 2) {
 				const [p, q] = [...pointers.values()];
@@ -1772,6 +2183,19 @@
 		});
 
 		const endPointer = (ev) => {
+			// A tap on the field that never turned into a pan. A finger has
+			// no hover, so this is the only way it gets to ask what a strand
+			// is; it fades on its own rather than waiting to be dismissed.
+			if (ev.type === "pointerup" && ev.pointerType !== "mouse" && tapFrom &&
+				tapFrom.id === ev.pointerId && !ev.target.closest(".node") &&
+				Math.hypot(ev.clientX - tapFrom.x, ev.clientY - tapFrom.y) < 12) {
+				const r = stage.getBoundingClientRect();
+				const e = nearestStrand(ev.clientX - r.left, ev.clientY - r.top);
+				showTip(e, ev.clientX, ev.clientY);
+				clearTimeout(tipHide);
+				if (e) tipHide = setTimeout(() => showTip(null), 2800);
+			}
+			tapFrom = null;
 			pointers.delete(ev.pointerId);
 			if (pointers.size < 2) pinch = null;
 			if (pointers.size === 0) { panning = null; stage.classList.remove("is-panning"); }
@@ -1793,6 +2217,62 @@
 			const r = stage.getBoundingClientRect();
 			zoomAbout(ev.clientX - r.left, ev.clientY - r.top, Math.exp(-ev.deltaY * 0.0016));
 		}, { passive: false });
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Strands under the pointer
+		 * ═══════════════════════════════════════════════════════════ */
+		const tipEl = document.getElementById("tip");
+		let tipHide = null;
+
+		// Nearest strand to a point, sampled along the curve. The sag is
+		// shallow enough that a dozen samples sit closer together than the
+		// tolerance does, and thirty-odd strands times twelve is nothing to
+		// do on a pointermove.
+		function nearestStrand(px, py) {
+			let best = null, bestD = 13;
+			liveEdges.forEach(e => {
+				const { a, b, cx, cy } = strandPath(e);
+				for (let i = 0; i <= 12; i++) {
+					const t = i / 12, q = 1 - t;
+					const x = q * q * a.x + 2 * q * t * cx + t * t * b.x;
+					const y = q * q * a.y + 2 * q * t * cy + t * t * b.y;
+					const d = Math.hypot(x - px, y - py);
+					if (d < bestD) { bestD = d; best = e; }
+				}
+			});
+			return best;
+		}
+
+		// The bond where there is one, since that's the harder fact, then
+		// anything written by hand, then the tie. Same order the panel uses.
+		function showTip(e, x, y) {
+			if (hoverEdge !== e) { hoverEdge = e; paintLit(); }
+			if (!e) { tipEl.classList.remove("is-on"); return; }
+			const style = TIE[e.tie];
+			const bond = bondWords(e);
+			tipEl.innerHTML = `<span class="pair"><span class="nm"></span><i></i><span class="nm"></span></span>` +
+				`<span class="caps what"></span>`;
+			const nm = tipEl.querySelectorAll(".nm");
+			nm[0].textContent = byId.get(e.a).name;
+			nm[1].textContent = byId.get(e.b).name;
+			tipEl.querySelector(".what").textContent =
+				bond.length ? bond.join(", ") : e.label || style.word;
+			tipEl.style.setProperty("--accent", `rgb(${style.rgb})`);
+			tipEl.style.left = `${clamp(x, 95, innerWidth - 95)}px`;
+			tipEl.style.top = `${Math.max(48, y - 16)}px`;
+			tipEl.classList.add("is-on");
+		}
+
+		// Live on a mouse. A finger gets the same thing off a tap that
+		// doesn't turn into a pan, which endPointer handles.
+		stage.addEventListener("pointermove", (ev) => {
+			if (ev.pointerType !== "mouse" || panning || pinch || dragNode) return;
+			if (ev.target.closest(".node")) { showTip(null); return; }
+			const r = stage.getBoundingClientRect();
+			showTip(nearestStrand(ev.clientX - r.left, ev.clientY - r.top), ev.clientX, ev.clientY);
+		});
+
+		stage.addEventListener("pointerleave", () => showTip(null));
 
 		/* ═══════════════════════════════════════════════════════════
 		 *  Sigils
@@ -2092,6 +2572,7 @@
 			link: `<path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/>`,
 			comet: `<circle cx="15" cy="9" r="6"/><path d="m8.8 15.2-5.8 5.8"/>`,
 			seed: `<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3.4M12 17.6V21M3 12h3.4M17.6 12H21"/>`,
+			centre: `<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>`,
 		};
 
 		// What a thread gets in the list: the bond where there is one, since
@@ -2109,15 +2590,17 @@
 
 		// What to call this person's place in the web when the data doesn't
 		// say. Direct ties get their tie word; everyone else is described by
-		// whoever brought them in.
+		// whoever brought them in. Measured from wherever the web is
+		// currently standing, which isn't always me.
 		function standing(p) {
+			if (p.id === centre) return "Centre of the web";
 			if (p.me) return "This is me.";
 			if (p.relationship) return p.relationship;
-			if (myTie.has(p.id)) return TIE[myTie.get(p.id)].word;
-			const via = neighbours.get(p.id)
+			if (centreTie.has(p.id)) return TIE[centreTie.get(p.id)].word;
+			const through = neighbours.get(p.id)
 				.map(x => byId.get(x.id))
-				.filter(x => myTie.has(x.id) || x.me);
-			return via.length ? "Through " + via.map(x => x.name).join(" and ") : "In the wider web";
+				.filter(x => centreTie.has(x.id) || x.id === centre);
+			return through.length ? "Through " + through.map(x => x.name).join(" and ") : "In the wider web";
 		}
 
 		function field(label, value) {
@@ -2159,8 +2642,14 @@
 			tremor(id);
 			keepVisible(n);
 
+			// The chain back to the middle: lit on the field, and spelled
+			// out on the card below when it's long enough to be worth it.
+			const chain = routeTo(id);
+			setRoute(chain);
+
 			panel.style.setProperty("--accent",
-				p.me ? "var(--me)" : myTie.has(id) ? `var(--${myTie.get(id)})` : "var(--silk-faint)");
+				id === centre ? "var(--me)"
+					: centreTie.has(id) ? `var(--${centreTie.get(id)})` : "var(--silk-faint)");
 
 			const sheet = document.createElement("div");
 			sheet.className = "sheet";
@@ -2182,7 +2671,7 @@
 			meta.className = "meta";
 			const kicker = document.createElement("p");
 			kicker.className = "caps";
-			kicker.textContent = p.me ? "Centre of the web" : standing(p);
+			kicker.textContent = standing(p);
 			const name = document.createElement("h2");
 			name.id = "panel-name";
 			name.textContent = p.name;
@@ -2203,6 +2692,34 @@
 				wrap.append(l, v, f);
 				card.append(wrap);
 			}
+
+			/* ── How you get here from the middle. Only worth spelling out
+			   past one hop: a direct thread is the whole story already, and
+			   the strand tells it better than a row of names. ── */
+			if (chain.length > 2) {
+				const row = document.createElement("div");
+				row.className = "route";
+				chain.forEach((step, i) => {
+					if (i) {
+						const sep = document.createElement("s");
+						sep.textContent = "\u203A";
+						row.append(sep);
+					}
+					const last = i === chain.length - 1;
+					const b = document.createElement(last ? "span" : "button");
+					if (!last) {
+						b.type = "button";
+						b.addEventListener("click", () => openPanel(step));
+					}
+					// My own name never needs blurring off my own page.
+					const nm = document.createElement("span");
+					if (step !== ME) nm.className = "nm";
+					nm.textContent = step === ME ? "Me" : byId.get(step).name;
+					b.append(nm);
+					row.append(b);
+				});
+				card.append(row);
+			}
 			sheet.append(card);
 
 			/* ── Anything written up. Nothing shows an empty row: the sketch
@@ -2214,6 +2731,24 @@
 				if (p.relationship) notes.append(field("What we are", p.relationship));
 				if (p.met) notes.append(field("How we met", p.met));
 			}
+
+			/* ── Who the two of us would both name. Straight off the
+			   adjacency, so it can only ever say what the sketch says.
+			   Skipped when it would only name whoever the route above has
+			   already named: one hop out it's the interesting row, two hops
+			   out it's usually the same sentence twice. ── */
+			if (id !== centre) {
+				const mine = new Set(neighbours.get(centre).map(x => x.id));
+				const stops = new Set(chain.slice(1, -1));
+				const shared = neighbours.get(id)
+					.map(x => x.id)
+					.filter(x => mine.has(x) && x !== centre && nodeById.get(x).shown);
+				if (shared.length && !shared.every(x => stops.has(x))) {
+					notes.append(field(centre === ME ? "You both know" : "Both know",
+						shared.map(x => byId.get(x).name).join(", ")));
+				}
+			}
+
 			if (p.note) notes.append(field("Notes", p.note));
 			if (notes.children.length) sheet.append(notes);
 
@@ -2240,7 +2775,7 @@
 						// My own row takes my colour, so it reads as the way
 						// back to the middle rather than as another thread.
 						b.style.setProperty("--accent",
-							other.me ? "var(--me)" : `var(--${link.tie})`);
+							other.id === centre ? "var(--me)" : `var(--${link.tie})`);
 						// Married, engaged or same address wins, then anything
 						// written by hand, then the tie. Never a bare name.
 						const bond = bondWords(link);
@@ -2257,6 +2792,19 @@
 				sheet.append(conn);
 			}
 
+			/* ── Hand them the middle of the web ── */
+			if (id !== centre) {
+				const side = document.createElement("button");
+				side.type = "button";
+				side.className = "side";
+				side.innerHTML = icon("centre") + `<span>See the web from <span></span></span>`;
+				const who = side.querySelector("span span");
+				if (id !== ME) who.className = "nm";
+				who.textContent = id === ME ? "my side" : `${p.name}'s side`;
+				side.addEventListener("click", () => recentre(id));
+				sheet.append(side);
+			}
+
 			panelBody.replaceChildren(sheet);
 			panelBody.scrollTop = 0;
 			panel.classList.add("is-open");
@@ -2269,8 +2817,157 @@
 			active = null;
 			panel.classList.remove("is-open");
 			scrim.classList.remove("is-open");
+			setRoute([]);
 			setFocus(null);
 			if (returnFocusTo) { returnFocusTo.focus(); returnFocusTo = null; }
+		}
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Finder
+		 *
+		 *  Nearly thirty names on a field that keeps moving. Opens on / or
+		 *  off the Find button, Enter takes the top match. Anyone the reach
+		 *  switch has put away is still findable, and going to them opens
+		 *  the switch far enough to show them rather than pretending they
+		 *  aren't there.
+		 * ═══════════════════════════════════════════════════════════ */
+		const finder = document.getElementById("finder");
+		const finderQ = document.getElementById("finder-q");
+		const finderHits = document.getElementById("finder-hits");
+		const findBtn = document.getElementById("btn-find");
+		let hits = [], hitIdx = 0;
+
+		function paintHits() {
+			finderHits.replaceChildren(...hits.map((p, i) => {
+				const b = document.createElement("button");
+				b.type = "button";
+				b.className = "hit" + (i === hitIdx ? " is-on" : "");
+				b.setAttribute("role", "option");
+				b.setAttribute("aria-selected", String(i === hitIdx));
+				b.style.setProperty("--accent",
+					p.id === centre ? "var(--me)"
+						: centreTie.has(p.id) ? `var(--${centreTie.get(p.id)})` : "var(--silk-faint)");
+				b.innerHTML = `<span class="dot"></span><span class="nm"></span><span class="where"></span>`;
+				b.querySelector(".nm").textContent = p.name;
+				const d = depth.get(p.id);
+				b.querySelector(".where").textContent =
+					p.id === centre ? "the middle"
+						: d === undefined ? "off on its own"
+							: d === 1 ? "one hop" : `${d} hops`;
+				b.addEventListener("click", () => goTo(p.id));
+				return b;
+			}));
+		}
+
+		function runFinder() {
+			const q = finderQ.value.trim().toLowerCase();
+			hits = people
+				.filter(p => !q || p.name.toLowerCase().includes(q))
+				// Names that start with what you typed first, then whoever's
+				// nearest the middle. On an empty box that's the closest
+				// seven people, which is a reasonable thing to open on.
+				.sort((a, b) =>
+					(a.name.toLowerCase().startsWith(q) ? 0 : 1) - (b.name.toLowerCase().startsWith(q) ? 0 : 1)
+					|| (depth.get(a.id) ?? 99) - (depth.get(b.id) ?? 99)
+					|| a.name.localeCompare(b.name))
+				.slice(0, 7);
+			hitIdx = 0;
+			paintHits();
+		}
+
+		function openFinder() {
+			// Blur is on, so the names are off the page: a searchable list
+			// of them is the last thing this should hand back.
+			if (document.body.classList.contains("is-blurred")) return;
+			finder.classList.add("is-open");
+			finderQ.value = "";
+			runFinder();
+			finderQ.focus();
+		}
+
+		function closeFinder() {
+			if (!finder.classList.contains("is-open")) return;
+			finder.classList.remove("is-open");
+			finderQ.blur();
+		}
+
+		function goTo(id) {
+			closeFinder();
+			// Out of reach where the switch is sitting: open it far enough,
+			// and let the springs finish before parking the view, or we'd
+			// aim at where they were rather than where they end up.
+			const wasHidden = !nodeById.get(id).shown;
+			if (wasHidden) {
+				const need = REACH.findIndex(r => hops(id) <= r);
+				applyReach(need < 0 ? REACH.length - 1 : need);
+				reframeAt = [];
+			}
+			openPanel(id);
+			const park = () => {
+				const n = nodeById.get(id);
+				const room = W > 640 ? W - Math.min(400, W) : W;
+				glide({ k: view.k, x: room / 2 - n.x * view.k, y: (W > 640 ? H / 2 : H * 0.32) - n.y * view.k });
+			};
+			wasHidden ? setTimeout(park, 340) : park();
+		}
+
+		finderQ.addEventListener("input", runFinder);
+		finderQ.addEventListener("keydown", (ev) => {
+			if (ev.key === "Escape") { ev.preventDefault(); closeFinder(); return; }
+			if (ev.key === "Enter") { ev.preventDefault(); if (hits[hitIdx]) goTo(hits[hitIdx].id); return; }
+			const step = ev.key === "ArrowDown" ? 1 : ev.key === "ArrowUp" ? -1 : 0;
+			if (!step || !hits.length) return;
+			ev.preventDefault();
+			hitIdx = (hitIdx + step + hits.length) % hits.length;
+			paintHits();
+		});
+
+		findBtn.addEventListener("click", () =>
+			finder.classList.contains("is-open") ? closeFinder() : openFinder());
+
+		/* ═══════════════════════════════════════════════════════════
+		 *  Keeping the arrangement
+		 *
+		 *  Only the people you've deliberately dragged somewhere. Everyone
+		 *  else settles the same way on every load anyway, so there's
+		 *  nothing there worth keeping, and the springs arrange them around
+		 *  the pins the way they would around anything else. Reset throws
+		 *  the lot away, which is what Reset is for.
+		 * ═══════════════════════════════════════════════════════════ */
+		const LAYOUT_KEY = "poly-layout";
+		let saveSoon = null;
+
+		function saveLayout() {
+			clearTimeout(saveSoon);
+			saveSoon = setTimeout(() => {
+				const pins = {};
+				nodes.forEach(n => { if (n.pinned) pins[n.id] = [Math.round(n.x), Math.round(n.y)]; });
+				try {
+					localStorage.setItem(LAYOUT_KEY, JSON.stringify({ v: 1, reach: reachIdx, pins }));
+				} catch { }
+			}, 400);
+		}
+
+		function loadLayout() {
+			let saved = null;
+			try { saved = JSON.parse(localStorage.getItem(LAYOUT_KEY) || "null"); } catch { }
+			if (!saved || saved.v !== 1) return;
+			if (Number.isInteger(saved.reach)) reachIdx = clamp(saved.reach, 0, REACH.length - 1);
+			Object.entries(saved.pins || {}).forEach(([id, xy]) => {
+				const n = nodeById.get(id);
+				// Names come and go. A pin for someone who's left is nothing,
+				// and neither is one that isn't a pair of numbers.
+				if (!n || !Array.isArray(xy) || !Number.isFinite(xy[0]) || !Number.isFinite(xy[1])) return;
+				n.x = xy[0];
+				n.y = xy[1];
+				n.vx = n.vy = 0;
+				n.pinned = true;
+			});
+		}
+
+		function forgetLayout() {
+			clearTimeout(saveSoon);
+			try { localStorage.removeItem(LAYOUT_KEY); } catch { }
 		}
 
 		/* ─── Blur ──────────────────────────────────────────────────
@@ -2287,6 +2984,10 @@
 		function setBlur(on) {
 			document.body.classList.toggle("is-blurred", on);
 			blurBtn.setAttribute("aria-pressed", String(on));
+			// Nothing to find while the names are off the page.
+			findBtn.disabled = on;
+			findBtn.title = on ? "Names are blurred" : "";
+			if (on) closeFinder();
 			try { localStorage.setItem("poly-blur", on ? "1" : "0"); } catch { }
 		}
 
@@ -2306,7 +3007,13 @@
 			closePanel();
 		});
 		addEventListener("keydown", (ev) => {
-			if (ev.key === "Escape" && active) closePanel();
+			if (ev.key === "Escape") {
+				// Innermost thing first: the finder sits over the panel.
+				if (finder.classList.contains("is-open")) closeFinder();
+				else if (active) closePanel();
+				return;
+			}
+			if (ev.key === "/" && ev.target.tagName !== "INPUT") { ev.preventDefault(); openFinder(); }
 		});
 
 		/* ═══════════════════════════════════════════════════════════
@@ -2314,12 +3021,15 @@
 		 * ═══════════════════════════════════════════════════════════ */
 		document.getElementById("btn-fit").addEventListener("click", () => fit());
 		document.getElementById("btn-reset").addEventListener("click", () => {
+			recentre(ME);
 			seed();
 			settle = 0;
 			nodes.forEach(n => { n.pinned = false; });
+			// Last, so it also cancels the save that clearing the pins queued.
+			forgetLayout();
 			// Let the springs pull it back into shape before framing it.
 			setTimeout(() => fit(), 260);
-			tremor(ME);
+			tremor(centre);
 		});
 
 		let refit = null;
@@ -2334,11 +3044,12 @@
 
 		resize();
 		seed();
+		loadLayout();                           // pins, and the reach it was left on
 		applyReach(reachIdx, false);
 		for (let i = 0; i < 220; i++) tick();   // settle off-screen, no flail on load
 		settle = 999;
 		fit(false);
-		requestAnimationFrame((t) => { tremor(ME); frame(t); });
+		requestAnimationFrame((t) => { tremor(centre); frame(t); });
 	</script>
 </body>
 
