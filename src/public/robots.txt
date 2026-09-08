@@ -4,7 +4,7 @@ Allow: /
 # Private gaming page — do not crawl (defense in depth with page meta)
 Disallow: /gaming.html
 Disallow: /gaming
-# Private relationship map — unlisted, handed out by URL only
+# The relationship map moved to poly.duffle.one; these paths redirect there.
 Disallow: /poly.html
 Disallow: /poly
 

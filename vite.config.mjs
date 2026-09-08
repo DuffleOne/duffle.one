@@ -34,8 +34,6 @@ export default defineConfig({
 				// Standalone vanity page kept verbatim from the prior site.
 				// It's outside the SPA — full page load, its own assets.
 				jellycats: 'src/jellycats.html',
-				// Unlisted. Nothing links here; it's handed out by URL.
-				poly: 'src/poly.html',
 			},
 		},
 	},

@@ -59,4 +59,4 @@ steps:
       # The entry pages must revalidate on every request so a deploy shows up
       # straight away; the hashed bundles carry no cache header, as before.
       cache_control:
-        '(^|/)(index|jellycats|poly)\.html$': "no-cache, no-store, must-revalidate"
+        '(^|/)(index|jellycats)\.html$': "no-cache, no-store, must-revalidate"

@@ -27,14 +27,13 @@ aws s3 sync "$BUILD_DIR" s3://duffle.one \
 	--delete \
 	--exclude "index.html" \
 	--exclude "jellycats.html" \
-	--exclude "poly.html" \
 	--exclude "img/jellycats/*.jpg" \
 	--exclude "img/*.JPG"
 
 # Entry HTML: text/html, no caching, every request hits S3 fresh.
 # The asset bundle filenames are content-hashed by Vite so the rest of
 # the bundle can cache long.
-for page in index.html jellycats.html poly.html; do
+for page in index.html jellycats.html; do
 	aws s3 cp "$BUILD_DIR/$page" "s3://duffle.one/$page" \
 		--acl public-read \
 		--content-type text/html \
