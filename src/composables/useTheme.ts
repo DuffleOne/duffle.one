@@ -1,10 +1,11 @@
 /*
-  Theme switching. Three states the user can pick from: light, dark,
-  system. The choice is persisted in localStorage; "system" follows
-  the OS preference and updates live when it changes.
+  Theme switching. "system" follows the OS preference and updates live
+  when it changes; that's where everyone starts, until they pick light
+  or dark with the switch in the nav. The pick is persisted in
+  localStorage.
 
   We write `data-theme` to <html> for the explicit choices and leave it
-  off for "system" so the CSS @media query takes over.
+  off for "system" so the OS preference takes over.
 */
 
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
@@ -73,12 +74,5 @@ export function useTheme() {
 		choice.value = resolved.value === "dark" ? "light" : "dark";
 	}
 
-	function cycle() {
-		choice.value =
-			choice.value === "light" ? "dark"
-			: choice.value === "dark" ? "system"
-			: "light";
-	}
-
-	return { choice, resolved, toggle, cycle };
+	return { choice, resolved, toggle };
 }

@@ -4,21 +4,23 @@ Working notes for WARP (warp.dev) and other AI assistants in this repo.
 
 ## Project overview
 
-Personal site for Laura Miller (`duffle.one`). Single-page Vue 3 app with a
-print aesthetic — full-bleed paper, Alcyone display type over Lora body
-serif, gold accents, hairline rules. Light and dark follow the OS by
-default, with a visitor override (the small toggle in the leader and
-mastheads) persisted in localStorage.
+Personal site for Laura Miller (`duffle.one`). Single-page Vue 3 app in
+the "Dot" design (a Pencil handoff): Figtree, a lot of white, navy ink
+and the yellow dot off the Duffle logo. The yellow only ever fills dots,
+never text. Light and dark follow the OS by default, with a visitor
+override (the light/dark switch in the nav) persisted in localStorage.
 
-The subpages are the original broadsheet (a Claude Design handoff on the
-Classical design system). The landing is a later pass that sets the same
-palette and type as a darkroom contact sheet: film leader, strips of
-numbered frames, edge codes, grease-pencil marks on the selects.
+Every page shares one shell: the nav along the top, a big title with the
+dot after it, then labelled sections. One column (a phone layout under
+720px, a centred 600px column up to 1439px); from 1440px the title
+block takes a 600px column on the left and the rest runs down the right.
 
 ## Stack
 
 - Vue 3 (`<script setup>` SFCs) + vue-router (hash mode for S3)
-- Vite 8 + TypeScript + Tailwind CSS v4 (`@theme` for tokens)
+- Vite 8 + TypeScript
+- Tailwind CSS v4, for its reset only: components style themselves in
+  scoped CSS against the tokens in `input.css`
 - No backend.
 
 ## Commands
@@ -31,51 +33,45 @@ npm run build      # typecheck + production bundle into ./build
 ./publish.sh       # build + deploy to s3://duffle.one (AWS_PROFILE=dfl)
 ```
 
-Drone (`.drone.yml`) builds and publishes on push to master; the pipeline
-is signed, so edit it via `drone sign`.
+Woodpecker (`.woodpecker/build.yml`) builds every push and publishes
+pushes to master straight to the bucket.
 
 ## Layout
 
 ```
 src/
-	index.html              SPA shell: Lora from Google Fonts, Alcyone
-	                        preloads, pre-paint theme script
+	index.html              SPA shell: Figtree preload, pre-paint theme
+	                        script, icons and Open Graph tags
 	main.ts                 vue + router bootstrap, document.title sync
 	App.vue                 theme bootstrap + router outlet
-	input.css               Tailwind import + light-dark() tokens +
-	                        Alcyone @font-face + base styles (scoped to
-	                        html.paper-root so jellycats.html stays
-	                        independent)
+	input.css               Tailwind reset, the colour tokens (light-dark()
+	                        pairs), the spacing rhythm per layout, Figtree
+	                        @font-face, base styles
 	site/
-		data.ts               all copy: bio, socials, projects, cv, guide
+		data.ts               all copy: about, socials, projects, quotes,
+		                      footer lines, cv, guide
 		routes.ts             route registry (id, label, path, title, nav)
 	composables/
-		useWeather.ts         London weather for the dateline (Open-Meteo)
-		useToday.ts           dotted dateline date, refreshed half-hourly
 		useTheme.ts           light/dark/system choice, data-theme on <html>
-		useQuoteRotation.ts   shuffled-cycle quote walk (paused when hidden)
+		useQuoteRotation.ts   shuffled quote walk: timer, holds, go()
 		useReducedMotion.ts   prefers-reduced-motion ref
-	components/paper/
-		PaperSheet.vue        full-bleed page, content centred at 1180px
-		PageMasthead.vue      brand + section nav + theme toggle
-		PageTitle.vue         centred Alcyone title + optional standfirst
-		ThemeToggle.vue       the light/dark/auto control
-	components/sheet/       the landing's contact-sheet kit
-		Perforations.vue      sprocket run for the leader/tail (decorative)
-		StripLabel.vue        strip letter, hairline, section heading
-		FrameCell.vue         one frame: rebate row (number/label/meta) + slot
-		EdgeCode.vue          one film-edge code: label over handle
+	components/dot/
+		DotPage.vue           the shell: nav, intro + content slots (two
+		                      columns from 1440px), random footer line
+		DotHeading.vue        big title with the dot, and the lede under it
+		DotSection.vue        small muted label and what it labels
+		DotRow.vue            list row as a link: name left, meta right
+		DotQuote.vue          the landing's rotating quote and its dots
 	screens/
-		Home.vue              landing contact sheet: leader, frame 01 (the
-		                      enlargement), edge codes, the margin note,
-		                      about + the select + the edit, zone-scale
-		                      divider, projects, the roll of jobs, tail
-		CV.vue                role list with first-bullet standfirsts
-		CVRole.vue            /cv/:slug — one role in full, prev/next
-		Guide.vue             user guide: parted-column About, section rows
+		Home.vue              wordmark, about, links, quote, made, work
+		CV.vue                proud of, jobs, volunteering, skills
+		CVRole.vue            /cv/:slug, one role in full, newer/older
+		Guide.vue             the user guide, section by section, values
 		Sudo.vue              404 catch-all
-	public/                 static: fonts/alcyone/ (woff2), img/, favicons,
-	                        robots.txt, sitemap.xml, site.webmanifest
+	public/                 static: fonts/figtree/ (woff2 + OFL), img/,
+	                        favicon.svg, apple-touch-icon.png,
+	                        icon-512.png, og.png, robots.txt,
+	                        sitemap.xml, site.webmanifest
 	jellycats.html          standalone vanity page, outside the SPA
 scripts/
 	convert-new-jellycats.sh  thumbnail pipeline for new jellycat photos
@@ -84,17 +80,21 @@ scripts/
 ## Notes
 
 - Content edits go in `src/site/data.ts`. Voice is part of the design,
-  don't paraphrase.
-- Landing frame numbers (01, 02, 06A…) are literals in `Home.vue`, in
-  sheet order. Move a strip and renumber by hand, the way a real sheet
-  gets renumbered when it's recut.
-- Colour tokens live in `src/input.css` as light-dark() pairs; the
-  effective color-scheme comes from the OS or the data-theme attribute
-  useTheme() writes.
-- Alcyone is licensed (licence PDF at the repo root); woff2s are vendored
-  in `src/public/fonts/alcyone/`.
+  don't paraphrase. Titles, ledes, labels and meta are lowercase (the
+  components lowercase ledes and labels themselves); proper names like
+  TFLGame keep their capitals.
+- Sizes and spacing on the landing match the handoff to the pixel;
+  `--gap-page`, `--gap-block` and `--gap-section` in `input.css` carry
+  its rhythm to the other pages.
+- The landing's quote block is always as tall as the longest quote, so
+  nothing under it moves as it rotates; the dots are lifted to sit
+  under whichever quote is showing. Dots, arrow keys (with the quote
+  focused) and sideways swipes move it back and forth.
+- Figtree is OFL and self-hosted (latin subset of the variable font).
+  `Alcyone_webfont_license.pdf` at the root is the licence for the
+  display face the previous designs used; it isn't on the site any more.
 - Full-size jellycat photos aren't in git; publish.sh syncs them from
-  local, and the Drone pipeline excludes them from `--delete`.
+  local, and the Woodpecker publish never deletes, so they stay put.
 - `jellycats.html` is one self-contained file on purpose: its own palette,
   its own fonts, no shared CSS. Everything on the page is derived from the
   `collection` array at the bottom, so counts, chips, the chart and the

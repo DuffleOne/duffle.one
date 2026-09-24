@@ -1,23 +1,25 @@
 <script setup lang="ts">
 /*
-  /cv/:slug — one role in full: title row with the role/years/site
-  block, the stack, every bullet as prose, and prev/next along the
-  bottom rule.
+  /cv/:slug: one role in full. The company's the title, with the role,
+  place, years and its site under it; then the stack, everything I did
+  there, and the roles either side of it.
 */
 import { computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { SITE } from "../site/data";
-import PaperSheet from "../components/paper/PaperSheet.vue";
-import PageMasthead from "../components/paper/PageMasthead.vue";
+import DotPage from "../components/dot/DotPage.vue";
+import DotHeading from "../components/dot/DotHeading.vue";
+import DotSection from "../components/dot/DotSection.vue";
 
 const route = useRoute();
 
 const slug = computed(() => String(route.params.slug ?? ""));
 const role = computed(() => SITE.cv.experience.find((e) => e.slug === slug.value));
 
+// The cv runs newest first, so the one before is newer.
 const idx = computed(() => SITE.cv.experience.findIndex((e) => e.slug === slug.value));
-const prev = computed(() => (idx.value > 0 ? SITE.cv.experience[idx.value - 1] : null));
-const next = computed(() =>
+const newer = computed(() => (idx.value > 0 ? SITE.cv.experience[idx.value - 1] : null));
+const older = computed(() =>
 	idx.value >= 0 && idx.value < SITE.cv.experience.length - 1
 		? SITE.cv.experience[idx.value + 1]
 		: null,
@@ -32,55 +34,79 @@ watchEffect(() => {
 </script>
 
 <template>
-	<PaperSheet>
-		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
-			<PageMasthead active="cv"/>
+	<DotPage>
+		<template #intro>
+			<DotHeading v-if="role" :title="role.co">
+				{{ role.role }} · {{ role.loc }} · {{ role.years }}<template v-if="role.href"> · <a :href="role.href" target="_blank" rel="noopener">{{ siteLabel }}</a></template>
+			</DotHeading>
+			<DotHeading v-else title="not found">
+				nothing on the cv called “{{ slug }}”. <RouterLink to="/cv">back to the cv</RouterLink>
+			</DotHeading>
+		</template>
 
-			<template v-if="role">
-				<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3 border-b-2 border-ink pb-4 pt-8">
-					<h2 class="m-0 font-display font-light text-[clamp(40px,6vw,64px)] leading-none">{{ role.co }}</h2>
-					<div class="text-right text-[12px] tracking-[0.14em] uppercase text-ink-faint leading-[1.9] tnum">
-						{{ role.role }}<br>
-						{{ role.years }} · {{ role.loc }}<br>
-						<a
-							v-if="role.href"
-							:href="role.href"
-							target="_blank"
-							rel="noopener"
-						>{{ siteLabel }}</a>
-					</div>
-				</div>
+		<template v-if="role">
+			<DotSection v-if="role.tech?.length" label="stack">
+				<p class="stack">{{ role.tech.join(", ") }}</p>
+			</DotSection>
 
-				<div v-if="role.tech?.length" class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule">
-					<div class="meta-caps text-accent-ink">Stack</div>
-					<div class="text-[14px] italic leading-[1.9] text-ink-mute">{{ role.tech.join(" · ") }}</div>
-				</div>
+			<DotSection label="what I did">
+				<ul class="did">
+					<li v-for="(b, i) in role.bullets" :key="i">{{ b }}</li>
+				</ul>
+			</DotSection>
 
-				<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7">
-					<div class="meta-caps text-accent-ink">What I did</div>
-					<div class="flex flex-col gap-[9px]">
-						<p
-							v-for="(b, i) in role.bullets"
-							:key="i"
-							class="m-0 text-[15px] leading-[1.7] text-ink-soft"
-						>{{ b }}</p>
-					</div>
-				</div>
-
-				<nav class="flex flex-wrap justify-between gap-4 border-t border-rule pt-4 meta-caps">
-					<RouterLink v-if="prev" :to="`/cv/${prev.slug}`">← {{ prev.co }}</RouterLink>
-					<span v-else></span>
-					<RouterLink v-if="next" :to="`/cv/${next.slug}`">{{ next.co }} →</RouterLink>
-				</nav>
-			</template>
-
-			<template v-else>
-				<div class="flex flex-col items-center pt-14 pb-10 text-center">
-					<h2 class="m-0 font-display font-light text-[clamp(40px,6vw,64px)] leading-none">Not found</h2>
-					<p class="mt-4 font-display font-light italic text-[clamp(18px,2.4vw,25px)] text-ink-soft">No entry under "{{ slug }}".</p>
-					<RouterLink to="/cv" class="mt-6 text-[15.5px]">Back to the CV →</RouterLink>
-				</div>
-			</template>
-		</div>
-	</PaperSheet>
+			<nav v-if="newer || older" class="pager" aria-label="Other roles">
+				<RouterLink v-if="newer" :to="`/cv/${newer.slug}`" class="pager-link">
+					<span class="pager-label">newer</span>
+					<span class="pager-name">{{ newer.co }}</span>
+				</RouterLink>
+				<RouterLink v-if="older" :to="`/cv/${older.slug}`" class="pager-link older">
+					<span class="pager-label">older</span>
+					<span class="pager-name">{{ older.co }}</span>
+				</RouterLink>
+			</nav>
+		</template>
+	</DotPage>
 </template>
+
+<style scoped>
+.stack {
+	line-height: 1.5;
+}
+
+.did {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	line-height: 1.6;
+}
+
+.pager {
+	display: flex;
+	justify-content: space-between;
+	gap: 24px;
+	margin-top: var(--gap-section);
+}
+.pager-link {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.pager-link.older {
+	margin-left: auto;
+	text-align: right;
+}
+.pager-label {
+	font-size: 13px;
+	letter-spacing: 0.2px;
+	color: var(--muted);
+}
+.pager-name {
+	font-weight: 500;
+}
+.pager-link:hover .pager-name {
+	text-decoration-line: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 2px;
+}
+</style>

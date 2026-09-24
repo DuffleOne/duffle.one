@@ -1,67 +1,65 @@
 <script setup lang="ts">
 /*
-  /guide — "A user guide to me". Centred opening, the About story in
-  hairline-parted newspaper columns, then one row per section in the
-  CV's label-and-prose pattern, closing with the values two-up.
+  /guide: a user guide to me. The about story, then one labelled
+  section per topic, then the values, two up from 720px.
 */
 import { SITE } from "../site/data";
-import PaperSheet from "../components/paper/PaperSheet.vue";
-import PageMasthead from "../components/paper/PageMasthead.vue";
-import PageTitle from "../components/paper/PageTitle.vue";
+import DotPage from "../components/dot/DotPage.vue";
+import DotHeading from "../components/dot/DotHeading.vue";
+import DotSection from "../components/dot/DotSection.vue";
+
+const sections = [{ h: "About", body: SITE.guide.about }, ...SITE.guide.sections];
 </script>
 
 <template>
-	<PaperSheet>
-		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
-			<PageMasthead active="guide"/>
+	<DotPage>
+		<template #intro>
+			<DotHeading title="user guide">{{ SITE.guide.intro }}</DotHeading>
+		</template>
 
-			<div class="mx-auto max-w-[880px] pt-8">
-				<PageTitle title="A user guide to me" :subtitle="SITE.guide.intro"/>
-
-				<div class="guide-cols py-7 border-b border-rule">
-					<p
-						v-for="(p, i) in SITE.guide.about"
-						:key="i"
-						class="m-0 mb-3.5 last:mb-0 text-[15.5px] leading-[1.75] prose-just"
-					>{{ p }}</p>
-				</div>
-
-				<div
-					v-for="s in SITE.guide.sections"
-					:key="s.h"
-					class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule"
-				>
-					<div class="font-display font-medium text-[24px] leading-tight">{{ s.h }}</div>
-					<div class="flex flex-col gap-[9px]">
-						<p
-							v-for="(p, i) in s.body"
-							:key="i"
-							class="m-0 text-[15px] leading-[1.7] text-ink-soft"
-						>{{ p }}</p>
-					</div>
-				</div>
-
-				<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7">
-					<div class="meta-caps text-accent-ink pt-1">Values</div>
-					<div class="grid sm:grid-cols-2 gap-x-[30px] gap-y-5">
-						<div v-for="v in SITE.guide.values" :key="v.h">
-							<div class="font-display font-medium text-[19px] leading-tight">{{ v.h }}</div>
-							<div class="mt-1 text-[14px] leading-[1.65] text-ink-soft">{{ v.b }}</div>
-						</div>
-					</div>
-				</div>
+		<DotSection v-for="s in sections" :key="s.h" :label="s.h">
+			<div class="prose">
+				<p v-for="(p, i) in s.body" :key="i">{{ p }}</p>
 			</div>
-		</div>
-	</PaperSheet>
+		</DotSection>
+
+		<DotSection label="values">
+			<dl class="values">
+				<div v-for="v in SITE.guide.values" :key="v.h">
+					<dt class="value-name">{{ v.h }}</dt>
+					<dd class="value-text">{{ v.b }}</dd>
+				</div>
+			</dl>
+		</DotSection>
+	</DotPage>
 </template>
 
 <style scoped>
-/* About reads as parted columns on wide sheets, one flow on mobile. */
-@media (min-width: 768px) {
-	.guide-cols {
-		columns: 2;
-		column-gap: 38px;
-		column-rule: 1px solid var(--color-rule);
+.prose {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	line-height: 1.6;
+}
+
+.values {
+	display: grid;
+	gap: 20px;
+}
+.value-name {
+	font-weight: 500;
+	text-transform: lowercase;
+}
+.value-text {
+	margin-top: 4px;
+	line-height: 1.5;
+	color: var(--muted);
+}
+
+@media (min-width: 720px) {
+	.values {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 24px;
 	}
 }
 </style>

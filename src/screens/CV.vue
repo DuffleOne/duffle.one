@@ -1,59 +1,80 @@
 <script setup lang="ts">
 /*
-  /cv — "Where I've worked" (design 1a subpage). Title row with the
-  contact block, a "Most proud of" lead, then one hairline row per
-  role: company / years / stack on the left, role and the first
-  bullet as a standfirst on the right, with the full story a click
-  away on /cv/:slug.
+  /cv: what I'm most proud of, then the jobs, newest first, each with
+  its years, the role and the first thing I did there. The rest of a
+  role is a click away on /cv/:slug. Volunteering sits apart from the
+  jobs, and the skills close it out.
 */
 import { SITE } from "../site/data";
-import PaperSheet from "../components/paper/PaperSheet.vue";
-import PageMasthead from "../components/paper/PageMasthead.vue";
+import DotPage from "../components/dot/DotPage.vue";
+import DotHeading from "../components/dot/DotHeading.vue";
+import DotSection from "../components/dot/DotSection.vue";
+import DotRow from "../components/dot/DotRow.vue";
+
+const groups = [
+	{ label: "work", roles: SITE.cv.experience.filter((e) => !e.volunteer) },
+	{ label: "volunteering", roles: SITE.cv.experience.filter((e) => e.volunteer) },
+];
 </script>
 
 <template>
-	<PaperSheet>
-		<div class="px-5 py-6 sm:px-8 md:px-14 md:py-12">
-			<PageMasthead active="cv"/>
+	<DotPage>
+		<template #intro>
+			<DotHeading title="cv">{{ SITE.cv.lede }} <a :href="`mailto:${SITE.cv.email}`">{{ SITE.cv.email }}</a></DotHeading>
+		</template>
 
-			<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3 border-b-2 border-ink pb-4 pt-8">
-				<h2 class="m-0 font-display font-light text-[clamp(40px,6vw,64px)] leading-none">Where I've worked</h2>
-				<div class="text-right text-[12px] tracking-[0.14em] uppercase text-ink-faint leading-[1.9]">
-					{{ SITE.name }}<br>
-					Engineer · London<br>
-					{{ SITE.cv.email }}
-				</div>
-			</div>
+		<DotSection label="most proud of">
+			<p class="proud">{{ SITE.cv.proudOf }}</p>
+		</DotSection>
 
-			<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule">
-				<div class="meta-caps text-accent-ink">Most proud of</div>
-				<p class="m-0 text-[16px] leading-[1.75] prose-just">{{ SITE.cv.proudOf }}</p>
-			</div>
+		<DotSection v-for="g in groups" :key="g.label" :label="g.label">
+			<ul class="roles">
+				<li v-for="e in g.roles" :key="e.slug">
+					<DotRow :name="e.co" :meta="e.years" :to="`/cv/${e.slug}`" inline>
+						<p class="role">{{ e.role }} · {{ e.loc }}</p>
+						<p class="standfirst">{{ e.bullets[0] }}</p>
+					</DotRow>
+				</li>
+			</ul>
+		</DotSection>
 
-			<div
-				v-for="e in SITE.cv.experience"
-				:key="e.slug"
-				class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7 border-b border-rule"
-			>
-				<div class="flex flex-col gap-1">
-					<RouterLink
-						:to="`/cv/${e.slug}`"
-						class="font-display font-medium text-[26px] leading-tight text-ink hover:text-accent-hover"
-					>{{ e.co }}</RouterLink>
-					<div class="text-[12px] tracking-[0.14em] uppercase text-ink-faint tnum">{{ e.years }} · {{ e.loc }}</div>
-					<div v-if="e.tech?.length" class="mt-1.5 text-[13px] italic text-ink-mute">{{ e.tech.join(" · ") }}</div>
-				</div>
-				<div class="flex flex-col gap-[9px]">
-					<div class="font-display font-medium text-[24px] leading-tight">{{ e.role }}</div>
-					<p class="m-0 text-[15px] leading-[1.7] text-ink-soft">{{ e.bullets[0] }}</p>
-					<RouterLink :to="`/cv/${e.slug}`" class="meta-caps mt-1">Read more →</RouterLink>
-				</div>
-			</div>
-
-			<div class="grid md:grid-cols-[200px_1fr] gap-3 md:gap-[30px] py-7">
-				<div class="meta-caps text-accent-ink">Skills</div>
-				<div class="text-[14px] italic leading-[1.9] text-ink-mute">{{ SITE.cv.skills.join(" · ") }}</div>
-			</div>
-		</div>
-	</PaperSheet>
+		<DotSection label="skills">
+			<p class="skills">{{ SITE.cv.skills.join(", ") }}</p>
+		</DotSection>
+	</DotPage>
 </template>
+
+<style scoped>
+.proud {
+	font-size: 17px;
+	line-height: 25px;
+}
+
+.roles {
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+}
+.role {
+	margin-top: 2px;
+	font-size: 14px;
+	color: var(--muted);
+	text-transform: lowercase;
+}
+.standfirst {
+	margin-top: 8px;
+	line-height: 1.5;
+	color: var(--muted);
+}
+
+.skills {
+	line-height: 1.5;
+}
+
+@media (min-width: 720px) {
+	.proud {
+		font-size: 20px;
+		line-height: 1.45;
+	}
+}
+</style>

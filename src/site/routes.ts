@@ -1,10 +1,11 @@
 /*
-  Route registry. Single source of truth for the router and the
-  subpage masthead nav. Add a route here and it shows up everywhere.
+  Route registry. Single source of truth for the router and the nav
+  along the top of every page. Add a route here and it shows up
+  everywhere.
 
-  `id` is the internal/code name; `label` is what the masthead shows;
+  `id` is the internal/code name; `label` is what the nav shows;
   `path` is the public URL; `title` lands in document.title. Routes
-  flagged `nav: false` stay out of the masthead (detail pages).
+  flagged `nav: false` stay out of the nav (detail pages).
 */
 
 import type { Component } from "vue";

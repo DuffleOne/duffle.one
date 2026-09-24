@@ -1,15 +1,15 @@
 {
 	"name": "Laura Miller — duffle.one",
 	"short_name": "duffle.one",
-	"description": "Laura Miller. Engineer, photographer, 3D modeller.",
+	"description": "Laura Miller. Engineer in London. Photographer, 3D designer.",
 	"id": "/",
 	"start_url": "/",
 	"display": "standalone",
-	"background_color": "#f3f2f2",
-	"theme_color": "#f3f2f2",
+	"background_color": "#ffffff",
+	"theme_color": "#ffffff",
 	"icons": [
 		{
-			"src": "/favicon.png",
+			"src": "/icon-512.png",
 			"sizes": "512x512",
 			"type": "image/png",
 			"purpose": "any"

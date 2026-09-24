@@ -1,14 +1,18 @@
 /*
-  Quote rotation. Shuffles the pool once at session start (Fisher-Yates),
-  then walks the shuffled order, never repeating until the whole list
-  has been seen; reshuffles and goes again when it runs dry.
+  Quote rotation. The pool is shuffled once per visit, so it starts
+  somewhere new each time and nothing repeats until the lot has been
+  round. `step` counts through that order, round and round, and runs
+  negative when someone goes back past the start. go() moves it by
+  hand.
 
-  Rotation pauses while the tab is hidden — throttled renderers just
-  pile up unfinished fade transitions otherwise.
+  The timer holds while the tab is hidden and while `held` is true (the
+  landing holds it on hover and focus), and a quote always gets its full
+  interval once it lets go or after a move by hand. Under
+  prefers-reduced-motion it never runs by itself at all.
 */
 
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { SITE } from "../site/data";
+import { computed, onBeforeUnmount, onMounted, ref, watch, type Ref } from "vue";
+import { useReducedMotion } from "./useReducedMotion";
 
 function shuffle<T>(input: readonly T[]): T[] {
 	const arr = [...input];
@@ -19,37 +23,39 @@ function shuffle<T>(input: readonly T[]): T[] {
 	return arr;
 }
 
-function cycler<T>(source: readonly T[]) {
-	let queue: T[] = shuffle(source);
-	let idx = 0;
-	return () => {
-		if (idx >= queue.length) {
-			queue = shuffle(source);
-			idx = 0;
-		}
-		return queue[idx++];
-	};
-}
+export function useQuoteRotation(pool: readonly string[], held: Ref<boolean>, intervalMs = 6_000) {
+	const order = shuffle(pool);
+	const step = ref(0);
+	const quote = computed(() => order[((step.value % order.length) + order.length) % order.length]);
+	const { reduced } = useReducedMotion();
+	let timer: ReturnType<typeof setTimeout> | undefined;
 
-export function useQuoteRotation(intervalMs = 8_000) {
-	const nextQuote = cycler(SITE.quotePool);
-	const quote = ref(nextQuote());
-	const tick = ref(0);
-	let timer: ReturnType<typeof setInterval> | null = null;
-
-	function rotate() {
-		if (typeof document !== "undefined" && document.hidden) return;
-		quote.value = nextQuote();
-		tick.value += 1;
+	function schedule() {
+		clearTimeout(timer);
+		timer = undefined;
+		if (reduced.value || held.value || document.hidden) return;
+		timer = setTimeout(() => {
+			step.value += 1;
+			schedule();
+		}, intervalMs);
 	}
 
+	function go(delta: number) {
+		step.value += delta;
+		schedule();
+	}
+
+	watch([reduced, held], schedule);
+
 	onMounted(() => {
-		timer = setInterval(rotate, intervalMs);
+		document.addEventListener("visibilitychange", schedule);
+		schedule();
 	});
 
 	onBeforeUnmount(() => {
-		if (timer) clearInterval(timer);
+		clearTimeout(timer);
+		document.removeEventListener("visibilitychange", schedule);
 	});
 
-	return { quote, tick, rotate };
+	return { quote, step, go };
 }

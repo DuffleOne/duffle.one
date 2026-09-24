@@ -1,8 +1,8 @@
 /*
   Single source of truth for all copy + content.
-  Lifted from the prior duffle.one MPA, carried through the tty and
-  design-C sites, now feeding the broadsheet layout. Voice is part of
-  the design, don't paraphrase.
+  Lifted from the prior duffle.one MPA, carried through the tty,
+  design-C and broadsheet sites, now feeding the Dot design. Voice is
+  part of the design, don't paraphrase.
 */
 
 export type Social = { id: string; label: string; handle: string; href: string };
@@ -21,17 +21,16 @@ export type Experience = {
 	co: string;
 	role: string;
 	when: string;
-	// Years-only form shown by the broadsheet design ("2016 – 2022", "now");
+	// Years-only form the cv shows ("2016 – 2022", "now");
 	// `when` keeps the full months as canonical data.
 	years: string;
 	loc: string;
 	href?: string;
 	tech?: string[];
 	bullets: string[];
-	// Volunteering rows stay on /cv but off the landing employer list.
+	// Volunteering, not a job. Still listed on /cv.
 	volunteer?: boolean;
 };
-export type EditMark = { text: string; keep: boolean };
 export type Education = { school: string; degree: string; when: string; note: string };
 export type GuideSection = { h: string; body: string[] };
 export type GuideValue = { h: string; b: string };
@@ -40,71 +39,61 @@ export const SITE = {
 	name: "Laura Miller",
 	domain: "duffle.one",
 	email: "laura@duffle.one",
-	tagline: "Engineer, photographer, 3D modeller",
 
-	// Landing-page About column. The second paragraph carries an inline
-	// link on the current employer, hence the split shape.
-	about: {
-		lead: "I've been an engineer for about fifteen years, usually at small companies right at the start. Six of those were at Cuvva, which I still think of fondly. Photography, ballet and 3D printing take up most of the rest.",
-		current: {
-			pre: "Currently at ",
-			company: "Yardstick",
-			href: "https://yardstick.money",
-			post: ", an early-stage startup. Previously Clove, Paddle, incident.io, Mojo and Cuvva.",
-		},
-	},
+	// The landing's line about me, under the wordmark. One line; it
+	// isn't a bio.
+	about: "laura. engineer in london. photographer, 3d designer",
 
-	// The landing plate. Caption + date render as the figure's meta row.
-	hero: {
-		src: "/img/hero.webp",
-		alt: "Speaking after dinner in a wood-panelled hall, candles and silverware down the table.",
-		caption: "Speaking after dinner",
-		date: "28.05.2026",
-	},
+	// Where I've worked, as one sentence. The dates live on /cv.
+	work: "yardstick now. before that clove, paddle, incident.io, mojo and cuvva.",
 
-	// The landing's third frame: what's kept and what's struck out, the
-	// way a photographer marks up a contact sheet in grease pencil.
-	edit: [
-		{ text: "photography", keep: true },
-		{ text: "ballet", keep: true },
-		{ text: "3D printing", keep: true },
-		{ text: "jellycats, all 53", keep: true },
-		{ text: "mornings", keep: false },
-	] satisfies EditMark[],
+	// Every page's footer picks one of these at random.
+	footer: [
+		"made in london at odd hours",
+		"fuelled by hot chocolate",
+		"no cookies, only jellycats",
+		"the dot is doing its best",
+		"right way over easy way",
+		"all lowercase, on purpose",
+		"still not a morning person",
+		"53 jellycats and counting",
+	],
 
+	// In the order the landing lists them. It adds email on the end and
+	// sets the labels in lowercase.
 	socials: [
-		{ id: "github", label: "GitHub", handle: "@DuffleOne", href: "https://github.com/DuffleOne" },
-		{ id: "linkedin", label: "LinkedIn", handle: "/in/duffle", href: "https://www.linkedin.com/in/duffle/" },
 		{ id: "ig", label: "Instagram", handle: "@duffle.one", href: "https://instagram.com/duffle.one" },
+		{ id: "github", label: "GitHub", handle: "@DuffleOne", href: "https://github.com/DuffleOne" },
 		{ id: "glass", label: "Glass", handle: "/duffle", href: "https://glass.photo/duffle" },
+		{ id: "linkedin", label: "LinkedIn", handle: "/in/duffle", href: "https://www.linkedin.com/in/duffle/" },
 		{ id: "steam", label: "Steam", handle: "DuffleOne", href: "https://steamcommunity.com/id/DuffleOne" },
 	] satisfies Social[],
 
 	projects: [
 		{
 			id: "easycal", name: "easycal",
-			blurb: "Share your availability without sharing your calendar.",
+			blurb: "share availability, not your calendar",
 			description: "A privacy-first way to let people know when you're free. Connects to Google Calendar, iCloud, or any CalDAV server. One link, group scheduling, and visibility controls so you decide what gets exposed.",
 			year: "2024", tag: "shipping", href: "https://easycal.uk",
 			tech: ["calendar", "caldav", "privacy-first"],
 		},
 		{
 			id: "tflgame", name: "TFLGame",
-			blurb: "Guess the London Underground station.",
+			blurb: "guess the tube station",
 			description: "Unscramble letters to guess a TFL station name. Built as a small mobile-first web app for the daily-puzzle crowd; runs as an installable PWA.",
 			year: "2024", tag: "weekend", href: "https://tflga.me",
 			tech: ["pwa", "vite", "weekend hack"],
 		},
 		{
 			id: "latex", name: "Latex stock",
-			blurb: "Latex inventory export tool.",
+			blurb: "inventory export",
 			description: "Internal tool for tracking and exporting latex stock. Auth-walled in production; the public landing page is just the export endpoint.",
 			year: "2023", tag: "internal", href: "https://latex.duffle.one",
 			tech: ["go", "postgres", "solo"],
 		},
 		{
 			id: "jellycats", name: "Jellycats",
-			blurb: "A vanity gallery of all 53 I own.",
+			blurb: "all 53 of them",
 			description: "53 plushies across eight categories: Bunnies, Dragons, Birds, Dogs, Farm, Sea Creatures, Forest, plus a few honorary members. Click any thumbnail for the full-size shot.",
 			year: "2023", tag: "archive", href: "/jellycats.html",
 			tech: ["photo", "vanilla css", "vanity"],
@@ -112,7 +101,8 @@ export const SITE = {
 	] satisfies Project[],
 
 	// The rotation pool: 37 lifted verbatim from the old src/index.html,
-	// plus later additions. useQuoteRotation walks a shuffled cycle.
+	// plus later additions. The landing shows one at a time, shuffled
+	// fresh on every visit.
 	quotePool: [
 		"At museums, she's allowed to touch the art.",
 		"Both sides of her pillow are cool.",
@@ -158,6 +148,8 @@ export const SITE = {
 
 	cv: {
 		title: "Founding Engineer",
+		// The line under the cv title; the email follows it as a link.
+		lede: "laura miller. founding engineer in london.",
 		email: "laura@duffle.one",
 		summary:
 			"Founding engineer building 0→1 products. Helped scale Cuvva from 4 people to 100+, and a system from 10 policies a week to hundreds per second. Photographer, ballet, 3D printing on the side.",
