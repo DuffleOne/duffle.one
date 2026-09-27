@@ -1,0 +1,15 @@
+// duffle.me: the same site as duffle.one, under its own name.
+// Deploy with `npx wrangler deploy` from this directory.
+{
+  "name": "duffle-me",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-27",
+  // Custom domains: Cloudflare creates and owns the DNS records for these,
+  // so there's nothing to add by hand. The zone's MX and TXT records are
+  // untouched.
+  "routes": [
+    { "pattern": "duffle.me", "custom_domain": true },
+    { "pattern": "www.duffle.me", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}
