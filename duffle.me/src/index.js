@@ -21,7 +21,11 @@ export default {
     }
 
     url.hostname = SOURCE
-    const response = await fetch(new Request(url, request), { redirect: 'manual' })
+    // Say which name was asked for, so anything on duffle.one that prints the
+    // site's address (the link-preview cards) can print duffle.me instead.
+    const upstream = new Request(url, request)
+    upstream.headers.set('x-forwarded-host', SITE)
+    const response = await fetch(upstream, { redirect: 'manual' })
 
     // S3's own redirects (adding a trailing slash) are relative and pass
     // through untouched. An absolute one back to duffle.one would take the
