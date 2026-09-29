@@ -15,7 +15,7 @@ export AWS_PROFILE=dfl
 
 BUILD_DIR=${BUILD_DIR:-./build}
 
-# Sync everything except the entry HTML (which we re-upload below with
+# Sync everything except the HTML pages (which we re-upload below with
 # explicit no-cache headers so deploys actually invalidate). Skip the
 # full-size jellycat jpgs — they're synced separately from local source
 # below since they aren't in git. Also skip camera originals sitting in
@@ -25,16 +25,17 @@ aws s3 sync "$BUILD_DIR" s3://duffle.one \
 	--acl public-read \
 	--follow-symlinks \
 	--delete \
-	--exclude "index.html" \
-	--exclude "jellycats.html" \
+	--exclude "*.html" \
 	--exclude "img/jellycats/*.jpg" \
 	--exclude "img/*.JPG"
 
-# Entry HTML: text/html, no caching, every request hits S3 fresh.
-# The asset bundle filenames are content-hashed by Vite so the rest of
-# the bundle can cache long.
-for page in index.html jellycats.html; do
-	aws s3 cp "$BUILD_DIR/$page" "s3://duffle.one/$page" \
+# HTML pages: text/html, no caching, every request hits S3 fresh. That's
+# index.html, jellycats.html and a copy of index.html per route (cv.html,
+# guide.html), which vite.config.mjs writes. The asset bundle filenames are
+# content-hashed by Vite so the rest of the bundle can cache long.
+for file in "$BUILD_DIR"/*.html; do
+	page=$(basename "$file")
+	aws s3 cp "$file" "s3://duffle.one/$page" \
 		--acl public-read \
 		--content-type text/html \
 		--cache-control "no-cache, no-store, must-revalidate" \
