@@ -51,8 +51,9 @@ if [ -d "$JELLYCAT_DIR" ]; then
 		--cache-control "public, max-age=31536000, immutable"
 fi
 
-# SPA fallback: any unknown path serves index.html so the hash router
-# can take over. Real files (jellycats.html, /img/*) still serve directly.
+# SPA fallback: any unknown path serves index.html, with a 403, and the
+# router shows its not-found page. The real routes have pages of their own
+# (cv.html, guide.html) that Cloudflare rewrites /cv and /guide onto.
 aws s3 website s3://duffle.one/ \
 	--index-document index.html \
 	--error-document index.html
