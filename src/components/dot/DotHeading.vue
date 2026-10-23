@@ -8,6 +8,9 @@
   from the foot of the 112px line (18 of 68, 12 of 44), just clear of
   the baseline; it's raised from the baseline rather than set on the
   line box so a title that wraps keeps it after the last word.
+
+  On the iPhone Duo the title is a weight heavier and the dot smaller,
+  sat on the baseline like a full stop.
 */
 defineProps<{ title: string; wordmark?: boolean }>();
 </script>
@@ -88,5 +91,33 @@ defineProps<{ title: string; wordmark?: boolean }>();
 		font-size: 20px;
 		line-height: 1.2;
 	}
+}
+
+:root[data-duo] .title {
+	font-weight: 600;
+}
+:root[data-duo] .title-dot {
+	width: 0.15em;
+	height: 0.15em;
+	margin-left: 0.11em;
+	vertical-align: baseline;
+}
+
+:root[data-duo="folded"] .lede {
+	font-size: 15px;
+	line-height: 21px;
+}
+
+:root[data-duo="open"] .title {
+	font-size: 56px;
+	letter-spacing: -1px;
+}
+:root[data-duo="open"] .wordmark {
+	font-size: 92px;
+	letter-spacing: -1.2px;
+}
+:root[data-duo="open"] .lede {
+	font-size: 16px;
+	line-height: 22px;
 }
 </style>

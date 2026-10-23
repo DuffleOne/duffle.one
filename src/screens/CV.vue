@@ -77,4 +77,22 @@ const groups = [
 		line-height: 1.45;
 	}
 }
+
+/* On the iPhone Duo everything follows the rows down a size, and the
+   proud bit follows the lede. */
+:root[data-duo] .role {
+	font-size: 13px;
+}
+:root[data-duo] .standfirst {
+	font-size: 15px;
+	line-height: 22px;
+}
+:root[data-duo="folded"] .proud {
+	font-size: 15px;
+	line-height: 21px;
+}
+:root[data-duo="open"] .proud {
+	font-size: 16px;
+	line-height: 22px;
+}
 </style>

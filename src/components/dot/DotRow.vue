@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /*
   One row of a list, as a link: the name in ink on the left and its
-  meta in muted on the right, or under it on a phone unless it's short
-  enough to stay `inline`. `href` links out (in a new tab), `to` stays
-  on the site. Anything in the slot sits under the row, outside the
-  link.
+  meta in muted on the right, or under it on a phone or an iPhone Duo
+  unless it's short enough to stay `inline`. `href` links out (in a
+  new tab), `to` stays on the site. Anything in the slot sits under
+  the row, outside the link.
 */
 import { RouterLink } from "vue-router";
 
@@ -59,5 +59,20 @@ defineProps<{ name: string; meta?: string; href?: string; to?: string; inline?: 
 		font-size: 16px;
 		text-align: right;
 	}
+}
+
+:root[data-duo] .row-link:not(.inline) {
+	flex-direction: column;
+	gap: 2px;
+}
+:root[data-duo] .row-name {
+	font-size: 15px;
+	font-weight: 500;
+}
+:root[data-duo] .row-meta {
+	font-size: 13px;
+}
+:root[data-duo] .row-link:not(.inline) .row-meta {
+	text-align: left;
 }
 </style>

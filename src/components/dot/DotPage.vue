@@ -7,6 +7,11 @@
   One column: a phone layout under 720px, a centred 600px column up to
   1439px. From 1440px the intro slot takes a 600px column on the left
   and stays put while the rest runs down the right.
+
+  The iPhone Duo has its own two. Folded, it's the phone layout kept
+  clear of Safari's toolbar. Open, the page is a spread across the fold:
+  the intro holds still on the left page and the rest runs down the
+  right, nav at the top and footer at the bottom.
 */
 import { computed } from "vue";
 import { useRoute } from "vue-router";
@@ -149,6 +154,58 @@ const footer = SITE.footer[Math.floor(Math.random() * SITE.footer.length)];
 		margin-top: 0;
 		padding-top: var(--content-offset, 8px);
 	}
+}
+
+/* iPhone Duo. Safari's toolbar runs down the right-hand edge over the
+   page, and isn't a safe area, so the page leaves room for it itself:
+   58px folded, 52px open. */
+:root[data-duo] .top,
+:root[data-duo] .top-nav {
+	gap: 20px;
+}
+:root[data-duo] .top-link {
+	font-size: 13px;
+}
+
+:root[data-duo="folded"] .page {
+	padding: 22px 82px 40px 24px;
+}
+
+/* The left page is fixed, so it stays put while the right one scrolls.
+   The hairline sits on the crease. The footer is as tall as its dot,
+   with the line overhanging it evenly, so the dot lines up with the
+   quote's 40px off the bottom. */
+:root[data-duo="open"] .page {
+	display: flex;
+	flex-direction: column;
+	min-height: 100dvh;
+	padding: 22px 92px 40px calc(50% + 40px);
+}
+:root[data-duo="open"] .page::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: calc(50% - 0.5px);
+	width: 1px;
+	background: var(--idle);
+}
+:root[data-duo="open"] .main {
+	flex: 1 0 auto;
+}
+:root[data-duo="open"] .intro {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 50%;
+	padding: 62px 40px 0;
+}
+:root[data-duo="open"] .content {
+	margin-top: 0;
+}
+:root[data-duo="open"] .foot {
+	height: 8px;
+	margin-top: 40px;
 }
 
 @media (prefers-reduced-motion: reduce) {

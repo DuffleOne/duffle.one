@@ -3,7 +3,8 @@
   The landing: the wordmark and its yellow dot, one line about me, then
   the links, high up because sending people on is the page's main job.
   Below them the rotating quote, what I've made and where I've worked.
-  From 1440px the wordmark, about and links take the left column.
+  From 1440px the wordmark, about and links take the left column. On an
+  open iPhone Duo they take the left page, with the quote at its foot.
 */
 import { SITE } from "../site/data";
 import DotPage from "../components/dot/DotPage.vue";
@@ -38,9 +39,9 @@ const links = [
 			</ul>
 		</template>
 
-		<DotQuote :quotes="SITE.quotePool"/>
+		<DotQuote :quotes="SITE.quotePool" class="quote"/>
 
-		<DotSection label="made" class="made">
+		<DotSection label="made" :count="SITE.projects.length" class="made">
 			<ul class="made-list">
 				<li v-for="p in SITE.projects" :key="p.id">
 					<DotRow :name="p.name" :meta="p.blurb" :href="p.href"/>
@@ -115,5 +116,39 @@ const links = [
 	.links {
 		margin-top: 72px;
 	}
+}
+
+:root[data-duo] .links {
+	gap: 16px;
+	margin-top: 28px;
+}
+:root[data-duo] .link-name {
+	font-size: 15px;
+}
+:root[data-duo] .link-handle {
+	font-size: 13px;
+}
+:root[data-duo] .made-list {
+	gap: 16px;
+}
+:root[data-duo] .work {
+	font-size: 15px;
+	line-height: 22px;
+}
+
+/* Open, the quote stands at the foot of the left page, 40px in from
+   its edges like the rest of it, and "made" heads the right page. */
+:root[data-duo="open"] .links {
+	row-gap: 18px;
+	margin-top: 32px;
+}
+:root[data-duo="open"] .quote {
+	position: fixed;
+	bottom: 40px;
+	left: 40px;
+	width: calc(50% - 80px);
+}
+:root[data-duo="open"] .made {
+	margin-top: 0;
 }
 </style>

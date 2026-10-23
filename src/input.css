@@ -41,6 +41,20 @@
 	}
 }
 
+/* The iPhone Duo (index.html sets data-duo) runs tighter: folded, the
+   links and the quote share the first screen; open, the landing fits
+   on one spread. */
+:root[data-duo="folded"] {
+	--gap-page: 32px;
+	--gap-block: 28px;
+	--gap-section: 40px;
+}
+:root[data-duo="open"] {
+	--gap-page: 40px;
+	--gap-block: 40px;
+	--gap-section: 40px;
+}
+
 /*
   Figtree, the one family. The variable font (300–900), latin subset,
   self-hosted and preloaded from index.html; OFL, licence alongside it.

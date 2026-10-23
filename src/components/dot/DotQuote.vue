@@ -129,7 +129,7 @@ onBeforeUnmount(() => resize?.disconnect());
 			>“{{ q }}”</blockquote>
 		</div>
 
-		<div class="quote-lift" :class="{ settled }" :style="{ translate: `0 ${-lift}px` }">
+		<div class="quote-lift" :class="{ settled }" :style="{ '--lift': `${-lift}px` }">
 			<TransitionGroup tag="div" name="slide" class="quote-dots" @before-leave="pin">
 				<button
 					v-for="k in dots"
@@ -185,6 +185,7 @@ onBeforeUnmount(() => resize?.disconnect());
 	gap: 16px;
 	height: 8px;
 	margin-top: 20px;
+	translate: 0 var(--lift, 0);
 }
 .quote-lift.settled {
 	transition: translate 250ms ease;
@@ -195,7 +196,7 @@ onBeforeUnmount(() => resize?.disconnect());
    scaled to 6px, which keeps the slide an even step (scale, not
    transform, which the slide itself uses). The yellow one's button is
    16px so every gap stays 8px, and the row sits 4px left so the first
-   dot lands on the column edge. */
+   dot lands on the column edge. On the iPhone Duo every dot is 8px. */
 .quote-dots {
 	position: relative;
 	display: flex;
@@ -221,7 +222,7 @@ onBeforeUnmount(() => resize?.disconnect());
 	height: 8px;
 	border-radius: 50%;
 	background: var(--idle);
-	scale: 0.75;
+	scale: var(--idle-scale, 0.75);
 	transition: scale 300ms ease, background-color 300ms ease;
 }
 .quote-dot.is-current {
@@ -275,6 +276,40 @@ onBeforeUnmount(() => resize?.disconnect());
 	.quote-lift {
 		margin-top: 36px;
 	}
+}
+
+:root[data-duo] .quote-text {
+	letter-spacing: -0.4px;
+}
+:root[data-duo] .quote-lift {
+	margin-top: 28px;
+}
+:root[data-duo] .quote-dots {
+	--idle-scale: 1;
+}
+:root[data-duo] .quote-dot {
+	width: 16px;
+}
+:root[data-duo] .quote-dot::before {
+	left: 4px;
+}
+
+:root[data-duo="folded"] .quote-text {
+	font-size: 22px;
+	line-height: 30px;
+}
+
+/* Open, the quote stands on its dots at the foot of the left page, so
+   it's the stack that lines up at the bottom and the dots stay put. */
+:root[data-duo="open"] .quote-text {
+	font-size: 24px;
+	line-height: 31px;
+}
+:root[data-duo="open"] .quote-stack {
+	align-items: end;
+}
+:root[data-duo="open"] .quote-lift {
+	translate: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

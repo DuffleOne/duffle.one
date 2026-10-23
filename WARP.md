@@ -15,6 +15,17 @@ dot after it, then labelled sections. One column (a phone layout under
 720px, a centred 600px column up to 1439px); from 1440px the title
 block takes a 600px column on the left and the rest runs down the right.
 
+The iPhone Duo gets two layouts of its own, from a pair of mockups,
+folded and open. Folded, it's the phone layout a size down, kept clear
+of Safari's toolbar (which runs down the right edge over the page).
+Open, the page is a spread across the fold: the title block, and the
+landing's quote, on the left page and everything else on the right.
+Both have ruled section labels with a count, a heavier title and a
+smaller dot. Safari can't see the fold, so a script in `index.html` sets
+`data-duo` on `<html>` from the screen's shape (touch, and sizes no
+phone, tablet or desktop has) and components style against
+`:root[data-duo]`. Everything else gets the layouts above unchanged.
+
 ## Stack
 
 - Vue 3 (`<script setup>` SFCs) + vue-router (hash mode for S3)
@@ -41,7 +52,8 @@ pushes to master straight to the bucket.
 ```
 src/
 	index.html              SPA shell: Figtree preload, pre-paint theme
-	                        script, icons and Open Graph tags
+	                        and iPhone Duo scripts, icons and Open Graph
+	                        tags
 	main.ts                 vue + router bootstrap, document.title sync
 	App.vue                 theme bootstrap + router outlet
 	input.css               Tailwind reset, the colour tokens (light-dark()

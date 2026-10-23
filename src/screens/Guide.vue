@@ -62,4 +62,9 @@ const sections = [{ h: "About", body: SITE.guide.about }, ...SITE.guide.sections
 		gap: 24px;
 	}
 }
+
+/* An open iPhone Duo's right page is too narrow for two. */
+:root[data-duo="open"] .values {
+	grid-template-columns: minmax(0, 1fr);
+}
 </style>

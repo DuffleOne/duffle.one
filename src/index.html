@@ -30,6 +30,24 @@
 					}
 				} catch (e) { /* ignore */ }
 			})();
+
+			// The iPhone Duo gets layouts of its own, picked by data-duo on
+			// <html>. Safari can't see the fold, so this goes by the screen:
+			// folded it's a touch screen wider than any phone but too short
+			// for a tablet, open it's a landscape one about the same size.
+			// Set before paint, and again whenever it folds or unfolds.
+			(function () {
+				var folded = matchMedia("(pointer: coarse) and (min-width: 444px) and (max-width: 719px) and (max-height: 800px)");
+				var open = matchMedia("(pointer: coarse) and (orientation: landscape) and (min-width: 720px) and (max-width: 1023px) and (min-height: 560px) and (max-height: 800px)");
+				function apply() {
+					var duo = open.matches ? "open" : folded.matches ? "folded" : "";
+					if (duo) document.documentElement.setAttribute("data-duo", duo);
+					else document.documentElement.removeAttribute("data-duo");
+				}
+				apply();
+				folded.addEventListener("change", apply);
+				open.addEventListener("change", apply);
+			})();
 		</script>
 	</head>
 	<body class="antialiased">
